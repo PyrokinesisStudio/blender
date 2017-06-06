@@ -1698,14 +1698,8 @@ void KX_Scene::UpdateObjectActivity()
 		return;
 	}
 
-	const unsigned int size = m_objectlist->GetCount();
-	// The minimum squared distance between objects and any camera.
-	std::vector<float> dist2(size, FLT_MAX);
+	std::vector<MT_Vector3> camPositions;
 
-	// Is any camera using object activity culling?
-	bool used = false;
-
-	// For each camera compute the distance to objects and keep the minimum distance.
 	for (CListValue::iterator<KX_Camera> it = m_cameralist->GetBegin(), end = m_cameralist->GetEnd(); it != end; ++it) {
 		KX_Camera *cam = *it;
 
@@ -1713,37 +1707,28 @@ void KX_Scene::UpdateObjectActivity()
 			continue;
 		}
 
-		// At least one camera is using object activity culling.
-		used = true;
-
-		const MT_Vector3& campos = cam->NodeGetWorldPosition();
-		for (unsigned int i = 0; i < size; ++i) {
-			// If the object doesn't manage activity culling we don't compute distance.
-			KX_GameObject *gameobj = static_cast<KX_GameObject *>(m_objectlist->GetValue(i));
-			if (gameobj->GetActivityCullingInfo().m_flags & KX_GameObject::ActivityCullingInfo::ACTIVITY_NONE) {
-				continue;
-			}
-
-			const MT_Vector3& obpos = gameobj->NodeGetWorldPosition();
-			const float dist = obpos.distance2(campos);
-			// Keep the minimum distance.
-			dist2[i] = std::min(dist2[i], dist);
-		}
+		camPositions.push_back(cam->NodeGetWorldPosition());
 	}
 
 	// None cameras are using object activity culling?
-	if (!used) {
+	if (camPositions.size() == 0) {
 		return;
 	}
 
-	// Iterate over all objects and update activity culling.
-	for (unsigned int i = 0; i < size; ++i) {
-		KX_GameObject *gameobj = static_cast<KX_GameObject *>(m_objectlist->GetValue(i));
-		// Do nothing if the object doesn't use any activity culling.
+	for (CListValue::iterator<KX_GameObject> it = m_objectlist->GetBegin(), end = m_objectlist->GetEnd(); it != end; ++it) {
+		// If the object doesn't manage activity culling we don't compute distance.
+		KX_GameObject *gameobj = *it;
 		if (gameobj->GetActivityCullingInfo().m_flags & KX_GameObject::ActivityCullingInfo::ACTIVITY_NONE) {
 			continue;
 		}
-		const float dist = dist2[i];
+
+		// For each camera compute the distance to objects and keep the minimum distance.
+		const MT_Vector3& obpos = gameobj->NodeGetWorldPosition();
+		float dist = FLT_MAX;
+		for (const MT_Vector3& campos : camPositions) {
+			// Keep the minimum distance.
+			dist = std::min(obpos.distance2(campos), dist);
+		}
 		gameobj->UpdateActivity(dist);
 	}
 }
