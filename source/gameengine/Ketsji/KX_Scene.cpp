@@ -1700,9 +1700,7 @@ void KX_Scene::UpdateObjectActivity()
 
 	std::vector<MT_Vector3> camPositions;
 
-	for (CListValue::iterator<KX_Camera> it = m_cameralist->GetBegin(), end = m_cameralist->GetEnd(); it != end; ++it) {
-		KX_Camera *cam = *it;
-
+	for (KX_Camera *cam : m_cameralist) {
 		if ((cam != m_active_camera && !cam->GetViewport()) || !cam->GetActivityCulling()) {
 			continue;
 		}
@@ -1715,9 +1713,8 @@ void KX_Scene::UpdateObjectActivity()
 		return;
 	}
 
-	for (CListValue::iterator<KX_GameObject> it = m_objectlist->GetBegin(), end = m_objectlist->GetEnd(); it != end; ++it) {
+	for (KX_GameObject *gameobj : m_objectlist) {
 		// If the object doesn't manage activity culling we don't compute distance.
-		KX_GameObject *gameobj = *it;
 		if (gameobj->GetActivityCullingInfo().m_flags & KX_GameObject::ActivityCullingInfo::ACTIVITY_NONE) {
 			continue;
 		}
