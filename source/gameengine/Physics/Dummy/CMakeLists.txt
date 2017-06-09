@@ -30,7 +30,7 @@ set(INC
 )
 
 set(INC_SYS
-	../../../../intern/mathfu/mathfu
+	../../../../intern/mathfu
 )
 
 set(SRC

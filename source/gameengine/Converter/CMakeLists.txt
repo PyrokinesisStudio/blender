@@ -56,7 +56,7 @@ set(INC
 )
 
 set(INC_SYS
-	../../../intern/mathfu/mathfu
+	../../../intern/mathfu
 	../../../extern/recastnavigation/Detour/Include
 	${EIGEN3_INCLUDE_DIRS}
 	${PTHREADS_INCLUDE_DIRS}

@@ -45,7 +45,7 @@ set(INC
 )
 
 set(INC_SYS
-	../../../../intern/mathfu/mathfu
+	../../../../intern/mathfu
 	${GLEW_INCLUDE_PATH}
 	${BOOST_INCLUDE_DIR}
 )
