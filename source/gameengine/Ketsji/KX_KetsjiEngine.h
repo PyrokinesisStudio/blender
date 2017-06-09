@@ -33,7 +33,6 @@
 #ifndef __KX_KETSJIENGINE_H__
 #define __KX_KETSJIENGINE_H__
 
-#include "MT_Matrix4x4.h"
 #include <string>
 #include "KX_ISystem.h"
 #include "KX_Scene.h"
@@ -206,8 +205,8 @@ private:
 
 	std::string m_overrideSceneName;
 	RAS_CameraData m_overrideCamData;
-	MT_Matrix4x4 m_overrideCamProjMat;
-	MT_Matrix4x4 m_overrideCamViewMat;
+	mt::mat4 m_overrideCamProjMat;
+	mt::mat4 m_overrideCamViewMat;
 	/// Default camera zoom.
 	float m_overrideCamZoom;
 
@@ -263,7 +262,7 @@ private:
 	void UpdateSuspendedScenes(double framestep);
 
 	/// Update and return the projection matrix of a camera depending on the viewport.
-	MT_Matrix4x4 GetCameraProjectionMatrix(KX_Scene *scene, KX_Camera *cam, RAS_Rasterizer::StereoMode stereoMode,
+	mt::mat4 GetCameraProjectionMatrix(KX_Scene *scene, KX_Camera *cam, RAS_Rasterizer::StereoMode stereoMode,
 			RAS_Rasterizer::StereoEye eye, const RAS_Rect& viewport, const RAS_Rect& area) const;
 	CameraRenderData GetCameraRenderData(KX_Scene *scene, KX_Camera *camera, KX_Camera *overrideCullingCam, const RAS_Rect& displayArea,
 			RAS_Rasterizer::StereoMode stereoMode, RAS_Rasterizer::StereoEye eye);
@@ -370,7 +369,7 @@ public:
 	/// Get the camera zoom for the passed camera.
 	float GetCameraZoom(KX_Camera *camera) const;
 
-	void EnableCameraOverride(const std::string& forscene, const MT_Matrix4x4& projmat, const MT_Matrix4x4& viewmat, const RAS_CameraData& camdata);
+	void EnableCameraOverride(const std::string& forscene, const mt::mat4& projmat, const mt::mat4& viewmat, const RAS_CameraData& camdata);
 
 	// Update animations for object in this scene
 	void UpdateAnimations(KX_Scene *scene);

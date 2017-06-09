@@ -32,7 +32,6 @@
 #ifndef __RAS_BUCKETMANAGER_H__
 #define __RAS_BUCKETMANAGER_H__
 
-#include "MT_Transform.h"
 #include "RAS_MaterialBucket.h"
 
 #include <vector>
@@ -48,7 +47,7 @@ public:
 	{
 	public:
 		/// depth
-		MT_Scalar m_z;
+		float m_z;
 
 		union {
 			RAS_MeshSlot *m_ms;
@@ -56,8 +55,8 @@ public:
 		};
 
 		SortedMeshSlot() = default;
-		SortedMeshSlot(RAS_MeshSlot *ms, const MT_Vector3& pnorm);
-		SortedMeshSlot(RAS_MeshSlotUpwardNode *node, const MT_Vector3& pnorm);
+		SortedMeshSlot(RAS_MeshSlot *ms, const mt::vec3& pnorm);
+		SortedMeshSlot(RAS_MeshSlotUpwardNode *node, const mt::vec3& pnorm);
 	};
 
 	struct backtofront
@@ -104,7 +103,7 @@ public:
 	RAS_BucketManager(RAS_IPolyMaterial *textMaterial);
 	virtual ~RAS_BucketManager();
 
-	void Renderbuckets(RAS_Rasterizer::DrawType drawingMode, const MT_Transform & cameratrans, RAS_Rasterizer *rasty,
+	void Renderbuckets(RAS_Rasterizer::DrawType drawingMode, const mt::mat3x4& cameratrans, RAS_Rasterizer *rasty,
 			RAS_OffScreen *offScreen);
 
 	RAS_MaterialBucket *FindBucket(RAS_IPolyMaterial *material, bool &bucketCreated);

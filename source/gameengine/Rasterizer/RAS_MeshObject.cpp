@@ -42,8 +42,6 @@
 
 #include "SCA_IScene.h"
 
-#include "MT_Vector3.h"
-
 #include "CM_Message.h"
 
 #include <algorithm>
@@ -61,9 +59,9 @@ struct RAS_MeshObject::polygonSlot
 
 	/* pnorm is the normal from the plane equation that the distance from is
 	 * used to sort again. */
-	void get(RAS_IDisplayArray *array, int offset, int nvert, const MT_Vector3& pnorm)
+	void get(RAS_IDisplayArray *array, int offset, int nvert, const mt::vec3& pnorm)
 	{
-		MT_Vector3 center(0.0f, 0.0f, 0.0f);
+		mt::vec3 center(0.0f, 0.0f, 0.0f);
 
 		for (unsigned short i = 0; i < nvert; ++i) {
 			m_index[i] = array->GetIndex(offset + i);
@@ -73,7 +71,7 @@ struct RAS_MeshObject::polygonSlot
 		/* note we don't divide center by the number of vertices, since all
 		* polygons have the same number of vertices, and that we leave out
 		* the 4-th component of the plane equation since it is constant. */
-		m_z = MT_dot(pnorm, center);
+		m_z = mt::dot(pnorm, center);
 	}
 
 	void set(unsigned int *indexmap, int offset, int nvert)
@@ -246,11 +244,11 @@ RAS_Polygon *RAS_MeshObject::AddPolygon(RAS_MeshMaterial *meshmat, int numverts,
 
 unsigned int RAS_MeshObject::AddVertex(
 				RAS_MeshMaterial *meshmat,
-				const MT_Vector3& xyz,
-				const MT_Vector2 * const uvs,
-				const MT_Vector4& tangent,
+				const mt::vec3& xyz,
+				const mt::vec2 * const uvs,
+				const mt::vec4& tangent,
 				const unsigned int *rgba,
-				const MT_Vector3& normal,
+				const mt::vec3& normal,
 				const bool flat,
 				const unsigned int origindex)
 {
@@ -409,7 +407,7 @@ void RAS_MeshObject::GenerateAttribLayers()
 	}
 }
 
-void RAS_MeshObject::SortPolygons(RAS_IDisplayArray *array, const MT_Transform &transform, unsigned int *indexmap)
+void RAS_MeshObject::SortPolygons(RAS_IDisplayArray *array, const mt::mat3x4 &transform, unsigned int *indexmap)
 {
 	// Limitations: sorting is quite simple, and handles many
 	// cases wrong, partially due to polygons being sorted per
@@ -439,8 +437,8 @@ void RAS_MeshObject::SortPolygons(RAS_IDisplayArray *array, const MT_Transform &
 		return;
 
 	// Extract camera Z plane...
-	const MT_Vector3 pnorm(transform.getBasis()[2]);
-	// unneeded: const MT_Scalar pval = transform.getOrigin()[2];
+	const mt::vec3 pnorm(transform.RotationMatrix()[2]);
+	// unneeded: const float pval = transform.TranslationVector3D()[2];
 
 	std::vector<polygonSlot> poly_slots(totpoly);
 

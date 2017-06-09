@@ -34,7 +34,7 @@
 
 #include "SCA_IActuator.h"
 #include "SCA_IObject.h"
-#include "MT_Matrix3x3.h"
+#include "mathfu.h"
 #include "KX_GameObject.h"
 
 
@@ -50,7 +50,7 @@ class KX_TrackToActuator : public SCA_IActuator
 	int	m_trackflag;
 	int m_upflag;
 	
-	MT_Matrix3x3 m_parentlocalmat;
+	mt::mat3 m_parentlocalmat;
 	KX_GameObject* m_parentobj;
 
   public:

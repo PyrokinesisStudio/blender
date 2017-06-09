@@ -97,13 +97,16 @@ bool KX_SoftBodyDeformer::Apply(RAS_MeshMaterial *meshmat, RAS_IDisplayArray *ar
 	btSoftBody::tNodeArray&   nodes(softBody->m_nodes);
 
 	if (m_needUpdateAabb) {
-		m_boundingBox->SetAabb(MT_Vector3(0.0f, 0.0f, 0.0f), MT_Vector3(0.0f, 0.0f, 0.0f));
+		m_boundingBox->SetAabb(mt::vec3(0.0f, 0.0f, 0.0f), mt::vec3(0.0f, 0.0f, 0.0f));
 		m_needUpdateAabb = false;
 	}
 
 	// AABB Box : min/max.
-	MT_Vector3 aabbMin;
-	MT_Vector3 aabbMax;
+	mt::vec3 aabbMin;
+	mt::vec3 aabbMax;
+
+	const mt::vec3& pos = m_gameobj->NodeGetWorldPosition();
+	const mt::mat3 mat = m_gameobj->NodeGetWorldOrientation().Inverse();
 
 	for (unsigned int i = 0, size = array->GetVertexCount(); i < size; ++i) {
 		RAS_ITexVert *v = array->GetVertex(i);
@@ -115,13 +118,13 @@ bool KX_SoftBodyDeformer::Apply(RAS_MeshMaterial *meshmat, RAS_IDisplayArray *ar
 		 */
 		const unsigned int softbodyindex = vinfo.getSoftBodyIndex();
 
-		MT_Vector3 pt(
+		mt::vec3 pt(
 		    nodes[softbodyindex].m_x.getX(),
 		    nodes[softbodyindex].m_x.getY(),
 		    nodes[softbodyindex].m_x.getZ());
 		v->SetXYZ(pt);
 
-		MT_Vector3 normal(
+		mt::vec3 normal(
 		    nodes[softbodyindex].m_n.getX(),
 		    nodes[softbodyindex].m_n.getY(),
 		    nodes[softbodyindex].m_n.getZ());
@@ -131,24 +134,15 @@ bool KX_SoftBodyDeformer::Apply(RAS_MeshMaterial *meshmat, RAS_IDisplayArray *ar
 			continue;
 		}
 
-		const MT_Vector3& scale = m_gameobj->NodeGetWorldScaling();
-		const MT_Vector3& invertscale = MT_Vector3(1.0f / scale.x(), 1.0f / scale.y(), 1.0f / scale.z());
-		const MT_Vector3& pos = m_gameobj->NodeGetWorldPosition();
-		const MT_Matrix3x3& rot = m_gameobj->NodeGetWorldOrientation();
-
 		// Extract object transform from the vertex position.
-		pt = (pt - pos) * rot * invertscale;
+		pt = (pt - pos) * mat;
 		// if the AABB need an update.
 		if (i == 0) {
 			aabbMin = aabbMax = pt;
 		}
 		else {
-			aabbMin.x() = std::min(aabbMin.x(), pt.x());
-			aabbMin.y() = std::min(aabbMin.y(), pt.y());
-			aabbMin.z() = std::min(aabbMin.z(), pt.z());
-			aabbMax.x() = std::max(aabbMax.x(), pt.x());
-			aabbMax.y() = std::max(aabbMax.y(), pt.y());
-			aabbMax.z() = std::max(aabbMax.z(), pt.z());
+			aabbMax = mt::vec3::Max(aabbMax, pt);
+			aabbMin = mt::vec3::Min(aabbMin, pt);
 		}
 	}
 

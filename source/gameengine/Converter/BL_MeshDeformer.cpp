@@ -169,7 +169,7 @@ void BL_MeshDeformer::RecalcNormals()
 		}
 
 		if (flat) {
-			MT_Vector3 normal(pnorm);
+			mt::vec3 normal(pnorm);
 			for (unsigned int j = 0; j < numvert; ++j) {
 				RAS_ITexVert *vert = array->GetVertex(indices[j]);
 
@@ -190,7 +190,7 @@ void BL_MeshDeformer::RecalcNormals()
 			const RAS_TexVertInfo& vinfo = array->GetVertexInfo(i);
 
 			if (!(vinfo.getFlag() & RAS_TexVertInfo::FLAT))
-				v->SetNormal(MT_Vector3(m_transnors[vinfo.getOrigIndex()])); //.safe_normalized()
+				v->SetNormal(mt::vec3(m_transnors[vinfo.getOrigIndex()])); //.SafeNormalized(mt::axisX3)
 		}
 	}
 }

@@ -49,12 +49,12 @@ KX_ObjectActuator::
 KX_ObjectActuator(
 	SCA_IObject* gameobj,
 	KX_GameObject* refobj,
-	const MT_Vector3& force,
-	const MT_Vector3& torque,
-	const MT_Vector3& dloc,
-	const MT_Vector3& drot,
-	const MT_Vector3& linV,
-	const MT_Vector3& angV,
+	const mt::vec3& force,
+	const mt::vec3& torque,
+	const mt::vec3& dloc,
+	const mt::vec3& drot,
+	const mt::vec3& linV,
+	const mt::vec3& angV,
 	const short damping,
 	const KX_LocalFlags& flag
 ) : 
@@ -134,13 +134,13 @@ bool KX_ObjectActuator::Update()
 
 		// Explicitly stop the movement if we're using character motion
 		if (m_bitLocalFlag.CharacterMotion) {
-			character->SetWalkDirection(MT_Vector3 (0.0f, 0.0f, 0.0f));
+			character->SetWalkDirection(mt::vec3 (0.0f, 0.0f, 0.0f));
 		}
 
 		m_linear_damping_active = false;
 		m_angular_damping_active = false;
-		m_error_accumulator.setValue(0.0f,0.0f,0.0f);
-		m_previous_error.setValue(0.0f,0.0f,0.0f);
+		m_error_accumulator = mt::vec3(0.0f,0.0f,0.0f);
+		m_previous_error = mt::vec3(0.0f,0.0f,0.0f);
 		m_jumping = false;
 		return false; 
 
@@ -159,27 +159,27 @@ bool KX_ObjectActuator::Update()
 			// dv = e(t) - e(t-1)
 			// KP, KD, KI : coefficient
 			// F = KP*e+KI*I+KD*dv
-			MT_Scalar mass = parent->GetMass();
-			if (mass < MT_EPSILON)
+			float mass = parent->GetMass();
+			if (mt::FuzzyZero(mass))
 				return false;
-			MT_Vector3 v = parent->GetLinearVelocity(m_bitLocalFlag.LinearVelocity);
+			mt::vec3 v = parent->GetLinearVelocity(m_bitLocalFlag.LinearVelocity);
 			if (m_reference)
 			{
-				const MT_Vector3& mypos = parent->NodeGetWorldPosition();
-				const MT_Vector3& refpos = m_reference->NodeGetWorldPosition();
-				MT_Vector3 relpos;
+				const mt::vec3& mypos = parent->NodeGetWorldPosition();
+				const mt::vec3& refpos = m_reference->NodeGetWorldPosition();
+				mt::vec3 relpos;
 				relpos = (mypos-refpos);
-				MT_Vector3 vel= m_reference->GetVelocity(relpos);
+				mt::vec3 vel= m_reference->GetVelocity(relpos);
 				if (m_bitLocalFlag.LinearVelocity)
 					// must convert in local space
-					vel = parent->NodeGetWorldOrientation().transposed()*vel;
+					vel = parent->NodeGetWorldOrientation().Transpose()*vel;
 				v -= vel;
 			}
-			MT_Vector3 e = m_linear_velocity - v;
-			MT_Vector3 dv = e - m_previous_error;
-			MT_Vector3 I = m_error_accumulator + e;
+			mt::vec3 e = m_linear_velocity - v;
+			mt::vec3 dv = e - m_previous_error;
+			mt::vec3 I = m_error_accumulator + e;
 
-			m_force = m_pid.x()*e+m_pid.y()*I+m_pid.z()*dv;
+			m_force = m_pid.x*e+m_pid.y*I+m_pid.z*dv;
 			// to automatically adapt the PID coefficient to mass;
 			m_force *= mass;
 			if (m_bitLocalFlag.Torque) 
@@ -223,22 +223,22 @@ bool KX_ObjectActuator::Update()
 			parent->ApplyForce(m_force,(m_bitLocalFlag.LinearVelocity) != 0);
 		}
 		else if (m_bitLocalFlag.CharacterMotion) {
-			MT_Vector3 dir = m_dloc;
+			mt::vec3 dir = m_dloc;
 
 			if (m_bitLocalFlag.DLoc) {
-				MT_Matrix3x3 basis = parent->GetPhysicsController()->GetOrientation();
+				mt::mat3 basis = parent->GetPhysicsController()->GetOrientation();
 				dir = basis * dir;
 			}
 
 			if (m_bitLocalFlag.AddOrSetCharLoc) {
-				MT_Vector3 old_dir = character->GetWalkDirection();
+				mt::vec3 old_dir = character->GetWalkDirection();
 
-				if (!old_dir.fuzzyZero()) {
-					MT_Scalar mag = old_dir.length();
+				if (!mt::vec3::FuzzyZero(old_dir)) {
+					float mag = old_dir.Length();
 
 					dir = dir + old_dir;
-					if (!dir.fuzzyZero())
-						dir = dir.normalized() * mag;
+					if (!mt::vec3::FuzzyZero(dir))
+						dir = dir.Normalized() * mag;
 				}
 			}
 
@@ -284,12 +284,12 @@ bool KX_ObjectActuator::Update()
 				else {
 					m_active_combined_velocity = true;
 					if (m_damping > 0) {
-						MT_Vector3 linV;
+						mt::vec3 linV;
 						if (!m_linear_damping_active) {
 							// delta and the start speed (depends on the existing speed in that direction)
 							linV = parent->GetLinearVelocity(m_bitLocalFlag.LinearVelocity);
 							// keep only the projection along the desired direction
-							m_current_linear_factor = linV.dot(m_linear_velocity) / m_linear_length2;
+							m_current_linear_factor = mt::dot(linV, m_linear_velocity) / m_linear_length2;
 							m_linear_damping_active = true;
 						}
 						if (m_current_linear_factor < 1.0f)
@@ -308,12 +308,12 @@ bool KX_ObjectActuator::Update()
 			{
 				m_active_combined_velocity = true;
 				if (m_damping > 0) {
-					MT_Vector3 angV;
+					mt::vec3 angV;
 					if (!m_angular_damping_active) {
 						// delta and the start speed (depends on the existing speed in that direction)
 						angV = parent->GetAngularVelocity(m_bitLocalFlag.AngularVelocity);
 						// keep only the projection along the desired direction
-						m_current_angular_factor = angV.dot(m_angular_velocity)/m_angular_length2;
+						m_current_angular_factor = mt::dot(angV, m_angular_velocity)/m_angular_length2;
 						m_angular_damping_active = true;
 					}
 					if (m_current_angular_factor < 1.0)
@@ -458,10 +458,10 @@ static int mathutils_obactu_vector_get(BaseMathObject *bmo, int subtype)
 
 	switch (subtype) {
 		case MATHUTILS_VEC_CB_LINV:
-			self->m_linear_velocity.getValue(bmo->data);
+			self->m_linear_velocity.Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_ANGV:
-			self->m_angular_velocity.getValue(bmo->data);
+			self->m_angular_velocity.Pack(bmo->data);
 			break;
 	}
 
@@ -476,10 +476,10 @@ static int mathutils_obactu_vector_set(BaseMathObject *bmo, int subtype)
 
 	switch (subtype) {
 		case MATHUTILS_VEC_CB_LINV:
-			self->m_linear_velocity.setValue(bmo->data);
+			self->m_linear_velocity = mt::vec3(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_ANGV:
-			self->m_angular_velocity.setValue(bmo->data);
+			self->m_angular_velocity = mt::vec3(bmo->data);
 			break;
 	}
 

@@ -95,27 +95,27 @@ void RAS_BoundingBox::ClearModified()
 	m_modified = false;
 }
 
-void RAS_BoundingBox::GetAabb(MT_Vector3& aabbMin, MT_Vector3& aabbMax) const
+void RAS_BoundingBox::GetAabb(mt::vec3& aabbMin, mt::vec3& aabbMax) const
 {
 	aabbMin = m_aabbMin;
 	aabbMax = m_aabbMax;
 }
 
-void RAS_BoundingBox::SetAabb(const MT_Vector3& aabbMin, const MT_Vector3& aabbMax)
+void RAS_BoundingBox::SetAabb(const mt::vec3& aabbMin, const mt::vec3& aabbMax)
 {
 	m_aabbMin = aabbMin;
 	m_aabbMax = aabbMax;
 	m_modified = true;
 }
 
-void RAS_BoundingBox::ExtendAabb(const MT_Vector3& aabbMin, const MT_Vector3& aabbMax)
+void RAS_BoundingBox::ExtendAabb(const mt::vec3& aabbMin, const mt::vec3& aabbMax)
 {
-	m_aabbMin.x() = std::min(m_aabbMin.x(), aabbMin.x());
-	m_aabbMin.y() = std::min(m_aabbMin.y(), aabbMin.y());
-	m_aabbMin.z() = std::min(m_aabbMin.z(), aabbMin.z());
-	m_aabbMax.x() = std::max(m_aabbMax.x(), aabbMax.x());
-	m_aabbMax.y() = std::max(m_aabbMax.y(), aabbMax.y());
-	m_aabbMax.z() = std::max(m_aabbMax.z(), aabbMax.z());
+	m_aabbMin.x = std::min(m_aabbMin.x, aabbMin.x);
+	m_aabbMin.y = std::min(m_aabbMin.y, aabbMin.y);
+	m_aabbMin.z = std::min(m_aabbMin.z, aabbMin.z);
+	m_aabbMax.x = std::max(m_aabbMax.x, aabbMax.x);
+	m_aabbMax.y = std::max(m_aabbMax.y, aabbMax.y);
+	m_aabbMax.z = std::max(m_aabbMax.z, aabbMax.z);
 	m_modified = true;
 }
 
@@ -166,7 +166,7 @@ void RAS_MeshBoundingBox::Update(bool force)
 		// For each vertex.
 		for (unsigned int j = 0, size = displayArray->GetVertexCount(); j < size; ++j) {
 			RAS_ITexVert *vert = displayArray->GetVertex(j);
-			const MT_Vector3 vertPos = vert->xyz();
+			const mt::vec3 vertPos = vert->xyz();
 
 			// Initialize the AABB to the first vertex position.
 			if (j == 0 && i == 0) {
@@ -174,12 +174,12 @@ void RAS_MeshBoundingBox::Update(bool force)
 				continue;
 			}
 
-			m_aabbMin.x() = std::min(m_aabbMin.x(), vertPos.x());
-			m_aabbMin.y() = std::min(m_aabbMin.y(), vertPos.y());
-			m_aabbMin.z() = std::min(m_aabbMin.z(), vertPos.z());
-			m_aabbMax.x() = std::max(m_aabbMax.x(), vertPos.x());
-			m_aabbMax.y() = std::max(m_aabbMax.y(), vertPos.y());
-			m_aabbMax.z() = std::max(m_aabbMax.z(), vertPos.z());
+			m_aabbMin.x = std::min(m_aabbMin.x, vertPos.x);
+			m_aabbMin.y = std::min(m_aabbMin.y, vertPos.y);
+			m_aabbMin.z = std::min(m_aabbMin.z, vertPos.z);
+			m_aabbMax.x = std::max(m_aabbMax.x, vertPos.x);
+			m_aabbMax.y = std::max(m_aabbMax.y, vertPos.y);
+			m_aabbMax.z = std::max(m_aabbMax.z, vertPos.z);
 		}
 	}
 

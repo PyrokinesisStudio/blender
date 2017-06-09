@@ -84,8 +84,6 @@ protected:
 	//           Elements: SCA_IController with bookmark option
 	static SG_QList		   m_activeBookmarkedControllers;
 
-	static class MT_Vector3 m_sDummy;
-
 	/**
 	 * Ignore activity culling requests?
 	 */

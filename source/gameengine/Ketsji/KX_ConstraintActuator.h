@@ -33,8 +33,7 @@
 #define __KX_CONSTRAINTACTUATOR_H__
 
 #include "SCA_IActuator.h"
-#include "MT_Scalar.h"
-#include "MT_Vector3.h"
+#include "mathfu.h"
 #include "KX_ClientObjectInfo.h"
 
 #include "BLI_utildefines.h"
@@ -59,7 +58,7 @@ protected:
 	float m_maximumSine;
 	// reference direction
 	float m_refDirection[3];
-	MT_Vector3 m_refDirVector;	// same as m_refDirection
+	mt::vec3 m_refDirVector;	// same as m_refDirection
 	// locrotxyz choice (pick one): only one choice allowed at a time!
 	int m_locrot;
 	// active time of actuator
@@ -76,7 +75,7 @@ protected:
 	 * Clamp <var> to <min>, <max>. Borders are included (in as far as
 	 * float comparisons are good for equality...).
 	 */
-	void Clamp(MT_Scalar &var, float min, float max);
+	void Clamp(float &var, float min, float max);
 
 	
  public:

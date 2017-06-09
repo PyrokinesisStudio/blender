@@ -37,7 +37,6 @@ class RAS_MeshSlot;
 class RAS_IPolyMaterial;
 class RAS_Rasterizer;
 class RAS_IStorageInfo;
-class MT_Transform;
 
 class RAS_MaterialDownwardNode;
 class RAS_ManagerDownwardNode;
@@ -50,7 +49,7 @@ class RAS_MeshSlotUpwardNode;
 
 struct RAS_ManagerNodeData
 {
-	MT_Transform m_trans;
+	mt::mat3x4 m_trans;
 	RAS_Rasterizer *m_rasty;
 	RAS_Rasterizer::DrawType m_drawingMode;
 	bool m_sort;

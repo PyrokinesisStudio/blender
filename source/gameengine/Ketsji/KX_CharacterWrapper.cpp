@@ -186,7 +186,7 @@ PyObject *KX_CharacterWrapper::pyattr_get_walk_dir(PyObjectPlus *self_v, const K
 int KX_CharacterWrapper::pyattr_set_walk_dir(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef, PyObject *value)
 {
 	KX_CharacterWrapper* self = static_cast<KX_CharacterWrapper*>(self_v);
-	MT_Vector3 dir;
+	mt::vec3 dir;
 	if (!PyVecTo(value, dir)) {
 		PyErr_SetString(PyExc_TypeError, "KX_CharacterWrapper.walkDirection: expected a vector");
 		return PY_SET_ATTR_FAIL;
@@ -224,7 +224,7 @@ KX_PYMETHODDEF_DOC(KX_CharacterWrapper, setVelocity,
 		return nullptr;
 	}
 
-	MT_Vector3 velocity;
+	mt::vec3 velocity;
 	if (!PyVecTo(pyvect, velocity)) {
 		return nullptr;
 	}

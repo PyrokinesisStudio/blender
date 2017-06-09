@@ -39,13 +39,11 @@
 
 #include <vector>
 #include <list>
+#include <string>
 
 #include "RAS_MaterialBucket.h"
 #include "RAS_MeshMaterial.h"
 #include "RAS_Texture.h"
-#include "MT_Transform.h"
-#include "MT_Vector2.h"
-#include <string>
 
 class RAS_MeshUser;
 class RAS_Deformer;
@@ -135,11 +133,11 @@ public:
 									bool visible, bool collider, bool twoside);
 	virtual unsigned int AddVertex(
 				RAS_MeshMaterial *meshmat,
-				const MT_Vector3& xyz,
-				const MT_Vector2 * const uvs,
-				const MT_Vector4& tangent,
+				const mt::vec3& xyz,
+				const mt::vec2 * const uvs,
+				const mt::vec4& tangent,
 				const unsigned int *rgba,
-				const MT_Vector3& normal,
+				const mt::vec3& normal,
 				const bool flat,
 				const unsigned int origindex);
 
@@ -166,7 +164,7 @@ public:
 	void GenerateAttribLayers();
 
 	// polygon sorting by Z for alpha
-	void SortPolygons(RAS_IDisplayArray *array, const MT_Transform &transform, unsigned int *indexmap);
+	void SortPolygons(RAS_IDisplayArray *array, const mt::mat3x4 &transform, unsigned int *indexmap);
 
 	bool HasColliderPolygon();
 

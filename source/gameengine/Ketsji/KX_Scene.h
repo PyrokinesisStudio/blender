@@ -44,7 +44,6 @@
 #include "SG_Node.h"
 #include "SG_Frustum.h"
 #include "SCA_IScene.h"
-#include "MT_Transform.h"
 
 #include "RAS_Rasterizer.h" // For RAS_Rasterizer::DrawType.
 #include "RAS_FramingManager.h"
@@ -328,7 +327,7 @@ public:
 	KX_TextureRendererManager *GetTextureRendererManager() const;
 	RAS_BoundingBoxManager *GetBoundingBoxManager() const;
 	RAS_MaterialBucket*	FindBucket(RAS_IPolyMaterial* polymat, bool &bucketCreated);
-	void RenderBuckets(const KX_CullingNodeList& nodes, RAS_Rasterizer::DrawType drawingMode, const MT_Transform& cameratransform,
+	void RenderBuckets(const KX_CullingNodeList& nodes, RAS_Rasterizer::DrawType drawingMode, const mt::mat3x4& cameratransform,
 			RAS_Rasterizer *rasty, RAS_OffScreen *offScreen);
 	void RenderTextureRenderers(KX_TextureRendererManager::RendererCategory category, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen,
 			KX_Camera *sceneCamera, const RAS_Rect& viewport, const RAS_Rect& area);
@@ -525,8 +524,8 @@ public:
 
 	void SetPhysicsEnvironment(class PHY_IPhysicsEnvironment*	physEnv);
 
-	void	SetGravity(const MT_Vector3& gravity);
-	MT_Vector3 GetGravity();
+	void	SetGravity(const mt::vec3& gravity);
+	mt::vec3 GetGravity();
 
 	short GetAnimationFPS();
 

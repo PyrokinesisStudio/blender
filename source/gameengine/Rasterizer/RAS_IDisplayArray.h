@@ -136,11 +136,11 @@ public:
 	}
 
 	virtual RAS_ITexVert *CreateVertex(
-				const MT_Vector3& xyz,
-				const MT_Vector2 * const uvs,
-				const MT_Vector4& tangent,
+				const mt::vec3& xyz,
+				const mt::vec2 * const uvs,
+				const mt::vec4& tangent,
 				const unsigned int *rgba,
-				const MT_Vector3& normal) = 0;
+				const mt::vec3& normal) = 0;
 
 	/** Copy vertex data from an other display array. Different vertex type is allowed.
 	 * \param other The other display array to copy from.

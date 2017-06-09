@@ -121,10 +121,10 @@ protected:
 	float m_clip;						// clipping distance
 	float m_mirrorHalfWidth;            // mirror width in mirror space
 	float m_mirrorHalfHeight;           // mirror height in mirror space
-	MT_Vector3 m_mirrorPos;              // mirror center position in local space
-	MT_Vector3 m_mirrorZ;               // mirror Z axis in local space
-	MT_Vector3 m_mirrorY;               // mirror Y axis in local space
-	MT_Vector3 m_mirrorX;               // mirror X axis in local space
+	mt::vec3 m_mirrorPos;              // mirror center position in local space
+	mt::vec3 m_mirrorZ;               // mirror Z axis in local space
+	mt::vec3 m_mirrorY;               // mirror Y axis in local space
+	mt::vec3 m_mirrorX;               // mirror X axis in local space
 	/// canvas
 	RAS_ICanvas* m_canvas;
 	/// rasterizer
@@ -133,10 +133,10 @@ protected:
 	KX_KetsjiEngine* m_engine;
 
 	/// horizon color
-	MT_Vector4 m_horizon;
+	mt::vec4 m_horizon;
 
 	/// zenith color
-	MT_Vector4 m_zenith;
+	mt::vec4 m_zenith;
 
 	/// render 3d scene to image
 	virtual void calcImage (unsigned int texId, double ts, unsigned int format) { calcViewport(texId, ts, format); }

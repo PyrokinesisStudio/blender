@@ -97,7 +97,7 @@ KX_FontObject::KX_FontObject(void *sgReplicationInfo,
 	Curve *text = static_cast<Curve *> (ob->data);
 	m_fsize = text->fsize;
 	m_line_spacing = text->linedist;
-	m_offset = MT_Vector3(text->xof, text->yof, 0.0f);
+	m_offset = mt::vec3(text->xof, text->yof, 0.0f);
 
 	m_fontid = GetFontId(text->vfont);
 
@@ -130,8 +130,6 @@ void KX_FontObject::AddMeshUser()
 {
 	m_meshUser = new RAS_TextUser(m_pClient_info, m_boundingBox);
 
-	NodeGetWorldTransform().getValue(m_meshUser->GetMatrix());
-
 	RAS_BucketManager *bucketManager = GetScene()->GetBucketManager();
 	RAS_DisplayArrayBucket *arrayBucket = bucketManager->GetTextDisplayArrayBucket();
 
@@ -143,17 +141,17 @@ void KX_FontObject::UpdateBuckets()
 {
 	// Update datas and add mesh slot to be rendered only if the object is not culled.
 	if (m_pSGNode->IsDirty(SG_Node::DIRTY_RENDER)) {
-		NodeGetWorldTransform().getValue(m_meshUser->GetMatrix());
+		NodeGetWorldTransform().PackFromAffineTransform(m_meshUser->GetMatrix());
 		m_pSGNode->ClearDirty(SG_Node::DIRTY_RENDER);
 	}
 
 	// Font Objects don't use the glsl shader, this color management code is copied from gpu_shader_material.glsl
 	float color[4];
 	if (m_do_color_management) {
-		linearrgb_to_srgb_v4(color, m_objectColor.getValue());
+		linearrgb_to_srgb_v4(color, m_objectColor.Data());
 	}
 	else {
-		m_objectColor.getValue(color);
+		m_objectColor.Pack(color);
 	}
 
 	// HARDCODED MULTIPLICATION FACTOR - this will affect the render resolution directly
@@ -163,13 +161,13 @@ void KX_FontObject::UpdateBuckets()
 	const float aspect = m_fsize / size;
 
 	// Account for offset
-	MT_Vector3 offset = NodeGetWorldOrientation() * m_offset * NodeGetWorldScaling();
+	mt::vec3 offset = NodeGetWorldOrientation() * m_offset * NodeGetWorldScaling();
 	// Orient the spacing vector
-	MT_Vector3 spacing = NodeGetWorldOrientation() * MT_Vector3(0.0f, m_fsize * m_line_spacing, 0.0f) * NodeGetWorldScaling()[1];
+	mt::vec3 spacing = NodeGetWorldOrientation() * mt::vec3(0.0f, m_fsize * m_line_spacing, 0.0f) * NodeGetWorldScaling()[1];
 
 	RAS_TextUser *textUser = (RAS_TextUser *)m_meshUser;
 
-	textUser->SetColor(MT_Vector4(color));
+	textUser->SetColor(mt::vec4(color));
 	textUser->SetFrontFace(!m_bIsNegativeScaling);
 	textUser->SetFontId(m_fontid);
 	textUser->SetSize(size);
@@ -186,10 +184,10 @@ void KX_FontObject::SetText(const std::string& text)
 	m_text = text;
 	m_texts = split_string(text);
 
-	MT_Vector2 min;
-	MT_Vector2 max;
+	mt::vec2 min;
+	mt::vec2 max;
 	GetTextAabb(min, max);
-	m_boundingBox->SetAabb(MT_Vector3(min.x(), min.y(), 0.0f), MT_Vector3(max.x(), max.y(), 0.0f));
+	m_boundingBox->SetAabb(mt::vec3(min.x, min.y, 0.0f), mt::vec3(max.x, max.y, 0.0f));
 }
 
 void KX_FontObject::UpdateTextFromProperty()
@@ -201,19 +199,19 @@ void KX_FontObject::UpdateTextFromProperty()
 	}
 }
 
-const MT_Vector2 KX_FontObject::GetTextDimensions()
+const mt::vec2 KX_FontObject::GetTextDimensions()
 {
-	MT_Vector2 min;
-	MT_Vector2 max;
+	mt::vec2 min;
+	mt::vec2 max;
 	GetTextAabb(min, max);
 
 	// Scale the width and height by the object's scale
-	const MT_Vector3& scale = NodeGetLocalScaling();
+	const mt::vec3& scale = NodeGetLocalScaling();
 
-	return MT_Vector2((max.x() - min.x()) * fabs(scale.x()), (max.y() - min.y()) * fabs(scale.y()));
+	return mt::vec2((max.x - min.x) * fabs(scale.x), (max.y - min.y) * fabs(scale.y));
 }
 
-void KX_FontObject::GetTextAabb(MT_Vector2& min, MT_Vector2& max)
+void KX_FontObject::GetTextAabb(mt::vec2& min, mt::vec2& max)
 {
 	const float RES = BGE_FONT_RES * m_resolution;
 
@@ -228,16 +226,16 @@ void KX_FontObject::GetTextAabb(MT_Vector2& min, MT_Vector2& max)
 		const std::string& text = m_texts[i];
 		BLF_boundbox(m_fontid, text.c_str(), text.size(), &box);
 		if (i == 0) {
-			min.x() = box.xmin;
-			min.y() = box.ymin;
-			max.x() = box.xmax;
-			max.y() = box.ymax;
+			min.x = box.xmin;
+			min.y = box.ymin;
+			max.x = box.xmax;
+			max.y = box.ymax;
 		}
 		else {
-			min.x() = std::min(min.x(), box.xmin);
-			min.y() = std::min(min.y(), box.ymin - lineSpacing * i);
-			max.x() = std::max(max.x(), box.xmax);
-			max.y() = std::max(max.y(), box.ymax - lineSpacing * i);
+			min.x = std::min(min.x, box.xmin);
+			min.y = std::min(min.y, box.ymin - lineSpacing * i);
+			max.x = std::max(max.x, box.xmax);
+			max.y = std::max(max.y, box.ymax - lineSpacing * i);
 		}
 	}
 

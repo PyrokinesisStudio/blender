@@ -27,7 +27,6 @@
 #include "LinearMath/btTransform.h"
 
 #include "PHY_IMotionState.h"
-#include "MT_Vector3.h"
 
 class CcdPhysicsEnvironment;
 class btCollisionObject;
@@ -41,7 +40,7 @@ public:
 	virtual ~CcdGraphicController();
 
 	void SetLocalAabb(const btVector3& aabbMin, const btVector3& aabbMax);
-	virtual void SetLocalAabb(const MT_Vector3& aabbMin, const MT_Vector3& aabbMax);
+	virtual void SetLocalAabb(const mt::vec3& aabbMin, const mt::vec3& aabbMax);
 
 	PHY_IMotionState *GetMotionState()
 	{

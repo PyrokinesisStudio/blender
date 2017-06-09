@@ -9,8 +9,6 @@
 #include "RAS_Texture.h" // For RAS_Texture::MaxUnits.
 #include "RAS_Rasterizer.h" // For RAS_Rasterizer::TexCoGenList.
 
-#include "MT_Matrix4x4.h"
-
 #include <string>
 #include <vector>
 
@@ -166,7 +164,7 @@ public:
 	void DeleteShader();
 
 	// Update predefined uniforms each render call
-	void Update(RAS_Rasterizer *rasty, MT_Matrix4x4 model);
+	void Update(RAS_Rasterizer *rasty, const mt::mat4 &model);
 
 	void SetSampler(int loc, int unit);
 
@@ -181,11 +179,11 @@ public:
 	 */
 	int GetUniformLocation(const std::string& name, bool debug=true);
 
-	void SetUniform(int uniform, const MT_Vector2 &vec);
-	void SetUniform(int uniform, const MT_Vector3 &vec);
-	void SetUniform(int uniform, const MT_Vector4 &vec);
-	void SetUniform(int uniform, const MT_Matrix4x4 &vec, bool transpose = false);
-	void SetUniform(int uniform, const MT_Matrix3x3 &vec, bool transpose = false);
+	void SetUniform(int uniform, const mt::vec2 &vec);
+	void SetUniform(int uniform, const mt::vec3 &vec);
+	void SetUniform(int uniform, const mt::vec4 &vec);
+	void SetUniform(int uniform, const mt::mat4 &vec, bool transpose = false);
+	void SetUniform(int uniform, const mt::mat3 &vec, bool transpose = false);
 	void SetUniform(int uniform, const float &val);
 	void SetUniform(int uniform, const float *val, int len);
 	void SetUniform(int uniform, const int *val, int len);

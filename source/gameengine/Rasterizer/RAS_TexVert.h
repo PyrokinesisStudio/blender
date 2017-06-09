@@ -51,15 +51,15 @@ public:
 	{
 	}
 
-	RAS_TexVert(const MT_Vector3& xyz,
-	            const MT_Vector2 uvs[UvSize],
-	            const MT_Vector4& tangent,
+	RAS_TexVert(const mt::vec3& xyz,
+	            const mt::vec2 uvs[UvSize],
+	            const mt::vec4& tangent,
 				const unsigned int rgba[ColorSize],
-	            const MT_Vector3& normal)
+	            const mt::vec3& normal)
 		:RAS_ITexVert(xyz, tangent, normal)
 	{
 		for (int i = 0; i < UvSize; ++i) {
-			uvs[i].getValue(m_uvs[i]);
+			uvs[i].Pack(m_uvs[i]);
 		}
 
 		for (unsigned short i = 0; i < ColorSize; ++i) {
@@ -81,9 +81,9 @@ public:
 		return m_uvs[unit];
 	}
 
-	virtual void SetUV(const int index, const MT_Vector2& uv)
+	virtual void SetUV(const int index, const mt::vec2& uv)
 	{
-		uv.getValue(m_uvs[index]);
+		uv.Pack(m_uvs[index]);
 	}
 
 	virtual void SetUV(const int index, const float uv[2])
@@ -111,7 +111,7 @@ public:
 		m_rgba[index] = rgba;
 	}
 
-	virtual void SetRGBA(const int index, const MT_Vector4& rgba)
+	virtual void SetRGBA(const int index, const mt::vec4& rgba)
 	{
 		unsigned char *colp = (unsigned char *)&m_rgba[index];
 		colp[0] = (unsigned char)(rgba[0] * 255.0f);
