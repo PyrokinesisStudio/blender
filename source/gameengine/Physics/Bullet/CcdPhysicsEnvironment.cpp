@@ -3146,9 +3146,9 @@ void CcdPhysicsEnvironment::ConvertObject(KX_BlenderSceneConverter& converter, K
 			SG_Node *parentNode = parent->GetSGNode();
 			// relative transform
 			MT_Vector3 parentScale = parentNode->GetWorldScaling();
-			parentScale[0] = MT_Scalar(1.0f) / parentScale[0];
-			parentScale[1] = MT_Scalar(1.0f) / parentScale[1];
-			parentScale[2] = MT_Scalar(1.0f) / parentScale[2];
+			parentScale[0] = 1.0f / parentScale[0];
+			parentScale[1] = 1.0f / parentScale[1];
+			parentScale[2] = 1.0f / parentScale[2];
 			MT_Vector3 relativeScale = gameNode->GetWorldScaling() * parentScale;
 			MT_Matrix3x3 parentInvRot = parentNode->GetWorldOrientation().transposed();
 			MT_Vector3 relativePos = parentInvRot * ((gameNode->GetWorldPosition() - parentNode->GetWorldPosition()) * parentScale);

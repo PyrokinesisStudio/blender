@@ -202,10 +202,10 @@ KX_Scene::KX_Scene(SCA_IInputDevice *inputDevice,
 	switch (scene->gm.obstacleSimulation)
 	{
 	case OBSTSIMULATION_TOI_rays:
-		m_obstacleSimulation = new KX_ObstacleSimulationTOI_rays((MT_Scalar)scene->gm.levelHeight, showObstacleSimulation);
+		m_obstacleSimulation = new KX_ObstacleSimulationTOI_rays((float)scene->gm.levelHeight, showObstacleSimulation);
 		break;
 	case OBSTSIMULATION_TOI_cells:
-		m_obstacleSimulation = new KX_ObstacleSimulationTOI_cells((MT_Scalar)scene->gm.levelHeight, showObstacleSimulation);
+		m_obstacleSimulation = new KX_ObstacleSimulationTOI_cells((float)scene->gm.levelHeight, showObstacleSimulation);
 		break;
 	default:
 		m_obstacleSimulation = nullptr;

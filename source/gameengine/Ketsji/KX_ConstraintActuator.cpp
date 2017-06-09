@@ -85,7 +85,7 @@ KX_ConstraintActuator::KX_ConstraintActuator(SCA_IObject *gameobj,
 	case KX_ACT_CONSTRAINT_ORIY:
 	case KX_ACT_CONSTRAINT_ORIZ:
 		{
-			MT_Scalar len = m_refDirVector.length();
+			float len = m_refDirVector.length();
 			if (MT_fuzzyZero(len)) {
 				// missing a valid direction
 				CM_LogicBrickWarning(this, "there is no valid reference direction!");
@@ -184,7 +184,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 		MT_Vector3    newposition;
 		MT_Vector3   normal, direction, refDirection;
 		MT_Matrix3x3 rotation = obj->NodeGetWorldOrientation();
-		MT_Scalar    filter, newdistance, cosangle;
+		float    filter, newdistance, cosangle;
 		int axis, sign;
 
 		if (m_posDampTime) {
@@ -358,7 +358,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 						goto CHECK_TIME;
 					}
 					if (m_option & KX_ACT_CONSTRAINT_NORMAL) {
-						MT_Scalar rotFilter;
+						float rotFilter;
 						// apply damping on the direction
 						if (m_rotDampTime) {
 							rotFilter = m_rotDampTime/(1.0f+m_rotDampTime);
@@ -384,7 +384,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 						if (spc && spc->IsDynamic()) {
 							MT_Vector3 linV = spc->GetLinearVelocity();
 							// cancel the projection along the ray direction
-							MT_Scalar fallspeed = linV.dot(direction);
+							float fallspeed = linV.dot(direction);
 							if (!MT_fuzzyZero(fallspeed))
 								spc->SetLinearVelocity(linV-fallspeed*direction,false);
 						}
@@ -468,18 +468,18 @@ bool KX_ConstraintActuator::Update(double curtime)
 				{
 					MT_Vector3 newnormal = callback.m_hitNormal;
 					// compute new position & orientation
-					MT_Scalar distance = (callback.m_hitPoint-position).length()-spc->GetRadius(); 
+					float distance = (callback.m_hitPoint-position).length()-spc->GetRadius(); 
 					// estimate the velocity of the hit point
 					MT_Vector3 relativeHitPoint;
 					relativeHitPoint = (callback.m_hitPoint-m_hitObject->NodeGetWorldPosition());
 					MT_Vector3 velocityHitPoint = m_hitObject->GetVelocity(relativeHitPoint);
 					MT_Vector3 relativeVelocity = spc->GetLinearVelocity() - velocityHitPoint;
-					MT_Scalar relativeVelocityRay = direction.dot(relativeVelocity);
-					MT_Scalar springExtent = 1.0f - distance/m_minimumBound;
+					float relativeVelocityRay = direction.dot(relativeVelocity);
+					float springExtent = 1.0f - distance/m_minimumBound;
 					// Fh force is stored in m_maximum
-					MT_Scalar springForce = springExtent * m_maximumBound;
+					float springForce = springExtent * m_maximumBound;
 					// damping is stored in m_refDirection [0] = damping, [1] = rot damping
-					MT_Scalar springDamp = relativeVelocityRay * m_refDirVector[0];
+					float springDamp = relativeVelocityRay * m_refDirVector[0];
 					MT_Vector3 newVelocity = spc->GetLinearVelocity()-(springForce+springDamp)*direction;
 					if (m_option & KX_ACT_CONSTRAINT_NORMAL)
 					{
@@ -541,7 +541,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 	return result;
 } /* end of KX_ConstraintActuator::Update(double curtime,double deltatime)   */
 
-void KX_ConstraintActuator::Clamp(MT_Scalar &var, 
+void KX_ConstraintActuator::Clamp(float &var, 
 								  float min, 
 								  float max) {
 	if (var < min) {
@@ -603,7 +603,7 @@ int KX_ConstraintActuator::pyattr_check_direction(PyObjectPlus *self_v, const st
 {
 	KX_ConstraintActuator* act = static_cast<KX_ConstraintActuator*>(self_v);
 	MT_Vector3 dir(act->m_refDirection);
-	MT_Scalar len = dir.length();
+	float len = dir.length();
 	if (MT_fuzzyZero(len)) {
 		PyErr_SetString(PyExc_ValueError, "actuator.direction = vec: KX_ConstraintActuator, invalid direction");
 		return 1;

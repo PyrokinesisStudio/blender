@@ -94,7 +94,7 @@ void RAS_DebugDraw::DrawLine(const MT_Vector3 &from, const MT_Vector3 &to, const
 	m_lines.emplace_back(from, to, color);
 }
 
-void RAS_DebugDraw::DrawCircle(const MT_Vector3 &center, const MT_Scalar radius,
+void RAS_DebugDraw::DrawCircle(const MT_Vector3 &center, const float radius,
 		const MT_Vector4 &color, const MT_Vector3 &normal, int nsector)
 {
 	m_circles.emplace_back(center, normal, radius, nsector, color);

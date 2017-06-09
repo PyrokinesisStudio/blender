@@ -32,7 +32,6 @@
 #ifndef __KX_WORLDINFO_H__
 #define __KX_WORLDINFO_H__
 
-#include "MT_Scalar.h"
 #include "MT_Vector4.h"
 #include "KX_KetsjiEngine.h"
 #include "EXP_PyObjectPlus.h"

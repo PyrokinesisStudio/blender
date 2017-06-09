@@ -19,13 +19,13 @@ class KX_MaterialIpoController : public SG_Controller
 public:
 	MT_Vector4			m_rgba;
 	MT_Vector3			m_specrgb;
-	MT_Scalar			m_hard;
-	MT_Scalar			m_spec;
-	MT_Scalar			m_ref;
-	MT_Scalar			m_emit;
-	MT_Scalar			m_ambient;
-	MT_Scalar			m_alpha;
-	MT_Scalar			m_specAlpha;
+	float			m_hard;
+	float			m_spec;
+	float			m_ref;
+	float			m_emit;
+	float			m_ambient;
+	float			m_alpha;
+	float			m_specAlpha;
 
 private:
 	T_InterpolatorList	m_interpolators;

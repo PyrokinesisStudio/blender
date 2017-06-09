@@ -571,7 +571,7 @@ protected:
 	int m_savedCollisionFlags;
 	short m_savedCollisionFilterGroup;
 	short m_savedCollisionFilterMask;
-	MT_Scalar m_savedMass;
+	float m_savedMass;
 	bool m_savedDyna;
 	bool m_suspended;
 
@@ -680,8 +680,8 @@ public:
 	virtual void SetScaling(const MT_Vector3& scale);
 	virtual void SetTransform();
 
-	virtual MT_Scalar GetMass();
-	virtual void SetMass(MT_Scalar newmass);
+	virtual float GetMass();
+	virtual void SetMass(float newmass);
 
 	// physics methods
 	virtual void ApplyImpulse(const MT_Vector3& attach, const MT_Vector3& impulsein, bool local);

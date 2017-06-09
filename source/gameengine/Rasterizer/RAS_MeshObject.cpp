@@ -440,7 +440,7 @@ void RAS_MeshObject::SortPolygons(RAS_IDisplayArray *array, const MT_Transform &
 
 	// Extract camera Z plane...
 	const MT_Vector3 pnorm(transform.getBasis()[2]);
-	// unneeded: const MT_Scalar pval = transform.getOrigin()[2];
+	// unneeded: const float pval = transform.getOrigin()[2];
 
 	std::vector<polygonSlot> poly_slots(totpoly);
 

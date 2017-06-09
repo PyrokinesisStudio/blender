@@ -119,7 +119,7 @@ public:
 	~RAS_DebugDraw();
 
 	void DrawLine(const MT_Vector3 &from, const MT_Vector3 &to, const MT_Vector4& color);
-	void DrawCircle(const MT_Vector3 &center, const MT_Scalar radius,
+	void DrawCircle(const MT_Vector3 &center, const float radius,
 								 const MT_Vector4 &color, const MT_Vector3 &normal, int nsector);
 	/** Draw a box depends on minimal and maximal corner.
 	 * \param pos The box's position.

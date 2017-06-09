@@ -151,7 +151,7 @@ public :
 	static 
 		KX_SlowParentRelation *
 	New(
-		MT_Scalar relaxation
+		float relaxation
 	);
 
 	/** 
@@ -173,13 +173,13 @@ public :
 	NewCopy(
 	);
 
-		MT_Scalar
+		float
 	GetTimeOffset(
 	) { return m_relax; }
 	
 		void
 	SetTimeOffset(
-		MT_Scalar relaxation
+		float relaxation
 	) { m_relax = relaxation; }
 
 	~KX_SlowParentRelation(
@@ -194,12 +194,12 @@ public :
 private :
 
 	KX_SlowParentRelation(
-		MT_Scalar relaxation
+		float relaxation
 	);
 
 	// the relaxation coefficient.
 
-	MT_Scalar m_relax;
+	float m_relax;
 
 	/**
 	 * Looks like a hack flag to me.

@@ -248,14 +248,14 @@ bool ImageRender::Render()
 		// get observer world position
 		const MT_Vector3 & observerWorldPos = m_observer->GetSGNode()->GetWorldPosition();
 		// get plane D term = mirrorPos . normal
-		MT_Scalar mirrorPlaneDTerm = mirrorWorldPos.dot(mirrorWorldZ);
+		float mirrorPlaneDTerm = mirrorWorldPos.dot(mirrorWorldZ);
 		// compute distance of observer to mirror = D - observerPos . normal
-		MT_Scalar observerDistance = mirrorPlaneDTerm - observerWorldPos.dot(mirrorWorldZ);
+		float observerDistance = mirrorPlaneDTerm - observerWorldPos.dot(mirrorWorldZ);
 		// if distance < 0.01 => observer is on wrong side of mirror, don't render
 		if (observerDistance < 0.01)
 			return false;
 		// set camera world position = observerPos + normal * 2 * distance
-		MT_Vector3 cameraWorldPos = observerWorldPos + (MT_Scalar(2.0)*observerDistance)*mirrorWorldZ;
+		MT_Vector3 cameraWorldPos = observerWorldPos + (2.0f * observerDistance)*mirrorWorldZ;
 		m_camera->GetSGNode()->SetLocalPosition(cameraWorldPos);
 		// set camera orientation: z=normal, y=mirror_up in world space, x= y x z
 		MT_Vector3 mirrorWorldY = mirrorObjWorldOri * m_mirrorY;
@@ -273,7 +273,7 @@ bool ImageRender::Render()
 		mirrorOffset = mirrorOffset * cameraWorldOri;
 		//   scale mirror size to world scale:
 		//     get closest local axis for mirror Y and X axis and scale height and width by local axis scale
-		MT_Scalar x, y;
+		float x, y;
 		x = fabs(m_mirrorY[0]);
 		y = fabs(m_mirrorY[1]);
 		float height = (x > y) ?

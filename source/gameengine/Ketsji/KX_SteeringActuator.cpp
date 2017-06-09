@@ -220,7 +220,7 @@ bool KX_SteeringActuator::Update(double curtime)
 			{
 				terminate = false;
 
-				static const MT_Scalar WAYPOINT_RADIUS(0.25f);
+				static const float WAYPOINT_RADIUS(0.25f);
 
 				if (m_pathUpdateTime<0 || (m_pathUpdatePeriod>=0 && 
 											curtime - m_pathUpdateTime>((double)m_pathUpdatePeriod/1000.0)))

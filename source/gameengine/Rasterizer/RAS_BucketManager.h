@@ -48,7 +48,7 @@ public:
 	{
 	public:
 		/// depth
-		MT_Scalar m_z;
+		float m_z;
 
 		union {
 			RAS_MeshSlot *m_ms;

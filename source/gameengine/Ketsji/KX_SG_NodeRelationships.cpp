@@ -175,7 +175,7 @@ KX_VertexParentRelation(
 	KX_SlowParentRelation *
 KX_SlowParentRelation::
 New(
-	MT_Scalar relaxation
+	float relaxation
 ) {
 	return new 	KX_SlowParentRelation(relaxation);
 }
@@ -237,7 +237,7 @@ UpdateChildCoordinates(
 			// now 'interpolate' the normal coordinates with the last 
 			// world coordinates to get the new world coordinates.
 
-			MT_Scalar weight = MT_Scalar(1)/(m_relax + 1);
+			float weight = 1.0f / (m_relax + 1.0f);
 			child_w_scale = (m_relax * child_w_scale + child_n_scale) * weight;
 			child_w_pos = (m_relax * child_w_pos + child_n_pos) * weight;
 			// for rotation we must go through quaternion
@@ -281,7 +281,7 @@ NewCopy(
 
 KX_SlowParentRelation::
 KX_SlowParentRelation(
-	MT_Scalar relaxation
+	float relaxation
 ):
 	m_relax(relaxation),
 	m_initialized(false)

@@ -137,10 +137,10 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 						yaxis.x(), yaxis.y(), yaxis.z(),
 						norm.x(), norm.y(), norm.z());
 		}
-		const MT_Scalar rad = circle.m_radius;
+		const float rad = circle.m_radius;
 		const int n = circle.m_sector;
 		for (int j = 0; j < n; ++j) {
-			const MT_Scalar theta = j * MT_2_PI / n;
+			const float theta = j * MT_2_PI / n;
 			MT_Vector3 pos(cosf(theta) * rad, sinf(theta) * rad, 0.0f);
 			pos = pos * tr;
 			pos += circle.m_center;

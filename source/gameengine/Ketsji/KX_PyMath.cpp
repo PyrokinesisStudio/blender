@@ -86,7 +86,7 @@ bool PyQuatTo(PyObject *pyval, MT_Quaternion &qrot)
 		return false;
 
 	/* annoying!, Blender/Mathutils have the W axis first! */
-	MT_Scalar w = qrot[0]; /* from python, this is actually the W */
+	float w = qrot[0]; /* from python, this is actually the W */
 	qrot[0] = qrot[1];
 	qrot[1] = qrot[2];
 	qrot[2] = qrot[3];

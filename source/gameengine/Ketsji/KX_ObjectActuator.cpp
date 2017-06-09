@@ -159,7 +159,7 @@ bool KX_ObjectActuator::Update()
 			// dv = e(t) - e(t-1)
 			// KP, KD, KI : coefficient
 			// F = KP*e+KI*I+KD*dv
-			MT_Scalar mass = parent->GetMass();
+			float mass = parent->GetMass();
 			if (mass < MT_EPSILON)
 				return false;
 			MT_Vector3 v = parent->GetLinearVelocity(m_bitLocalFlag.LinearVelocity);
@@ -234,7 +234,7 @@ bool KX_ObjectActuator::Update()
 				MT_Vector3 old_dir = character->GetWalkDirection();
 
 				if (!old_dir.fuzzyZero()) {
-					MT_Scalar mag = old_dir.length();
+					float mag = old_dir.length();
 
 					dir = dir + old_dir;
 					if (!dir.fuzzyZero())

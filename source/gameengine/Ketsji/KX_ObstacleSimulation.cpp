@@ -43,15 +43,15 @@ namespace
 }
 
 static int sweepCircleCircle(
-        const MT_Vector2 &pos0, const MT_Scalar r0, const MT_Vector2 &v,
-        const MT_Vector2 &pos1, const MT_Scalar r1,
+        const MT_Vector2 &pos0, const float r0, const MT_Vector2 &v,
+        const MT_Vector2 &pos1, const float r1,
         float& tmin, float& tmax)
 {
 	static const float EPS = 0.0001f;
 	MT_Vector2 c0(pos0.x(), pos0.y());
 	MT_Vector2 c1(pos1.x(), pos1.y());
 	MT_Vector2 s = c1 - c0;
-	MT_Scalar  r = r0+r1;
+	float  r = r0+r1;
 	float c = s.length2() - r*r;
 	float a = v.length2();
 	if (a < EPS) return 0;	// not moving
@@ -66,8 +66,8 @@ static int sweepCircleCircle(
 }
 
 static int sweepCircleSegment(
-        const MT_Vector2 &pos0, const MT_Scalar r0, const MT_Vector2 &v,
-        const MT_Vector2& pa, const MT_Vector2 &pb, const MT_Scalar sr,
+        const MT_Vector2 &pos0, const float r0, const MT_Vector2 &v,
+        const MT_Vector2& pa, const MT_Vector2 &pb, const float sr,
         float& tmin, float &tmax)
 {
 	// equation parameters
@@ -76,7 +76,7 @@ static int sweepCircleSegment(
 	MT_Vector2 sb(pb.x(), pb.y());
 	MT_Vector2 L = sb-sa;
 	MT_Vector2 H = c0-sa;
-	MT_Scalar radius = r0+sr;
+	float radius = r0+sr;
 	float l2 = L.length2();
 	float r2 = radius * radius;
 	float dl = perp(v, L);
@@ -169,7 +169,7 @@ static float interpolateToi(float a, const float* dir, const float* toi, const i
 	return 0;
 }
 
-KX_ObstacleSimulation::KX_ObstacleSimulation(MT_Scalar levelHeight, bool enableVisualization)
+KX_ObstacleSimulation::KX_ObstacleSimulation(float levelHeight, bool enableVisualization)
 :	m_levelHeight(levelHeight)
 ,	m_enableVisualization(enableVisualization)
 {
@@ -288,7 +288,7 @@ KX_Obstacle* KX_ObstacleSimulation::GetObstacle(KX_GameObject* gameobj)
 }
 
 void KX_ObstacleSimulation::AdjustObstacleVelocity(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
-										MT_Vector3& velocity, MT_Scalar maxDeltaSpeed,MT_Scalar maxDeltaAngle)
+										MT_Vector3& velocity, float maxDeltaSpeed,float maxDeltaAngle)
 {
 }
 
@@ -332,10 +332,10 @@ static MT_Vector3 nearestPointToObstacle(MT_Vector3& pos ,KX_Obstacle* obstacle)
 		MT_Vector3 ab = obstacle->m_pos2 - obstacle->m_pos;
 		if (!ab.fuzzyZero())
 		{
-			const MT_Scalar dist = ab.length();
+			const float dist = ab.length();
 			MT_Vector3 abdir = ab.normalized();
 			MT_Vector3  v = pos - obstacle->m_pos;
-			MT_Scalar proj = abdir.dot(v);
+			float proj = abdir.dot(v);
 			CLAMP(proj, 0, dist);
 			MT_Vector3 res = obstacle->m_pos + abdir*proj;
 			return res;
@@ -365,7 +365,7 @@ static bool filterObstacle(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavM
 }
 
 ///////////*********TOI_rays**********/////////////////
-KX_ObstacleSimulationTOI::KX_ObstacleSimulationTOI(MT_Scalar levelHeight, bool enableVisualization)
+KX_ObstacleSimulationTOI::KX_ObstacleSimulationTOI(float levelHeight, bool enableVisualization)
 :	KX_ObstacleSimulation(levelHeight, enableVisualization),
 	m_maxSamples(32),
 	m_minToi(0.0f),
@@ -379,7 +379,7 @@ KX_ObstacleSimulationTOI::KX_ObstacleSimulationTOI(MT_Scalar levelHeight, bool e
 
 
 void KX_ObstacleSimulationTOI::AdjustObstacleVelocity(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
-                                                      MT_Vector3& velocity, MT_Scalar maxDeltaSpeed, MT_Scalar maxDeltaAngle)
+                                                      MT_Vector3& velocity, float maxDeltaSpeed, float maxDeltaAngle)
 {
 	int nobs = m_obstacles.size();
 	int obstidx = std::find(m_obstacles.begin(), m_obstacles.end(), activeObst) - m_obstacles.begin();
@@ -416,7 +416,7 @@ struct TOICircle
 	float	minToi, maxToi;			// Min/max TOI (seconds)
 };
 
-KX_ObstacleSimulationTOI_rays::KX_ObstacleSimulationTOI_rays(MT_Scalar levelHeight, bool enableVisualization):
+KX_ObstacleSimulationTOI_rays::KX_ObstacleSimulationTOI_rays(float levelHeight, bool enableVisualization):
 	KX_ObstacleSimulationTOI(levelHeight, enableVisualization)
 {
 	m_maxSamples = 32;
@@ -813,7 +813,7 @@ void KX_ObstacleSimulationTOI_cells::sampleRVO(KX_Obstacle* activeObst, KX_NavMe
 	delete [] spos;
 }
 
-KX_ObstacleSimulationTOI_cells::KX_ObstacleSimulationTOI_cells(MT_Scalar levelHeight, bool enableVisualization)
+KX_ObstacleSimulationTOI_cells::KX_ObstacleSimulationTOI_cells(float levelHeight, bool enableVisualization)
 :	KX_ObstacleSimulationTOI(levelHeight, enableVisualization)
 ,	m_bias(0.4f)
 ,	m_adaptive(true)

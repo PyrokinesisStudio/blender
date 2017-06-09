@@ -33,7 +33,6 @@
 #define __KX_CONSTRAINTACTUATOR_H__
 
 #include "SCA_IActuator.h"
-#include "MT_Scalar.h"
 #include "MT_Vector3.h"
 #include "KX_ClientObjectInfo.h"
 
@@ -76,7 +75,7 @@ protected:
 	 * Clamp <var> to <min>, <max>. Borders are included (in as far as
 	 * float comparisons are good for equality...).
 	 */
-	void Clamp(MT_Scalar &var, float min, float max);
+	void Clamp(float &var, float min, float max);
 
 	
  public:

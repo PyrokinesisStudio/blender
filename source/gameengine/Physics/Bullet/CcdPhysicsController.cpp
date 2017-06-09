@@ -1114,12 +1114,12 @@ void CcdPhysicsController::SetTransform()
 	}
 }
 
-MT_Scalar CcdPhysicsController::GetMass()
+float CcdPhysicsController::GetMass()
 {
 	if (GetSoftBody())
 		return GetSoftBody()->getTotalMass();
 
-	MT_Scalar invmass = 0.0f;
+	float invmass = 0.0f;
 	if (GetRigidBody())
 		invmass = GetRigidBody()->getInvMass();
 	if (invmass)
@@ -1127,7 +1127,7 @@ MT_Scalar CcdPhysicsController::GetMass()
 	return 0.0f;
 }
 
-void CcdPhysicsController::SetMass(MT_Scalar newmass)
+void CcdPhysicsController::SetMass(float newmass)
 {
 	btRigidBody *body = GetRigidBody();
 	if (body && !m_suspended && !IsPhysicsSuspended() && (newmass > MT_EPSILON && GetMass() > MT_EPSILON)) {

@@ -80,8 +80,8 @@ public:
 	virtual void SetScaling(const MT_Vector3& scale) = 0;
 	virtual void SetTransform() = 0;
 
-	virtual MT_Scalar GetMass() = 0;
-	virtual void SetMass(MT_Scalar newmass) = 0;
+	virtual float GetMass() = 0;
+	virtual void SetMass(float newmass) = 0;
 
 	// physics methods
 	virtual void ApplyImpulse(const MT_Vector3& attach, const MT_Vector3& impulse, bool local) = 0;

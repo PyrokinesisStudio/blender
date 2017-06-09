@@ -97,11 +97,11 @@ class KX_ObjectActuator : public SCA_IActuator
 	MT_Vector3		m_linear_velocity;
 	MT_Vector3		m_angular_velocity;
 	MT_Vector3		m_pid;
-	MT_Scalar		m_linear_length2;
-	MT_Scalar		m_angular_length2;
+	float		m_linear_length2;
+	float		m_angular_length2;
 	// used in damping
-	MT_Scalar		m_current_linear_factor;
-	MT_Scalar		m_current_angular_factor;
+	float		m_current_linear_factor;
+	float		m_current_angular_factor;
 	short			m_damping;
 	// used in servo control
 	MT_Vector3		m_previous_error;

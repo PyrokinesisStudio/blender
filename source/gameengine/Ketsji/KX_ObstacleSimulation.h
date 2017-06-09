@@ -52,7 +52,7 @@ struct KX_Obstacle
 	KX_OBSTACLE_SHAPE m_shape;
 	MT_Vector3 m_pos;
 	MT_Vector3 m_pos2;
-	MT_Scalar m_rad;
+	float m_rad;
 	
 	float vel[2];
 	float pvel[2];
@@ -71,12 +71,12 @@ class KX_ObstacleSimulation
 protected:
 	KX_Obstacles m_obstacles;
 
-	MT_Scalar m_levelHeight;
+	float m_levelHeight;
 	bool m_enableVisualization;
 
 	KX_Obstacle* CreateObstacle(KX_GameObject* gameobj);
 public:
-	KX_ObstacleSimulation(MT_Scalar levelHeight, bool enableVisualization);
+	KX_ObstacleSimulation(float levelHeight, bool enableVisualization);
 	virtual ~KX_ObstacleSimulation();
 
 	void DrawObstacles();
@@ -88,7 +88,7 @@ public:
 	KX_Obstacle* GetObstacle(KX_GameObject* gameobj);
 	void UpdateObstacles();
 	virtual void AdjustObstacleVelocity(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
-	                                    MT_Vector3& velocity, MT_Scalar maxDeltaSpeed,MT_Scalar maxDeltaAngle);
+	                                    MT_Vector3& velocity, float maxDeltaSpeed,float maxDeltaAngle);
 
 };
 class KX_ObstacleSimulationTOI: public KX_ObstacleSimulation
@@ -105,9 +105,9 @@ protected:
 	virtual void sampleRVO(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
 							const float maxDeltaAngle) = 0;
 public:
-	KX_ObstacleSimulationTOI(MT_Scalar levelHeight, bool enableVisualization);
+	KX_ObstacleSimulationTOI(float levelHeight, bool enableVisualization);
 	virtual void AdjustObstacleVelocity(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
-		MT_Vector3& velocity, MT_Scalar maxDeltaSpeed,MT_Scalar maxDeltaAngle);
+		MT_Vector3& velocity, float maxDeltaSpeed,float maxDeltaAngle);
 };
 
 class KX_ObstacleSimulationTOI_rays: public KX_ObstacleSimulationTOI
@@ -116,7 +116,7 @@ protected:
 	virtual void sampleRVO(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
 							const float maxDeltaAngle);
 public:
-	KX_ObstacleSimulationTOI_rays(MT_Scalar levelHeight, bool enableVisualization);
+	KX_ObstacleSimulationTOI_rays(float levelHeight, bool enableVisualization);
 };
 
 class KX_ObstacleSimulationTOI_cells: public KX_ObstacleSimulationTOI
@@ -128,7 +128,7 @@ protected:
 	virtual void sampleRVO(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
 							const float maxDeltaAngle);
 public:
-	KX_ObstacleSimulationTOI_cells(MT_Scalar levelHeight, bool enableVisualization);
+	KX_ObstacleSimulationTOI_cells(float levelHeight, bool enableVisualization);
 };
 
 #endif

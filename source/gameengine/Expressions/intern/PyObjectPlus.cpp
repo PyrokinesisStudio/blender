@@ -1007,7 +1007,7 @@ UNDO_AND_ERROR:
 						PyErr_Format(PyExc_ValueError, "value out of range for attribute \"%s\"", attrdef->m_name.c_str());
 						goto RESTORE_AND_ERROR;
 					}
-					(*var)[i] = (MT_Scalar)val;
+					(*var)[i] = (float)val;
 				}
 				break;
 			}
