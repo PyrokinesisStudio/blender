@@ -1111,9 +1111,9 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 			CM_FunctionWarning("invalid axis '" << axis <<"'");
 			return;
 	}
-	x.normalize(); // normalize the new base vectors
-	y.normalize();
-	z.normalize();
+	x.Normalize(); // normalize the new base vectors
+	y.Normalize();
+	z.Normalize();
 	orimat.setValue(x[0], y[0], z[0],
 	                x[1], y[1], z[1],
 	                x[2], y[2], z[2]);
@@ -3623,7 +3623,7 @@ KX_PYMETHODDEF_DOC_O(KX_GameObject, getVectTo,
 		locToDir = toDir = MT_Vector3(0.0f,0.0f,0.0f);
 		distance = 0.0f;
 	} else {
-		toDir.normalize();
+		toDir.Normalize();
 		locToDir = toDir * NodeGetWorldOrientation();
 	}
 	
@@ -3870,7 +3870,7 @@ KX_PYMETHODDEF_DOC(KX_GameObject, rayCast,
 			//return Py_BuildValue("OOO", Py_None, Py_None, Py_None);
 			return none_tuple_3();
 		}
-		toDir.normalize();
+		toDir.Normalize();
 		toPoint = fromPoint + (dist) * toDir;
 	} else if (MT_fuzzyZero((toPoint-fromPoint).LengthSquared())) {
 		//return Py_BuildValue("OOO", Py_None, Py_None, Py_None);

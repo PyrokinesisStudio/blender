@@ -1448,7 +1448,7 @@ void RAS_Rasterizer::GetTransform(float *origmat, int objectdrawmode, float mat[
 			left = (left - up.dot(left) * up).safe_normalized();
 		}
 
-		MT_Vector3 dir = (up.cross(left)).normalized();
+		MT_Vector3 dir = (up.cross(left)).Normalized();
 
 		// we have calculated the row vectors, now we keep
 		// local scaling into account:
@@ -1471,7 +1471,7 @@ void RAS_Rasterizer::GetTransform(float *origmat, int objectdrawmode, float mat[
 		KX_GameObject *gameobj = KX_GameObject::GetClientObject((KX_ClientObjectInfo *)m_clientobject);
 		MT_Vector3 direction = MT_Vector3(0.0f, 0.0f, -1.0f);
 
-		direction.normalize();
+		direction.Normalize();
 		direction *= 100000.0f;
 
 		const MT_Vector3 topoint = frompoint + direction;

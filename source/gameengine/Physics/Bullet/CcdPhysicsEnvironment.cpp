@@ -160,7 +160,7 @@ public:
 			if (body && body->hasContactResponse()) {
 				result.m_hitPointInWorld = rayCallback.m_hitPointWorld;
 				result.m_hitNormalInWorld = rayCallback.m_hitNormalWorld;
-				result.m_hitNormalInWorld.normalize();
+				result.m_hitNormalInWorld.Normalize();
 				result.m_distFraction = rayCallback.m_closestHitFraction;
 				return (void *)body;
 			}
@@ -845,10 +845,10 @@ void CcdPhysicsEnvironment::ProcessFhSprings(double curTime, float interval)
 					if (distance >= hitObjShapeProps.m_fh_distance)
 						continue;
 
-					//btVector3 ray_dir = cl_object->getCenterOfMassTransform().getBasis()* rayDirLocal.normalized();
-					btVector3 ray_dir = rayDirLocal.normalized();
+					//btVector3 ray_dir = cl_object->getCenterOfMassTransform().getBasis()* rayDirLocal.Normalized();
+					btVector3 ray_dir = rayDirLocal.Normalized();
 					btVector3 normal = resultCallback.m_hitNormalWorld;
-					normal.normalize();
+					normal.Normalize();
 
 					if (ctrl->GetConstructionInfo().m_do_fh) {
 						btVector3 lspot = cl_object->getCenterOfMassPosition() +
@@ -1284,7 +1284,7 @@ SKIP_UV_NORMAL:
 			}
 		}
 		if (rayCallback.m_hitNormalWorld.LengthSquared() > (SIMD_EPSILON * SIMD_EPSILON)) {
-			rayCallback.m_hitNormalWorld.normalize();
+			rayCallback.m_hitNormalWorld.Normalize();
 		}
 		else {
 			rayCallback.m_hitNormalWorld.setValue(1.0f, 0.0f, 0.0f);

@@ -333,7 +333,7 @@ static MT_Vector3 nearestPointToObstacle(MT_Vector3& pos ,KX_Obstacle* obstacle)
 		if (!ab.fuzzyZero())
 		{
 			const float dist = ab.Length();
-			MT_Vector3 abdir = ab.normalized();
+			MT_Vector3 abdir = ab.Normalized();
 			MT_Vector3  v = pos - obstacle->m_pos;
 			float proj = abdir.dot(v);
 			CLAMP(proj, 0, dist);
@@ -436,7 +436,7 @@ void KX_ObstacleSimulationTOI_rays::sampleRVO(KX_Obstacle* activeObst, KX_NavMes
 	float odir = (float) atan2(vel.y, vel.x);
 
 	MT_Vector2 ddir = vel;
-	ddir.normalize();
+	ddir.Normalize();
 
 	float bestScore = FLT_MAX;
 	float bestDir = odir;

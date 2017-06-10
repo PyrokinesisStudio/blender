@@ -238,7 +238,7 @@ bool KX_ObjectActuator::Update()
 
 					dir = dir + old_dir;
 					if (!dir.fuzzyZero())
-						dir = dir.normalized() * mag;
+						dir = dir.Normalized() * mag;
 				}
 			}
 

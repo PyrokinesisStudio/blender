@@ -202,7 +202,7 @@ bool KX_SteeringActuator::Update(double curtime)
 			{
 				terminate = false;
 				m_steerVec = vectotarg;
-				m_steerVec.normalize();
+				m_steerVec.Normalize();
 				apply_steerforce = true;
 			}
 			break;
@@ -211,7 +211,7 @@ bool KX_SteeringActuator::Update(double curtime)
 			{
 				terminate = false;
 				m_steerVec = -vectotarg;
-				m_steerVec.normalize();
+				m_steerVec.Normalize();
 				apply_steerforce = true;
 			}
 			break;
@@ -267,7 +267,7 @@ bool KX_SteeringActuator::Update(double curtime)
 		if (isdyna)
 			m_steerVec.z = 0;
 		if (!m_steerVec.fuzzyZero())
-			m_steerVec.normalize();
+			m_steerVec.Normalize();
 		MT_Vector3 newvel = m_velocity * m_steerVec;
 
 		//adjust velocity to avoid obstacles
@@ -423,7 +423,7 @@ void KX_SteeringActuator::HandleActorFace(MT_Vector3& velocity)
 	MT_Vector3 dir = m_facingMode==0 ?  curobj->NodeGetLocalOrientation().getColumn(1) : velocity;
 	if (dir.fuzzyZero())
 		return;
-	dir.normalize();
+	dir.Normalize();
 	MT_Vector3 up(0,0,1);
 	MT_Vector3 left;
 	MT_Matrix3x3 mat;

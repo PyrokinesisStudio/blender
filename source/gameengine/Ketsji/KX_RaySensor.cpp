@@ -264,7 +264,7 @@ bool KX_RaySensor::Evaluate()
 			break;
 		}
 	}
-	todir.normalize();
+	todir.Normalize();
 	m_rayDirection[0] = todir[0];
 	m_rayDirection[1] = todir[1];
 	m_rayDirection[2] = todir[2];

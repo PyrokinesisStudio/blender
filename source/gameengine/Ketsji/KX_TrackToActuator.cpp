@@ -227,7 +227,7 @@ static MT_Matrix3x3 vectomat(MT_Vector3 vec, short axis, short upflag, short thr
 
 	/* Normalized cross product of vec and proj specifies transformation of the right axis */
 	right = proj.cross(vec);
-	right.normalize();
+	right.Normalize();
 
 	if (axis != upflag) {
 		right_index = 3 - axis - upflag;

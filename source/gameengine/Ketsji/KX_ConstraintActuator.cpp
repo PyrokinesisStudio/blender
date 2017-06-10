@@ -238,7 +238,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 						zaxis = m_refDirVector.cross(MT_Vector3(0.0f,1.0f,0.0f));
 				}
 				MT_Vector3 yaxis = zaxis.cross(m_refDirVector);
-				yaxis.normalize();
+				yaxis.Normalize();
 				if (cosangle > m_minimumBound) {
 					// angle is too close to reference direction,
 					// choose a new reference that is exactly at minimum angle
@@ -305,7 +305,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 				sign = 1;
 				break;
 			}
-			normal.normalize();
+			normal.Normalize();
 			if (m_option & KX_ACT_CONSTRAINT_LOCAL) {
 				// direction of the ray is along the local axis
 				direction = normal;
@@ -369,7 +369,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 						obj->AlignAxisToVect((sign)?-newnormal:newnormal, axis);
 						if (m_option & KX_ACT_CONSTRAINT_LOCAL) {
 							direction = newnormal;
-							direction.normalize();
+							direction.Normalize();
 						}
 					}
 					if (m_option & KX_ACT_CONSTRAINT_DISTANCE) {
@@ -443,7 +443,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 				direction = MT_Vector3(0.0f,0.0f,-1.0f);
 				break;
 			}
-			normal.normalize();
+			normal.Normalize();
 			{
 				PHY_IPhysicsEnvironment* pe = KX_GetActiveScene()->GetPhysicsEnvironment();
 				PHY_IPhysicsController *spc = obj->GetPhysicsController();

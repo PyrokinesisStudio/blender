@@ -174,7 +174,7 @@ const MT_Vector3& KX_PlanarMap::GetNormal() const
 
 void KX_PlanarMap::SetNormal(const MT_Vector3& normal)
 {
-	m_normal = normal.normalized();
+	m_normal = normal.Normalized();
 }
 
 bool KX_PlanarMap::SetupCamera(KX_Camera *sceneCamera, KX_Camera *camera)

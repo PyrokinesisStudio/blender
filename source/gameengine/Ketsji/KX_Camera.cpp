@@ -914,7 +914,7 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, getScreenVect,
 	screenpos = MT_Vector3(win[0], win[1], win[2]);
 	vect = campos-screenpos;
 
-	vect.normalize();
+	vect.Normalize();
 	return PyObjectFrom(vect);
 }
 
