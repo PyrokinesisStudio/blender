@@ -323,8 +323,6 @@ public:
 	void SetWorldPosition(const MT_Vector3& trans);
 	void RelativeRotate(const MT_Matrix3x3& rot, bool local);
 	void SetLocalOrientation(const MT_Matrix3x3& rot);
-	// rot is arrange like openGL matrix
-	void SetLocalOrientation(const float *rot);
 	void SetWorldOrientation(const MT_Matrix3x3& rot);
 	void RelativeScale(const MT_Vector3& scale);
 	void SetLocalScale(const MT_Vector3& scale);

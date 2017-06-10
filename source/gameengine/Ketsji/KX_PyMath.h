@@ -146,7 +146,7 @@ bool PyVecTo(PyObject *pyval, T& vec)
 			PyErr_Format(PyExc_AttributeError, "error setting vector, %d args, should be %d", pyvec->size, Size(vec));
 			return false;
 		}
-		vec.setValue((float *) pyvec->vec);
+		vec = T(pyvec->vec);
 		return true;
 	}
 	else if (QuaternionObject_Check(pyval)) {
@@ -159,7 +159,7 @@ bool PyVecTo(PyObject *pyval, T& vec)
 			return false;
 		}
 		/* xyzw -> wxyz reordering is done by PyQuatTo */
-		vec.setValue((float *) pyquat->quat);
+		vec = T(pyquat->quat);
 		return true;
 	}
 	else if (EulerObject_Check(pyval)) {
@@ -171,7 +171,7 @@ bool PyVecTo(PyObject *pyval, T& vec)
 			PyErr_Format(PyExc_AttributeError, "error setting vector, %d args, should be %d", 3, Size(vec));
 			return false;
 		}
-		vec.setValue((float *) pyeul->eul);
+		vec = T(pyeul->eul);
 		return true;
 	}
 	else

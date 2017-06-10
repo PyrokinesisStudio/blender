@@ -398,12 +398,12 @@ static void GetRGB(
 static void GetUVs(const RAS_MeshObject::LayerList& layers, MFace *mface, MTFace *tface, MT_Vector2 uvs[4][RAS_Texture::MaxUnits])
 {
 	if (tface) {
-		uvs[0][0].setValue(tface->uv[0]);
-		uvs[1][0].setValue(tface->uv[1]);
-		uvs[2][0].setValue(tface->uv[2]);
+		uvs[0][0] = MT_Vector2(tface->uv[0]);
+		uvs[1][0] = MT_Vector2(tface->uv[1]);
+		uvs[2][0] = MT_Vector2(tface->uv[2]);
 
 		if (mface->v4)
-			uvs[3][0].setValue(tface->uv[3]);
+			uvs[3][0] = MT_Vector2(tface->uv[3]);
 	}
 	else {
 		uvs[0][0] = uvs[1][0] = uvs[2][0] = uvs[3][0] = MT_Vector2(0.0f, 0.0f);
@@ -415,15 +415,15 @@ static void GetUVs(const RAS_MeshObject::LayerList& layers, MFace *mface, MTFace
 			continue;
 		}
 
-		uvs[0][layer.index].setValue(layer.face->uv[0]);
-		uvs[1][layer.index].setValue(layer.face->uv[1]);
-		uvs[2][layer.index].setValue(layer.face->uv[2]);
+		uvs[0][layer.index] = MT_Vector2(layer.face->uv[0]);
+		uvs[1][layer.index] = MT_Vector2(layer.face->uv[1]);
+		uvs[2][layer.index] = MT_Vector2(layer.face->uv[2]);
 
 		if (mface->v4) {
-			uvs[3][layer.index].setValue(layer.face->uv[3]);
+			uvs[3][layer.index] = MT_Vector2(layer.face->uv[3]);
 		}
 		else {
-			uvs[3][layer.index].setValue(0.0f, 0.0f);
+			uvs[3][layer.index] = MT_Vector2(0.0f, 0.0f);
 		}
 	}
 }
@@ -582,9 +582,9 @@ RAS_MeshObject* BL_ConvertMesh(Mesh* mesh, Object* blenderobj, KX_Scene* scene, 
 	 * advantage to use MT_ types - campbell */
 	for (unsigned int i = 0; i < 4; i++) {
 		const float zero_vec[4] = {0.0f};
-		pt[i].setValue(zero_vec);
-		no[i].setValue(zero_vec);
-		tan[i].setValue(zero_vec);
+		pt[i] = MT_Vector3(zero_vec);
+		no[i] = MT_Vector3(zero_vec);
+		tan[i] = MT_Vector4(zero_vec);
 	}
 
 	/* we need to manually initialize the uvs (MoTo doesn't do that) [#34550] */
@@ -608,10 +608,10 @@ RAS_MeshObject* BL_ConvertMesh(Mesh* mesh, Object* blenderobj, KX_Scene* scene, 
 	for (int f=0;f<totface;f++,mface++)
 	{
 		/* get coordinates, normals and tangents */
-		pt[0].setValue(mvert[mface->v1].co);
-		pt[1].setValue(mvert[mface->v2].co);
-		pt[2].setValue(mvert[mface->v3].co);
-		if (mface->v4) pt[3].setValue(mvert[mface->v4].co);
+		pt[0] = MT_Vector3(mvert[mface->v1].co);
+		pt[1] = MT_Vector3(mvert[mface->v2].co);
+		pt[2] = MT_Vector3(mvert[mface->v3].co);
+		if (mface->v4) pt[3] = MT_Vector3(mvert[mface->v4].co);
 
 		if (mface->flag & ME_SMOOTH) {
 			float n0[3], n1[3], n2[3], n3[3];

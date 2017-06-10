@@ -1049,10 +1049,10 @@ ImageRender::ImageRender (KX_Scene *scene, KX_GameObject *observer, KX_GameObjec
 	transpose_m3(mirrorMat);
 	mul_m3_v3(mirrorMat, vec);
 	// mirror position in local space
-	m_mirrorPos.setValue(vec[0], vec[1], vec[2]);
+	m_mirrorPos = MT_Vector3(vec);
 	// mirror normal vector (pointed towards the back of the mirror) in local space
-	m_mirrorZ.setValue(-mirrorNormal[0], -mirrorNormal[1], -mirrorNormal[2]);
-	m_mirrorY.setValue(mirrorUp[0], mirrorUp[1], mirrorUp[2]);
+	m_mirrorZ = MT_Vector3(-mirrorNormal[0], -mirrorNormal[1], -mirrorNormal[2]);
+	m_mirrorY = MT_Vector3(mirrorUp);
 	m_mirrorX = m_mirrorY.cross(m_mirrorZ);
 	m_render = true;
 

@@ -540,7 +540,7 @@ void KX_NavMeshObject::DrawNavMesh(NavMeshRenderMode renderMode)
 					float pos[3];
 					rcVcopy(pos, v);
 					flipAxes(pos);
-					tri[k].setValue(pos);
+					tri[k] = MT_Vector3(pos);
 				}
 
 				for (int k=0; k<3; k++)
@@ -636,8 +636,8 @@ void KX_NavMeshObject::DrawPath(const float *path, int pathLen, const MT_Vector4
 	MT_Vector3 a,b;
 	for (int i=0; i<pathLen-1; i++)
 	{
-		a.setValue(&path[3*i]);
-		b.setValue(&path[3*(i+1)]);
+		a = MT_Vector3(&path[3*i]);
+		b = MT_Vector3(&path[3*(i+1)]);
 		KX_RasterizerDrawDebugLine(a, b, color);
 	}
 }

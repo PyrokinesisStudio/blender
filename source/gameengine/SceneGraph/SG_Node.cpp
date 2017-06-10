@@ -492,12 +492,6 @@ void SG_Node::SetLocalOrientation(const MT_Matrix3x3& rot)
 	SetModified();
 }
 
-void SG_Node::SetLocalOrientation(const float *rot)
-{
-	m_localRotation.setValue(rot);
-	SetModified();
-}
-
 void SG_Node::SetWorldOrientation(const MT_Matrix3x3& rot)
 {
 	m_worldRotation = rot;

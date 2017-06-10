@@ -102,11 +102,11 @@ UpdateChildCoordinates(
 				child_transform = parent_matrix * child_transform;
 				
 				// Recompute the child transform components from the transform.
-				child_w_scale.setValue( 
+				child_w_scale = MT_Vector3( 
 					MT_Vector3(child_transform[0][0], child_transform[0][1], child_transform[0][2]).Length(),
 					MT_Vector3(child_transform[1][0], child_transform[1][1], child_transform[1][2]).Length(),
 					MT_Vector3(child_transform[2][0], child_transform[2][1], child_transform[2][2]).Length());
-				child_w_rotation.setValue(child_transform[0][0], child_transform[0][1], child_transform[0][2], 
+				child_w_rotation = MT_Matrix3x3(child_transform[0][0], child_transform[0][1], child_transform[0][2], 
 					child_transform[1][0], child_transform[1][1], child_transform[1][2], 
 					child_transform[2][0], child_transform[2][1], child_transform[2][2]);
 				child_w_rotation.scale(1.0f/child_w_scale[0], 1.0f/child_w_scale[1], 1.0f/child_w_scale[2]);

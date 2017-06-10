@@ -242,7 +242,7 @@ bool KX_SteeringActuator::Update(double curtime)
 							terminate = true;
 						}
 						else
-							waypoint.setValue(&m_path[3*m_wayPointIdx]);
+							waypoint = MT_Vector3(&m_path[3*m_wayPointIdx]);
 					}
 
 					m_steerVec = waypoint - mypos;
@@ -404,7 +404,7 @@ static bool getNavmeshNormal(dtStatNavMesh* navmesh, const MT_Vector3& pos, MT_V
 		}
 		MT_Vector3 tri[3];
 		for (size_t j=0; j<3; j++)
-			tri[j].setValue(v[j][0],v[j][2],v[j][1]);
+			tri[j] = MT_Vector3(v[j]);
 		MT_Vector3 a,b;
 		a = tri[1]-tri[0];
 		b = tri[2]-tri[0];
@@ -487,14 +487,8 @@ void KX_SteeringActuator::HandleActorFace(MT_Vector3& velocity)
 		}
 	}
 
-	mat.setValue (
-		left[0], dir[0],up[0], 
-		left[1], dir[1],up[1],
-		left[2], dir[2],up[2]
-	);
+	mat = MT_Matrix3x3(left, dir, up);
 
-	
-	
 	KX_GameObject* parentObject = curobj->GetParent();
 	if (parentObject)
 	{ 

@@ -36,7 +36,7 @@
 
 void KX_PositionInterpolator::Execute(float currentTime) const
 {
-	m_target.setValue(m_ipos[0]->GetValue(currentTime),
+	m_target = MT_Vector3(m_ipos[0]->GetValue(currentTime),
 					  m_ipos[1]->GetValue(currentTime),
 					  m_ipos[2]->GetValue(currentTime));
 }

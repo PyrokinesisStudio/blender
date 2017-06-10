@@ -139,8 +139,8 @@ bool KX_ObjectActuator::Update()
 
 		m_linear_damping_active = false;
 		m_angular_damping_active = false;
-		m_error_accumulator.setValue(0.0f,0.0f,0.0f);
-		m_previous_error.setValue(0.0f,0.0f,0.0f);
+		m_error_accumulator = MT_Vector3(0.0f,0.0f,0.0f);
+		m_previous_error = MT_Vector3(0.0f,0.0f,0.0f);
 		m_jumping = false;
 		return false; 
 
@@ -476,10 +476,10 @@ static int mathutils_obactu_vector_set(BaseMathObject *bmo, int subtype)
 
 	switch (subtype) {
 		case MATHUTILS_VEC_CB_LINV:
-			self->m_linear_velocity.setValue(bmo->data);
+			self->m_linear_velocity = MT_Vector3(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_ANGV:
-			self->m_angular_velocity.setValue(bmo->data);
+			self->m_angular_velocity = MT_Vector3(bmo->data);
 			break;
 	}
 

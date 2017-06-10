@@ -133,7 +133,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		else {
 			const MT_Vector3 xaxis = MT_cross(norm, worldUp);
 			const MT_Vector3 yaxis = MT_cross(xaxis, norm);
-			tr.setValue(xaxis.x, xaxis.y, xaxis.z,
+			tr = MT_Matrix3x3(xaxis.x, xaxis.y, xaxis.z,
 						yaxis.x, yaxis.y, yaxis.z,
 						norm.x, norm.y, norm.z);
 		}

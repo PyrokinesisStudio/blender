@@ -93,10 +93,10 @@ void KX_MouseFocusSensor::Init()
 	m_hitObject_Last = nullptr;
 	m_reset = true;
 	
-	m_hitPosition.setValue(0,0,0);
-	m_prevTargetPoint.setValue(0,0,0);
-	m_prevSourcePoint.setValue(0,0,0);
-	m_hitNormal.setValue(0,0,1);
+	m_hitPosition = MT_Zeros2;
+	m_prevTargetPoint = MT_Zeros2;
+	m_prevSourcePoint = MT_Zeros2;
+	m_hitNormal = MT_Zeros2;
 }
 
 bool KX_MouseFocusSensor::Evaluate()
@@ -322,12 +322,12 @@ bool KX_MouseFocusSensor::ParentObjectHasFocusCamera(KX_Camera *cam)
 	 *	The actual z coordinates used don't have to be exact just infront and 
 	 *	behind of the near and far clip planes.
 	 */ 
-	frompoint.setValue(	(2 * (m_x-x_lb) / width) - 1.0f,
+	frompoint = MT_Vector4(	(2 * (m_x-x_lb) / width) - 1.0f,
 						1.0f - (2 * (m_y_inv - y_lb) / height),
 						-1.0f,
 						1.0f );
 	
-	topoint.setValue(	(2 * (m_x-x_lb) / width) - 1.0f,
+	topoint = MT_Vector4(	(2 * (m_x-x_lb) / width) - 1.0f,
 						1.0f - (2 * (m_y_inv-y_lb) / height),
 						1.0f,
 						1.0f );
@@ -349,13 +349,9 @@ bool KX_MouseFocusSensor::ParentObjectHasFocusCamera(KX_Camera *cam)
 	topoint   = camcs_wcs_matrix * topoint;
 	
 	/* from hom wcs to 3d wcs: */
-	m_prevSourcePoint.setValue(	frompoint[0]/frompoint[3],
-								frompoint[1]/frompoint[3],
-								frompoint[2]/frompoint[3]); 
+	m_prevSourcePoint = frompoint.xyz() / frompoint.w;
 	
-	m_prevTargetPoint.setValue(	topoint[0]/topoint[3],
-								topoint[1]/topoint[3],
-								topoint[2]/topoint[3]); 
+	m_prevTargetPoint = topoint.xyz() / topoint.w;
 	
 	/* 2. Get the object from PhysicsEnvironment */
 	/* Shoot! Beware that the first argument here is an
@@ -377,8 +373,8 @@ bool KX_MouseFocusSensor::ParentObjectHasFocusCamera(KX_Camera *cam)
 bool KX_MouseFocusSensor::ParentObjectHasFocus()
 {
 	m_hitObject = 0;
-	m_hitPosition.setValue(0,0,0);
-	m_hitNormal.setValue(1,0,0);
+	m_hitPosition = MT_Zeros3;
+	m_hitNormal = MT_AxisZ3;
 	
 	KX_Camera *activecam = m_kxscene->GetActiveCamera();
 	
@@ -486,7 +482,7 @@ PyObject *KX_MouseFocusSensor::pyattr_get_ray_direction(PyObjectPlus *self_v, co
 {
 	KX_MouseFocusSensor* self = static_cast<KX_MouseFocusSensor*>(self_v);
 	MT_Vector3 dir = self->RayTarget() - self->RaySource();
-	if (MT_fuzzyZero(dir))	dir.setValue(0,0,0);
+	if (MT_fuzzyZero(dir))	dir = MT_Zeros3;
 	else					dir.Normalize();
 	return PyObjectFrom(dir);
 }

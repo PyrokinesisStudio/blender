@@ -273,6 +273,21 @@ class Matrix {
     data_[3] = column3;
   }
 
+  /// @brief Create 3x3 Matrix from 3, 3 element vectors.
+  ///
+  /// @note This method only works with a 3x3 Matrix.
+  ///
+  /// @param column0 Vector used for the first column.
+  /// @param column1 Vector used for the second column.
+  /// @param column2 Vector used for the third column.
+  inline Matrix(const Vector<T, 3>& column0, const Vector<T, 3>& column1,
+                const Vector<T, 3>& column2) {
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 3);
+    data_[0] = column0;
+    data_[1] = column1;
+    data_[2] = column2;
+  }
+
   /// @brief Create a Matrix from the first row * column elements of an array.
   ///
   /// @param a Array of values that the matrix will be iniitlized to.
