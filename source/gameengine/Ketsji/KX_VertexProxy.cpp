@@ -279,7 +279,7 @@ int KX_VertexProxy::pyattr_set_x(PyObjectPlus *self_v, const struct KX_PYATTRIBU
 	if (PyFloat_Check(value)) {
 		float val = PyFloat_AsDouble(value);
 		MT_Vector3 pos(self->m_vertex->getXYZ());
-		pos.x() = val;
+		pos.x = val;
 		self->m_vertex->SetXYZ(pos);
 		self->m_array->AppendModifiedFlag(RAS_IDisplayArray::POSITION_MODIFIED);
 		return PY_SET_ATTR_SUCCESS;
@@ -293,7 +293,7 @@ int KX_VertexProxy::pyattr_set_y(PyObjectPlus *self_v, const struct KX_PYATTRIBU
 	if (PyFloat_Check(value)) {
 		float val = PyFloat_AsDouble(value);
 		MT_Vector3 pos(self->m_vertex->getXYZ());
-		pos.y() = val;
+		pos.y = val;
 		self->m_vertex->SetXYZ(pos);
 		self->m_array->AppendModifiedFlag(RAS_IDisplayArray::POSITION_MODIFIED);
 		return PY_SET_ATTR_SUCCESS;
@@ -307,7 +307,7 @@ int KX_VertexProxy::pyattr_set_z(PyObjectPlus *self_v, const struct KX_PYATTRIBU
 	if (PyFloat_Check(value)) {
 		float val = PyFloat_AsDouble(value);
 		MT_Vector3 pos(self->m_vertex->getXYZ());
-		pos.z() = val;
+		pos.z = val;
 		self->m_vertex->SetXYZ(pos);
 		self->m_array->AppendModifiedFlag(RAS_IDisplayArray::POSITION_MODIFIED);
 		return PY_SET_ATTR_SUCCESS;

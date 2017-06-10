@@ -132,7 +132,7 @@ bool KX_SoftBodyDeformer::Apply(RAS_MeshMaterial *meshmat, RAS_IDisplayArray *ar
 		}
 
 		const MT_Vector3& scale = m_gameobj->NodeGetWorldScaling();
-		const MT_Vector3& invertscale = MT_Vector3(1.0f / scale.x(), 1.0f / scale.y(), 1.0f / scale.z());
+		const MT_Vector3& invertscale = MT_Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 		const MT_Vector3& pos = m_gameobj->NodeGetWorldPosition();
 		const MT_Matrix3x3& rot = m_gameobj->NodeGetWorldOrientation();
 
@@ -143,12 +143,12 @@ bool KX_SoftBodyDeformer::Apply(RAS_MeshMaterial *meshmat, RAS_IDisplayArray *ar
 			aabbMin = aabbMax = pt;
 		}
 		else {
-			aabbMin.x() = std::min(aabbMin.x(), pt.x());
-			aabbMin.y() = std::min(aabbMin.y(), pt.y());
-			aabbMin.z() = std::min(aabbMin.z(), pt.z());
-			aabbMax.x() = std::max(aabbMax.x(), pt.x());
-			aabbMax.y() = std::max(aabbMax.y(), pt.y());
-			aabbMax.z() = std::max(aabbMax.z(), pt.z());
+			aabbMin.x = std::min(aabbMin.x, pt.x);
+			aabbMin.y = std::min(aabbMin.y, pt.y);
+			aabbMin.z = std::min(aabbMin.z, pt.z);
+			aabbMax.x = std::max(aabbMax.x, pt.x);
+			aabbMax.y = std::max(aabbMax.y, pt.y);
+			aabbMax.z = std::max(aabbMax.z, pt.z);
 		}
 	}
 

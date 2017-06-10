@@ -34,7 +34,7 @@
 
 namespace
 {
-	inline float perp(const MT_Vector2& a, const MT_Vector2& b) { return a.x()*b.y() - a.y()*b.x(); }
+	inline float perp(const MT_Vector2& a, const MT_Vector2& b) { return a.x*b.y - a.y*b.x; }
 
 	inline float sqr(float x) { return x * x; }
 	inline float lerp(float a, float b, float t) { return a + (b - a) * t; }
@@ -48,8 +48,8 @@ static int sweepCircleCircle(
         float& tmin, float& tmax)
 {
 	static const float EPS = 0.0001f;
-	MT_Vector2 c0(pos0.x(), pos0.y());
-	MT_Vector2 c1(pos1.x(), pos1.y());
+	MT_Vector2 c0(pos0.x, pos0.y);
+	MT_Vector2 c1(pos1.x, pos1.y);
 	MT_Vector2 s = c1 - c0;
 	float  r = r0+r1;
 	float c = s.length2() - r*r;
@@ -71,9 +71,9 @@ static int sweepCircleSegment(
         float& tmin, float &tmax)
 {
 	// equation parameters
-	MT_Vector2 c0(pos0.x(), pos0.y());
-	MT_Vector2 sa(pa.x(), pa.y());
-	MT_Vector2 sb(pb.x(), pb.y());
+	MT_Vector2 c0(pos0.x, pos0.y);
+	MT_Vector2 sa(pa.x, pa.y);
+	MT_Vector2 sb(pb.x, pb.y);
 	MT_Vector2 L = sb-sa;
 	MT_Vector2 H = c0-sa;
 	float radius = r0+sr;
@@ -263,8 +263,8 @@ void KX_ObstacleSimulation::UpdateObstacles()
 
 		KX_Obstacle* obs = m_obstacles[i];
 		obs->m_pos = obs->m_gameObj->NodeGetWorldPosition();
-		obs->vel[0] = obs->m_gameObj->GetLinearVelocity().x();
-		obs->vel[1] = obs->m_gameObj->GetLinearVelocity().y();
+		obs->vel[0] = obs->m_gameObj->GetLinearVelocity().x;
+		obs->vel[1] = obs->m_gameObj->GetLinearVelocity().y;
 
 		// Update velocity history and calculate perceived (average) velocity.
 		copy_v2_v2(&obs->hvel[obs->hhead * 2], obs->vel);
@@ -358,7 +358,7 @@ static bool filterObstacle(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavM
 
 	//filter obstacles by position
 	MT_Vector3 p = nearestPointToObstacle(activeObst->m_pos, otherObst);
-	if ( fabsf(activeObst->m_pos.z() - p.z()) > levelHeight)
+	if ( fabsf(activeObst->m_pos.z - p.z) > levelHeight)
 		return false;
 
 	return true;
@@ -386,7 +386,7 @@ void KX_ObstacleSimulationTOI::AdjustObstacleVelocity(KX_Obstacle* activeObst, K
 	if (obstidx == nobs)
 		return;
 
-	vset(activeObst->dvel, velocity.x(), velocity.y());
+	vset(activeObst->dvel, velocity.x, velocity.y);
 
 	//apply RVO
 	sampleRVO(activeObst, activeNavMeshObj, maxDeltaAngle);
@@ -400,8 +400,8 @@ void KX_ObstacleSimulationTOI::AdjustObstacleVelocity(KX_Obstacle* activeObst, K
 		mul_v2_fl(dv, fabs(maxDeltaSpeed / ds));
 	add_v2_v2v2(vel, activeObst->vel, dv);
 
-	velocity.x() = vel[0];
-	velocity.y() = vel[1];
+	velocity.x = vel[0];
+	velocity.y = vel[1];
 }
 
 ///////////*********TOI_rays**********/////////////////
@@ -433,7 +433,7 @@ void KX_ObstacleSimulationTOI_rays::sampleRVO(KX_Obstacle* activeObst, KX_NavMes
 {
 	MT_Vector2 vel(activeObst->dvel[0], activeObst->dvel[1]);
 	float vmax = (float) vel.length();
-	float odir = (float) atan2(vel.y(), vel.x());
+	float odir = (float) atan2(vel.y, vel.x);
 
 	MT_Vector2 ddir = vel;
 	ddir.normalize();
@@ -457,8 +457,8 @@ void KX_ObstacleSimulationTOI_rays::sampleRVO(KX_Obstacle* activeObst, KX_NavMes
 		const float ndir = ((float)iter/(float)m_maxSamples) - aoff;
 		const float dir = odir+ndir*(float)M_PI*2.0f;
 		MT_Vector2 svel;
-		svel.x() = cosf(dir) * vmax;
-		svel.y() = sinf(dir) * vmax;
+		svel.x = cosf(dir) * vmax;
+		svel.y = sinf(dir) * vmax;
 
 		// Find min time of impact and exit amongst all obstacles.
 		float tmin = m_maxToi;
@@ -591,7 +591,7 @@ static void processSamples(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavM
 	}
 
 	float activeObstPos[2];
-	vset(activeObstPos, activeObst->m_pos.x(), activeObst->m_pos.y()); 
+	vset(activeObstPos, activeObst->m_pos.x, activeObst->m_pos.y); 
 	/* adist = vdot(adir, activeObstPos); */
 
 	float minPenalty = FLT_MAX;
@@ -628,7 +628,7 @@ static void processSamples(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavM
 				// they can be precomputed per object. 
 				const float* pa = activeObstPos;
 				float pb[2];
-				vset(pb, ob->m_pos.x(), ob->m_pos.y());
+				vset(pb, ob->m_pos.x, ob->m_pos.y);
 
 				const float orig[2] = {0, 0};
 				float dp[2], dv[2], np[2];
@@ -675,8 +675,8 @@ static void processSamples(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavM
 					p2 = navmeshobj->TransformToWorldCoords(p2);
 				}
 				float p[2], q[2];
-				vset(p, p1.x(), p1.y());
-				vset(q, p2.x(), p2.y());
+				vset(p, p1.x, p1.y);
+				vset(q, p2.x, p2.y);
 
 				// NOTE: the segments are assumed to come from a navmesh which is shrunken by
 				// the agent radius, hence the use of really small radius.

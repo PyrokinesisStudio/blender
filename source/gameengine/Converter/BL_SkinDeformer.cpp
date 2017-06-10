@@ -338,12 +338,12 @@ void BL_SkinDeformer::UpdateTransverts()
 					first = false;
 				}
 				else {
-					aabbMin.x() = std::min(aabbMin.x(), vertpos.x());
-					aabbMin.y() = std::min(aabbMin.y(), vertpos.y());
-					aabbMin.z() = std::min(aabbMin.z(), vertpos.z());
-					aabbMax.x() = std::max(aabbMax.x(), vertpos.x());
-					aabbMax.y() = std::max(aabbMax.y(), vertpos.y());
-					aabbMax.z() = std::max(aabbMax.z(), vertpos.z());
+					aabbMin.x = std::min(aabbMin.x, vertpos.x);
+					aabbMin.y = std::min(aabbMin.y, vertpos.y);
+					aabbMin.z = std::min(aabbMin.z, vertpos.z);
+					aabbMax.x = std::max(aabbMax.x, vertpos.x);
+					aabbMax.y = std::max(aabbMax.y, vertpos.y);
+					aabbMax.z = std::max(aabbMax.z, vertpos.z);
 				}
 			}
 

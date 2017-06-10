@@ -179,7 +179,7 @@ bool KX_ObjectActuator::Update()
 			MT_Vector3 dv = e - m_previous_error;
 			MT_Vector3 I = m_error_accumulator + e;
 
-			m_force = m_pid.x()*e+m_pid.y()*I+m_pid.z()*dv;
+			m_force = m_pid.x*e+m_pid.y*I+m_pid.z*dv;
 			// to automatically adapt the PID coefficient to mass;
 			m_force *= mass;
 			if (m_bitLocalFlag.Torque) 

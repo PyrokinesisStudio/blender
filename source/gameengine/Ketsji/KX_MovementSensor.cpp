@@ -110,39 +110,39 @@ bool KX_MovementSensor::Evaluate()
 	{
 		case SENS_MOVEMENT_X_AXIS: // X
 		{
-			m_positionHasChanged = ((currentposition.x() - m_previousPosition.x()) > m_threshold);
+			m_positionHasChanged = ((currentposition.x - m_previousPosition.x) > m_threshold);
 			break;
 		}
 		case SENS_MOVEMENT_Y_AXIS: // Y
 		{
-			m_positionHasChanged = ((currentposition.y() - m_previousPosition.y()) > m_threshold);
+			m_positionHasChanged = ((currentposition.y - m_previousPosition.y) > m_threshold);
 			break;
 		}
 		case SENS_MOVEMENT_Z_AXIS: // Z
 		{
-			m_positionHasChanged = ((currentposition.z() - m_previousPosition.z()) > m_threshold);
+			m_positionHasChanged = ((currentposition.z - m_previousPosition.z) > m_threshold);
 			break;
 		}
 		case SENS_MOVEMENT_NEG_X_AXIS: // -X
 		{
-			m_positionHasChanged = ((currentposition.x() - m_previousPosition.x()) < -m_threshold);
+			m_positionHasChanged = ((currentposition.x - m_previousPosition.x) < -m_threshold);
 			break;
 		}
 		case SENS_MOVEMENT_NEG_Y_AXIS: // -Y
 		{
-			m_positionHasChanged = ((currentposition.y() - m_previousPosition.y()) < -m_threshold);
+			m_positionHasChanged = ((currentposition.y - m_previousPosition.y) < -m_threshold);
 			break;
 		}
 		case SENS_MOVEMENT_NEG_Z_AXIS: // -Z
 		{
-			m_positionHasChanged = ((currentposition.z() - m_previousPosition.z()) < -m_threshold);
+			m_positionHasChanged = ((currentposition.z - m_previousPosition.z) < -m_threshold);
 			break;
 		}
 		case SENS_MOVEMENT_ALL_AXIS: // ALL
 		{
-			if ((fabs(currentposition.x() - m_previousPosition.x()) > m_threshold) ||
-				(fabs(currentposition.y() - m_previousPosition.y()) > m_threshold) ||
-				(fabs(currentposition.z() - m_previousPosition.z()) > m_threshold))
+			if ((fabs(currentposition.x - m_previousPosition.x) > m_threshold) ||
+				(fabs(currentposition.y - m_previousPosition.y) > m_threshold) ||
+				(fabs(currentposition.z - m_previousPosition.z) > m_threshold))
 			{
 				m_positionHasChanged = true;
 			}

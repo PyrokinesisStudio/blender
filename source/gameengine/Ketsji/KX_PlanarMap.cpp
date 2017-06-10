@@ -65,12 +65,12 @@ void KX_PlanarMap::ComputeClipPlane(const MT_Vector3& mirrorObjWorldPos, const M
 {
 	const MT_Vector3 normal = mirrorObjWorldOri * m_normal;
 
-	m_clipPlane.x() = normal.x();
-	m_clipPlane.y() = normal.y();
-	m_clipPlane.z() = normal.z();
-	m_clipPlane.w() = -(m_clipPlane.x() * mirrorObjWorldPos.x() +
-					    m_clipPlane.y() * mirrorObjWorldPos.y() +
-					    m_clipPlane.z() * mirrorObjWorldPos.z());
+	m_clipPlane.x = normal.x;
+	m_clipPlane.y = normal.y;
+	m_clipPlane.z = normal.z;
+	m_clipPlane.w = -(m_clipPlane.x * mirrorObjWorldPos.x +
+					    m_clipPlane.y * mirrorObjWorldPos.y +
+					    m_clipPlane.z * mirrorObjWorldPos.z);
 }
 
 void KX_PlanarMap::InvalidateProjectionMatrix()
@@ -190,10 +190,10 @@ bool KX_PlanarMap::SetupCamera(KX_Camera *sceneCamera, KX_Camera *camera)
 	// Update clip plane to possible new normal or viewpoint object.
 	ComputeClipPlane(mirrorObjWorldPos, mirrorObjWorldOri);
 
-	const float d = m_clipPlane.x() * cameraWorldPos.x() +
-			  m_clipPlane.y() * cameraWorldPos.y() +
-			  m_clipPlane.z() * cameraWorldPos.z() +
-			  m_clipPlane.w();
+	const float d = m_clipPlane.x * cameraWorldPos.x +
+			  m_clipPlane.y * cameraWorldPos.y +
+			  m_clipPlane.z * cameraWorldPos.z +
+			  m_clipPlane.w;
 
 	// Check if the scene camera is in the right plane side.
 	if (d < 0.0) {

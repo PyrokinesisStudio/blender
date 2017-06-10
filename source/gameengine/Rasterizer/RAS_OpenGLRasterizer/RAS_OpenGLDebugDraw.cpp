@@ -133,9 +133,9 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		else {
 			const MT_Vector3 xaxis = MT_cross(norm, worldUp);
 			const MT_Vector3 yaxis = MT_cross(xaxis, norm);
-			tr.setValue(xaxis.x(), xaxis.y(), xaxis.z(),
-						yaxis.x(), yaxis.y(), yaxis.z(),
-						norm.x(), norm.y(), norm.z());
+			tr.setValue(xaxis.x, xaxis.y, xaxis.z,
+						yaxis.x, yaxis.y, yaxis.z,
+						norm.x, norm.y, norm.z);
 		}
 		const float rad = circle.m_radius;
 		const int n = circle.m_sector;
@@ -165,10 +165,10 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 
 	glBegin(GL_QUADS);
 	for (const RAS_DebugDraw::Box2D& box2d : debugDraw->m_boxes2D) {
-		const float xco = box2d.m_pos.x();
-		const float yco = height - box2d.m_pos.y();
-		const float xsize = box2d.m_size.x();
-		const float ysize = box2d.m_size.y();
+		const float xco = box2d.m_pos.x;
+		const float yco = height - box2d.m_pos.y;
+		const float xsize = box2d.m_size.x;
+		const float ysize = box2d.m_size.y;
 
 		glColor4fv(box2d.m_color.getValue());
 		glVertex2f(xco + 1 + xsize, yco + ysize);
@@ -187,8 +187,8 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 
 	for (const RAS_DebugDraw::Text2D& text2d : debugDraw->m_texts2D) {
 		const std::string& text = text2d.m_text;
-		const float xco = text2d.m_pos.x();
-		const float yco = height - text2d.m_pos.y();
+		const float xco = text2d.m_pos.x;
+		const float yco = height - text2d.m_pos.y;
 
 		glColor4fv(text2d.m_color.getValue());
 		BLF_position(blf_mono_font, xco, yco, 0.0f);

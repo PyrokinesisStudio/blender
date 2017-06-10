@@ -228,7 +228,7 @@ void RAS_OpenGLRasterizer::Init()
 
 void RAS_OpenGLRasterizer::SetAmbient(const MT_Vector3& amb, float factor)
 {
-	float ambient[] = {amb.x() * factor, amb.y() * factor, amb.z() * factor, 1.0f};
+	float ambient[] = {amb.x * factor, amb.y * factor, amb.z * factor, 1.0f};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 }
 
@@ -433,7 +433,7 @@ void RAS_OpenGLRasterizer::SetPolygonOffset(float mult, float add)
 
 void RAS_OpenGLRasterizer::EnableClipPlane(unsigned short index, const MT_Vector4& plane)
 {
-	double planev[4] = {plane.x(), plane.y(), plane.z(), plane.w()};
+	double planev[4] = {plane.x, plane.y, plane.z, plane.w};
 	glClipPlane(GL_CLIP_PLANE0 + index, planev);
 	glEnable(GL_CLIP_PLANE0 + index);
 }

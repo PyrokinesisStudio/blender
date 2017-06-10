@@ -1198,7 +1198,7 @@ static PyObject *gPyDrawLine(PyObject *, PyObject *args)
 
 	// Allow conversion from vector 3d.
 	if (PyVecTo(ob_color, color3)) {
-		KX_RasterizerDrawDebugLine(from, to, MT_Vector4(color3.x(), color3.y(), color3.z(), 1.0f));
+		KX_RasterizerDrawDebugLine(from, to, MT_Vector4(color3.x, color3.y, color3.z, 1.0f));
 		Py_RETURN_NONE;
 	}
 	else {

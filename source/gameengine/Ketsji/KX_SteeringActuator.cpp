@@ -191,7 +191,7 @@ bool KX_SteeringActuator::Update(double curtime)
 	const MT_Vector3& targpos = m_target->NodeGetWorldPosition();
 	MT_Vector3 vectotarg = targpos - mypos;
 	MT_Vector3 vectotarg2d = vectotarg;
-	vectotarg2d.z() = 0.0f;
+	vectotarg2d.z = 0.0f;
 	m_steerVec = MT_Vector3(0.0f, 0.0f, 0.0f);
 	bool apply_steerforce = false;
 	bool terminate = true;
@@ -265,7 +265,7 @@ bool KX_SteeringActuator::Update(double curtime)
 	{
 		bool isdyna = obj->IsDynamic();
 		if (isdyna)
-			m_steerVec.z() = 0;
+			m_steerVec.z = 0;
 		if (!m_steerVec.fuzzyZero())
 			m_steerVec.normalize();
 		MT_Vector3 newvel = m_velocity * m_steerVec;
@@ -289,9 +289,9 @@ bool KX_SteeringActuator::Update(double curtime)
 			MT_Vector3 curvel = obj->GetLinearVelocity();
 
 			if (m_lockzvel)
-				newvel.z() = 0.0f;
+				newvel.z = 0.0f;
 			else
-				newvel.z() = curvel.z();
+				newvel.z = curvel.z;
 
 			obj->setLinearVelocity(newvel, false);
 		}

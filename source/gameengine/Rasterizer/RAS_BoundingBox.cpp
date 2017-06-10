@@ -110,12 +110,12 @@ void RAS_BoundingBox::SetAabb(const MT_Vector3& aabbMin, const MT_Vector3& aabbM
 
 void RAS_BoundingBox::ExtendAabb(const MT_Vector3& aabbMin, const MT_Vector3& aabbMax)
 {
-	m_aabbMin.x() = std::min(m_aabbMin.x(), aabbMin.x());
-	m_aabbMin.y() = std::min(m_aabbMin.y(), aabbMin.y());
-	m_aabbMin.z() = std::min(m_aabbMin.z(), aabbMin.z());
-	m_aabbMax.x() = std::max(m_aabbMax.x(), aabbMax.x());
-	m_aabbMax.y() = std::max(m_aabbMax.y(), aabbMax.y());
-	m_aabbMax.z() = std::max(m_aabbMax.z(), aabbMax.z());
+	m_aabbMin.x = std::min(m_aabbMin.x, aabbMin.x);
+	m_aabbMin.y = std::min(m_aabbMin.y, aabbMin.y);
+	m_aabbMin.z = std::min(m_aabbMin.z, aabbMin.z);
+	m_aabbMax.x = std::max(m_aabbMax.x, aabbMax.x);
+	m_aabbMax.y = std::max(m_aabbMax.y, aabbMax.y);
+	m_aabbMax.z = std::max(m_aabbMax.z, aabbMax.z);
 	m_modified = true;
 }
 
@@ -174,12 +174,12 @@ void RAS_MeshBoundingBox::Update(bool force)
 				continue;
 			}
 
-			m_aabbMin.x() = std::min(m_aabbMin.x(), vertPos.x());
-			m_aabbMin.y() = std::min(m_aabbMin.y(), vertPos.y());
-			m_aabbMin.z() = std::min(m_aabbMin.z(), vertPos.z());
-			m_aabbMax.x() = std::max(m_aabbMax.x(), vertPos.x());
-			m_aabbMax.y() = std::max(m_aabbMax.y(), vertPos.y());
-			m_aabbMax.z() = std::max(m_aabbMax.z(), vertPos.z());
+			m_aabbMin.x = std::min(m_aabbMin.x, vertPos.x);
+			m_aabbMin.y = std::min(m_aabbMin.y, vertPos.y);
+			m_aabbMin.z = std::min(m_aabbMin.z, vertPos.z);
+			m_aabbMax.x = std::max(m_aabbMax.x, vertPos.x);
+			m_aabbMax.y = std::max(m_aabbMax.y, vertPos.y);
+			m_aabbMax.z = std::max(m_aabbMax.z, vertPos.z);
 		}
 	}
 

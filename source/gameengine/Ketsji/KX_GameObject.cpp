@@ -1017,7 +1017,7 @@ void KX_GameObject::ResolveCombinedVelocities(
 		MT_Vector3 lv = lin_vel_local ? NodeGetWorldOrientation() * lin_vel : lin_vel;
 		MT_Vector3 av = ang_vel_local ? NodeGetWorldOrientation() * ang_vel : ang_vel;
 		m_pPhysicsController->ResolveCombinedVelocities(
-			lv.x(),lv.y(),lv.z(),av.x(),av.y(),av.z());
+			lv.x,lv.y,lv.z,av.x,av.y,av.z);
 	}
 }
 

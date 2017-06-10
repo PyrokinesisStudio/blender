@@ -3310,10 +3310,10 @@ void CcdPhysicsEnvironment::SetupObjectConstraints(KX_GameObject *obj_src, KX_Ga
 	 * homogeneous scaling. */
 	int constraintId = phys_env->CreateConstraint(
 	    phy_src, phy_dest, (PHY_ConstraintType)dat->type,
-	    (float)(dat->pivX * scale.x()), (float)(dat->pivY * scale.y()), (float)(dat->pivZ * scale.z()),
-	    (float)(axis0.x() * scale.x()), (float)(axis0.y() * scale.y()), (float)(axis0.z() * scale.z()),
-	    (float)(axis1.x() * scale.x()), (float)(axis1.y() * scale.y()), (float)(axis1.z() * scale.z()),
-	    (float)(axis2.x() * scale.x()), (float)(axis2.y() * scale.y()), (float)(axis2.z() * scale.z()),
+	    (float)(dat->pivX * scale.x), (float)(dat->pivY * scale.y), (float)(dat->pivZ * scale.z),
+	    (float)(axis0.x * scale.x), (float)(axis0.y * scale.y), (float)(axis0.z * scale.z),
+	    (float)(axis1.x * scale.x), (float)(axis1.y * scale.y), (float)(axis1.z * scale.z),
+	    (float)(axis2.x * scale.x), (float)(axis2.y * scale.y), (float)(axis2.z * scale.z),
 	    dat->flag);
 
 	/* PHY_POINT2POINT_CONSTRAINT = 1,

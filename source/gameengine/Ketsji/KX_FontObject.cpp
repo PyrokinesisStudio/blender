@@ -189,7 +189,7 @@ void KX_FontObject::SetText(const std::string& text)
 	MT_Vector2 min;
 	MT_Vector2 max;
 	GetTextAabb(min, max);
-	m_boundingBox->SetAabb(MT_Vector3(min.x(), min.y(), 0.0f), MT_Vector3(max.x(), max.y(), 0.0f));
+	m_boundingBox->SetAabb(MT_Vector3(min.x, min.y, 0.0f), MT_Vector3(max.x, max.y, 0.0f));
 }
 
 void KX_FontObject::UpdateTextFromProperty()
@@ -210,7 +210,7 @@ const MT_Vector2 KX_FontObject::GetTextDimensions()
 	// Scale the width and height by the object's scale
 	const MT_Vector3& scale = NodeGetLocalScaling();
 
-	return MT_Vector2((max.x() - min.x()) * fabs(scale.x()), (max.y() - min.y()) * fabs(scale.y()));
+	return MT_Vector2((max.x - min.x) * fabs(scale.x), (max.y - min.y) * fabs(scale.y));
 }
 
 void KX_FontObject::GetTextAabb(MT_Vector2& min, MT_Vector2& max)
@@ -228,16 +228,16 @@ void KX_FontObject::GetTextAabb(MT_Vector2& min, MT_Vector2& max)
 		const std::string& text = m_texts[i];
 		BLF_boundbox(m_fontid, text.c_str(), text.size(), &box);
 		if (i == 0) {
-			min.x() = box.xmin;
-			min.y() = box.ymin;
-			max.x() = box.xmax;
-			max.y() = box.ymax;
+			min.x = box.xmin;
+			min.y = box.ymin;
+			max.x = box.xmax;
+			max.y = box.ymax;
 		}
 		else {
-			min.x() = std::min(min.x(), box.xmin);
-			min.y() = std::min(min.y(), box.ymin - lineSpacing * i);
-			max.x() = std::max(max.x(), box.xmax);
-			max.y() = std::max(max.y(), box.ymax - lineSpacing * i);
+			min.x = std::min(min.x, box.xmin);
+			min.y = std::min(min.y, box.ymin - lineSpacing * i);
+			max.x = std::max(max.x, box.xmax);
+			max.y = std::max(max.y, box.ymax - lineSpacing * i);
 		}
 	}
 

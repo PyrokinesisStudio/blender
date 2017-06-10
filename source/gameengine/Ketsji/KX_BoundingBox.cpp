@@ -82,7 +82,7 @@ bool KX_BoundingBox::SetMax(MT_Vector3 max)
 {
 	const MT_Vector3& min = GetMin();
 
-	if (min.x() > max.x() || min.y() > max.y() || min.z() > max.z()) {
+	if (min.x > max.x || min.y > max.y || min.z > max.z) {
 		return false;
 	}
 
@@ -94,7 +94,7 @@ bool KX_BoundingBox::SetMin(MT_Vector3 min)
 {
 	const MT_Vector3& max = GetMax();
 
-	if (min.x() > max.x() || min.y() > max.y() || min.z() > max.z()) {
+	if (min.x > max.x || min.y > max.y || min.z > max.z) {
 		return false;
 	}
 

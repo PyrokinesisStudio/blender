@@ -527,9 +527,9 @@ static PyObject *gPyCreateConstraint(PyObject *self,
 
 			int constraintid = PHY_GetActiveEnvironment()->CreateConstraint(
 			        physctrl, physctrl2, (enum PHY_ConstraintType)constrainttype, pivotX, pivotY, pivotZ,
-			        (float)axis0.x(), (float)axis0.y(), (float)axis0.z(),
-			        (float)axis1.x(), (float)axis1.y(), (float)axis1.z(),
-			        (float)axis2.x(), (float)axis2.y(), (float)axis2.z(), flag);
+			        (float)axis0.x, (float)axis0.y, (float)axis0.z,
+			        (float)axis1.x, (float)axis1.y, (float)axis1.z,
+			        (float)axis2.x, (float)axis2.y, (float)axis2.z, flag);
 
 			KX_ConstraintWrapper *wrap = new KX_ConstraintWrapper(
 			        (enum PHY_ConstraintType)constrainttype, constraintid, PHY_GetActiveEnvironment());
