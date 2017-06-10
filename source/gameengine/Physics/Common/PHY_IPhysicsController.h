@@ -32,15 +32,13 @@
 #ifndef __PHY_IPHYSICSCONTROLLER_H__
 #define __PHY_IPHYSICSCONTROLLER_H__
 
+#include "MT_Matrix3x3.h"
 #include <vector>
+
 #include "PHY_IController.h"
 
 class PHY_IMotionState;
 class PHY_IPhysicsEnvironment;
-
-class MT_Vector3;
-class MT_Vector3;
-class MT_Matrix3x3;
 
 class KX_GameObject;
 class RAS_MeshObject;

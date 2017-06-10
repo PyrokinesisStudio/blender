@@ -2,10 +2,11 @@
 
 namespace mathfu
 {
-	class AffineTransform
+	/*template <>
+	class Matrix<float, 4, 3>
 	{
 		
-	};
+	};*/
 };
 
 using MT_Transform = mathfu::AffineTransform;

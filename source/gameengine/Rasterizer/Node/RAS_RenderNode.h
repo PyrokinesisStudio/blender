@@ -37,7 +37,6 @@ class RAS_MeshSlot;
 class RAS_IPolyMaterial;
 class RAS_Rasterizer;
 class RAS_IStorageInfo;
-class MT_Transform;
 
 class RAS_MaterialDownwardNode;
 class RAS_ManagerDownwardNode;

@@ -32,13 +32,12 @@
 #ifndef __RAS_LIGHTOBJECT_H__
 #define __RAS_LIGHTOBJECT_H__
 
+#include "MT_Matrix4x4.h"
+#include "MT_Transform.h"
+
 class RAS_ICanvas;
 
 class KX_Camera;
-class KX_Scene;
-
-class MT_Transform;
-class MT_Matrix4x4;
 
 struct Image;
 

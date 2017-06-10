@@ -33,8 +33,8 @@
 #define __KX_POSITIONINTERPOLATOR_H__
 
 #include "KX_IInterpolator.h"
+#include "MT_Vector3.h"
 
-class MT_Vector3;
 class KX_IScalarInterpolator;
 
 class KX_PositionInterpolator : public KX_IInterpolator {

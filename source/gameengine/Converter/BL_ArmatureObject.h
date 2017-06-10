@@ -41,7 +41,6 @@ struct Bone;
 struct bPose;
 struct bConstraint;
 struct Object;
-class MT_Matrix4x4;
 class KX_BlenderSceneConverter;
 class RAS_DebugDraw;
 
