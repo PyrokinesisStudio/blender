@@ -66,7 +66,6 @@ static btRaycastVehicle::btVehicleTuning gTuning;
 
 #endif //NEW_BULLET_VEHICLE_SUPPORT
 #include "LinearMath/btAabbUtil2.h"
-#include "MT_MinMax.h"
 
 #ifdef WIN32
 void DrawRasterizerLine(const float *from, const float *to, int color);

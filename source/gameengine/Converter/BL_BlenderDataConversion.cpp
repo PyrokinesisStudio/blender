@@ -54,7 +54,6 @@
 #include "BL_BlenderDataConversion.h"
 
 #include "MT_Transform.h"
-#include "MT_MinMax.h"
 
 #include "GPU_texture.h"
 
