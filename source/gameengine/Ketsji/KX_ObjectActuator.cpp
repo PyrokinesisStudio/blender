@@ -234,7 +234,7 @@ bool KX_ObjectActuator::Update()
 				MT_Vector3 old_dir = character->GetWalkDirection();
 
 				if (!old_dir.fuzzyZero()) {
-					float mag = old_dir.length();
+					float mag = old_dir.Length();
 
 					dir = dir + old_dir;
 					if (!dir.fuzzyZero())

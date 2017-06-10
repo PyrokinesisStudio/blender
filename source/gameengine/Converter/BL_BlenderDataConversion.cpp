@@ -1363,7 +1363,7 @@ static void bl_ConvertBlenderObject_Single(
 		MT_Vector3 x(ori.getColumn(0));
 		MT_Vector3 y(ori.getColumn(1));
 		MT_Vector3 z(ori.getColumn(2));
-		MT_Vector3 parscale(x.length(), y.length(), z.length());
+		MT_Vector3 parscale(x.Length(), y.Length(), z.Length());
 		if (!MT_fuzzyZero(parscale[0]))
 			x /= parscale[0];
 		if (!MT_fuzzyZero(parscale[1]))

@@ -85,7 +85,7 @@ KX_ConstraintActuator::KX_ConstraintActuator(SCA_IObject *gameobj,
 	case KX_ACT_CONSTRAINT_ORIY:
 	case KX_ACT_CONSTRAINT_ORIZ:
 		{
-			float len = m_refDirVector.length();
+			float len = m_refDirVector.Length();
 			if (MT_fuzzyZero(len)) {
 				// missing a valid direction
 				CM_LogicBrickWarning(this, "there is no valid reference direction!");
@@ -229,7 +229,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 				//    compute local axis with reference direction as X and
 				//    Y in direction X refDirection plane
 				MT_Vector3 zaxis = m_refDirVector.cross(direction);
-				if (MT_fuzzyZero2(zaxis.length2())) {
+				if (MT_fuzzyZero2(zaxis.LengthSquared())) {
 					// direction and refDirection are identical,
 					// choose any other direction to define plane
 					if (direction[0] < 0.9999f)
@@ -374,7 +374,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 					}
 					if (m_option & KX_ACT_CONSTRAINT_DISTANCE) {
 						if (m_posDampTime) {
-							newdistance = filter*(position-callback.m_hitPoint).length()+(1.0f-filter)*m_minimumBound;
+							newdistance = filter*(position-callback.m_hitPoint).Length()+(1.0f-filter)*m_minimumBound;
 						} else {
 							newdistance = m_minimumBound;
 						}
@@ -389,7 +389,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 								spc->SetLinearVelocity(linV-fallspeed*direction,false);
 						}
 					} else {
-						newdistance = (position-callback.m_hitPoint).length();
+						newdistance = (position-callback.m_hitPoint).Length();
 					}
 					newposition = callback.m_hitPoint-newdistance*direction;
 				} else if (m_option & KX_ACT_CONSTRAINT_PERMANENT) {
@@ -468,7 +468,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 				{
 					MT_Vector3 newnormal = callback.m_hitNormal;
 					// compute new position & orientation
-					float distance = (callback.m_hitPoint-position).length()-spc->GetRadius(); 
+					float distance = (callback.m_hitPoint-position).Length()-spc->GetRadius(); 
 					// estimate the velocity of the hit point
 					MT_Vector3 relativeHitPoint;
 					relativeHitPoint = (callback.m_hitPoint-m_hitObject->NodeGetWorldPosition());
@@ -603,7 +603,7 @@ int KX_ConstraintActuator::pyattr_check_direction(PyObjectPlus *self_v, const st
 {
 	KX_ConstraintActuator* act = static_cast<KX_ConstraintActuator*>(self_v);
 	MT_Vector3 dir(act->m_refDirection);
-	float len = dir.length();
+	float len = dir.Length();
 	if (MT_fuzzyZero(len)) {
 		PyErr_SetString(PyExc_ValueError, "actuator.direction = vec: KX_ConstraintActuator, invalid direction");
 		return 1;

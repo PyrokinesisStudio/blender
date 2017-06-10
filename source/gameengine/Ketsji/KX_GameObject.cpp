@@ -1040,7 +1040,7 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 	float len;
 
 	vect = dir;
-	len = vect.length();
+	len = vect.Length();
 	if (MT_fuzzyZero(len))
 	{
 		CM_FunctionError("null vector!");
@@ -1066,7 +1066,7 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 				x = vect;
 			} else {
 				x = (vect * fac) + ((orimat * MT_Vector3(1.0f, 0.0f, 0.0f)) * (1.0f - fac));
-				len = x.length();
+				len = x.Length();
 				if (MT_fuzzyZero(len)) x = vect;
 				else x /= len;
 			}
@@ -1083,7 +1083,7 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 				y = vect;
 			} else {
 				y = (vect * fac) + ((orimat * MT_Vector3(0.0f, 1.0f, 0.0f)) * (1.0f - fac));
-				len = y.length();
+				len = y.Length();
 				if (MT_fuzzyZero(len)) y = vect;
 				else y /= len;
 			}
@@ -1100,7 +1100,7 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 				z = vect;
 			} else {
 				z = (vect * fac) + ((orimat * MT_Vector3(0.0f, 0.0f, 1.0f)) * (1.0f - fac));
-				len = z.length();
+				len = z.Length();
 				if (MT_fuzzyZero(len)) z = vect;
 				else z /= len;
 			}
@@ -3616,7 +3616,7 @@ KX_PYMETHODDEF_DOC_O(KX_GameObject, getVectTo,
 
 	fromPoint = NodeGetWorldPosition();
 	toDir = toPoint-fromPoint;
-	distance = toDir.length();
+	distance = toDir.Length();
 
 	if (MT_fuzzyZero(distance))
 	{
@@ -3866,13 +3866,13 @@ KX_PYMETHODDEF_DOC(KX_GameObject, rayCast,
 
 	if (dist != 0.0f) {
 		MT_Vector3 toDir = toPoint-fromPoint;
-		if (MT_fuzzyZero(toDir.length2())) {
+		if (MT_fuzzyZero(toDir.LengthSquared())) {
 			//return Py_BuildValue("OOO", Py_None, Py_None, Py_None);
 			return none_tuple_3();
 		}
 		toDir.normalize();
 		toPoint = fromPoint + (dist) * toDir;
-	} else if (MT_fuzzyZero((toPoint-fromPoint).length2())) {
+	} else if (MT_fuzzyZero((toPoint-fromPoint).LengthSquared())) {
 		//return Py_BuildValue("OOO", Py_None, Py_None, Py_None);
 		return none_tuple_3();
 	}

@@ -841,7 +841,7 @@ void CcdPhysicsEnvironment::ProcessFhSprings(double curTime, float interval)
 
 					CcdConstructionInfo& hitObjShapeProps = controller->GetConstructionInfo();
 
-					float distance = resultCallback.m_closestHitFraction * rayDirLocal.length() - ctrl->GetConstructionInfo().m_radius;
+					float distance = resultCallback.m_closestHitFraction * rayDirLocal.Length() - ctrl->GetConstructionInfo().m_radius;
 					if (distance >= hitObjShapeProps.m_fh_distance)
 						continue;
 
@@ -878,7 +878,7 @@ void CcdPhysicsEnvironment::ProcessFhSprings(double curTime, float interval)
 							lateral = lcs * loc_lateral;
 						}
 
-						btScalar rel_vel_lateral = lateral.length();
+						btScalar rel_vel_lateral = lateral.Length();
 
 						if (rel_vel_lateral > SIMD_EPSILON) {
 							btScalar friction_factor = hit_object->getFriction();//cl_object->getFriction();
@@ -1238,17 +1238,17 @@ PHY_IPhysicsController *CcdPhysicsEnvironment::RayTest(PHY_IRayCastFilterCallbac
 						btVector3 v = v2 - v1;
 						btVector3 w = v3 - v1;
 						btVector3 u = v.cross(w);
-						btScalar A = u.length();
+						btScalar A = u.Length();
 
 						v = v2 - rayCallback.m_hitPointWorld;
 						w = v3 - rayCallback.m_hitPointWorld;
 						u = v.cross(w);
-						btScalar A1 = u.length();
+						btScalar A1 = u.Length();
 
 						v = rayCallback.m_hitPointWorld - v1;
 						w = v3 - v1;
 						u = v.cross(w);
-						btScalar A2 = u.length();
+						btScalar A2 = u.Length();
 
 						btVector3 baryCo;
 						baryCo.setX(A1 / A);
@@ -1283,7 +1283,7 @@ SKIP_UV_NORMAL:
 				}
 			}
 		}
-		if (rayCallback.m_hitNormalWorld.length2() > (SIMD_EPSILON * SIMD_EPSILON)) {
+		if (rayCallback.m_hitNormalWorld.LengthSquared() > (SIMD_EPSILON * SIMD_EPSILON)) {
 			rayCallback.m_hitNormalWorld.normalize();
 		}
 		else {
@@ -2389,7 +2389,7 @@ int findClosestNode(btSoftBody *sb, const btVector3& worldPoint)
 	float maxDistSqr = 1e30f;
 
 	for (int n = 0; n < nodes.size(); n++) {
-		btScalar distSqr = (nodes[n].m_x - worldPoint).length2();
+		btScalar distSqr = (nodes[n].m_x - worldPoint).LengthSquared();
 		if (distSqr < maxDistSqr)
 		{
 			maxDistSqr = distSqr;
@@ -2517,7 +2517,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 				
 				btVector3 axis1(axis1X,axis1Y,axis1Z), axis2(axis2X,axis2Y,axis2Z);
-				if (axis1.length() == 0.0)
+				if (axis1.Length() == 0.0)
 				{
 					btPlaneSpace1( axisInA, axis1, axis2 );
 				}
@@ -2579,7 +2579,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 				
 				btVector3 axis1(axis1X,axis1Y,axis1Z), axis2(axis2X,axis2Y,axis2Z);
-				if (axis1.length() == 0.0)
+				if (axis1.Length() == 0.0)
 				{
 					btPlaneSpace1( axisInA, axis1, axis2 );
 				}
@@ -2643,7 +2643,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 
 				btVector3 axis1(axis1X, axis1Y, axis1Z), axis2(axis2X, axis2Y, axis2Z);
-				if (axis1.length() == 0.0f) {
+				if (axis1.Length() == 0.0f) {
 					btPlaneSpace1(axisInA, axis1, axis2);
 				}
 
@@ -2669,7 +2669,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 
 				btVector3 axis1(axis1X, axis1Y, axis1Z), axis2(axis2X, axis2Y, axis2Z);
-				if (axis1.length() == 0.0f) {
+				if (axis1.Length() == 0.0f) {
 					btPlaneSpace1(axisInA, axis1, axis2);
 				}
 

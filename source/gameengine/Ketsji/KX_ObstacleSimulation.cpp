@@ -52,8 +52,8 @@ static int sweepCircleCircle(
 	MT_Vector2 c1(pos1.x, pos1.y);
 	MT_Vector2 s = c1 - c0;
 	float  r = r0+r1;
-	float c = s.length2() - r*r;
-	float a = v.length2();
+	float c = s.LengthSquared() - r*r;
+	float a = v.LengthSquared();
 	if (a < EPS) return 0;	// not moving
 
 	// Overlap, calc time to exit.
@@ -77,7 +77,7 @@ static int sweepCircleSegment(
 	MT_Vector2 L = sb-sa;
 	MT_Vector2 H = c0-sa;
 	float radius = r0+sr;
-	float l2 = L.length2();
+	float l2 = L.LengthSquared();
 	float r2 = radius * radius;
 	float dl = perp(v, L);
 	float hl = perp(H, L);
@@ -332,7 +332,7 @@ static MT_Vector3 nearestPointToObstacle(MT_Vector3& pos ,KX_Obstacle* obstacle)
 		MT_Vector3 ab = obstacle->m_pos2 - obstacle->m_pos;
 		if (!ab.fuzzyZero())
 		{
-			const float dist = ab.length();
+			const float dist = ab.Length();
 			MT_Vector3 abdir = ab.normalized();
 			MT_Vector3  v = pos - obstacle->m_pos;
 			float proj = abdir.dot(v);
@@ -432,7 +432,7 @@ void KX_ObstacleSimulationTOI_rays::sampleRVO(KX_Obstacle* activeObst, KX_NavMes
 										const float maxDeltaAngle)
 {
 	MT_Vector2 vel(activeObst->dvel[0], activeObst->dvel[1]);
-	float vmax = (float) vel.length();
+	float vmax = (float) vel.Length();
 	float odir = (float) atan2(vel.y, vel.x);
 
 	MT_Vector2 ddir = vel;

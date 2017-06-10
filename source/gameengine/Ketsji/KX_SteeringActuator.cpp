@@ -198,7 +198,7 @@ bool KX_SteeringActuator::Update(double curtime)
 
 	switch (m_mode) {
 		case KX_STEERING_SEEK:
-			if (vectotarg2d.length2()>m_distance*m_distance)
+			if (vectotarg2d.LengthSquared()>m_distance*m_distance)
 			{
 				terminate = false;
 				m_steerVec = vectotarg;
@@ -207,7 +207,7 @@ bool KX_SteeringActuator::Update(double curtime)
 			}
 			break;
 		case KX_STEERING_FLEE:
-			if (vectotarg2d.length2()<m_distance*m_distance)
+			if (vectotarg2d.LengthSquared()<m_distance*m_distance)
 			{
 				terminate = false;
 				m_steerVec = -vectotarg;
@@ -216,7 +216,7 @@ bool KX_SteeringActuator::Update(double curtime)
 			}
 			break;
 		case KX_STEERING_PATHFOLLOWING:
-			if (m_navmesh && vectotarg.length2()>m_distance*m_distance)
+			if (m_navmesh && vectotarg.LengthSquared()>m_distance*m_distance)
 			{
 				terminate = false;
 
@@ -233,7 +233,7 @@ bool KX_SteeringActuator::Update(double curtime)
 				if (m_wayPointIdx>0)
 				{
 					MT_Vector3 waypoint(&m_path[3*m_wayPointIdx]);
-					if ((waypoint-mypos).length2()<WAYPOINT_RADIUS*WAYPOINT_RADIUS)
+					if ((waypoint-mypos).LengthSquared()<WAYPOINT_RADIUS*WAYPOINT_RADIUS)
 					{
 						m_wayPointIdx++;
 						if (m_wayPointIdx>=m_pathLen)

@@ -576,7 +576,7 @@ void BL_ArmatureObject::DrawDebug(RAS_DebugDraw& debugDraw)
 
 float BL_ArmatureObject::GetBoneLength(Bone *bone) const
 {
-	return (float)(MT_Vector3(bone->head) - MT_Vector3(bone->tail)).length();
+	return (float)(MT_Vector3(bone->head) - MT_Vector3(bone->tail)).Length();
 }
 
 #ifdef WITH_PYTHON
