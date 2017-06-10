@@ -568,7 +568,7 @@ PyObject *KX_WorldInfo::pyattr_get_background_color(PyObjectPlus *self_v, const 
 	        mathutils_world_color_cb_index, MATHUTILS_COL_CB_BACK_COLOR);
 #else
 	KX_WorldInfo *self = static_cast<KX_WorldInfo*>(self_v);
-	return PyObjectFrom(self->m_horizoncolor.to3d());
+	return PyObjectFrom(self->m_horizoncolor.xyz());
 #endif
 }
 

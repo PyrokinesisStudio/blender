@@ -1428,7 +1428,7 @@ void RAS_Rasterizer::GetTransform(float *origmat, int objectdrawmode, float mat[
 
 		MT_Vector3 left;
 		if (m_camortho) {
-			left = m_viewmatrix[2].to3d().safe_normalized();
+			left = m_viewmatrix[2].xyz().safe_normalized();
 		}
 		else {
 			const MT_Vector3 objpos(&origmat[12]);

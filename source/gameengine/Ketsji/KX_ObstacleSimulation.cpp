@@ -485,8 +485,8 @@ void KX_ObstacleSimulationTOI_rays::sampleRVO(KX_Obstacle* activeObst, KX_NavMes
 					vab = 2*svel - vel - MT_Vector2(ob->vel);
 				}
 
-				if (!sweepCircleCircle(activeObst->m_pos.to2d(), activeObst->m_rad,
-				                       vab, ob->m_pos.to2d(), ob->m_rad, htmin, htmax))
+				if (!sweepCircleCircle(activeObst->m_pos.xy(), activeObst->m_rad,
+				                       vab, ob->m_pos.xy(), ob->m_rad, htmin, htmax))
 				{
 					continue;
 				}
@@ -503,8 +503,8 @@ void KX_ObstacleSimulationTOI_rays::sampleRVO(KX_Obstacle* activeObst, KX_NavMes
 					p2 = navmeshobj->TransformToWorldCoords(p2);
 				}
 
-				if (!sweepCircleSegment(activeObst->m_pos.to2d(), activeObst->m_rad, svel,
-				                        p1.to2d(), p2.to2d(), ob->m_rad, htmin, htmax))
+				if (!sweepCircleSegment(activeObst->m_pos.xy(), activeObst->m_rad, svel,
+				                        p1.xy(), p2.xy(), ob->m_rad, htmin, htmax))
 				{
 					continue;
 				}
@@ -650,8 +650,8 @@ static void processSamples(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavM
 				                  dot_v2v2(np, vab)) * 2.0f, 0.0f, 1.0f);
 				nside++;
 
-				if (!sweepCircleCircle(activeObst->m_pos.to2d(), activeObst->m_rad,
-				                       MT_Vector2(vab), ob->m_pos.to2d(), ob->m_rad, htmin, htmax))
+				if (!sweepCircleCircle(activeObst->m_pos.xy(), activeObst->m_rad,
+				                       MT_Vector2(vab), ob->m_pos.xy(), ob->m_rad, htmin, htmax))
 				{
 					continue;
 				}
