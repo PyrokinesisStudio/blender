@@ -103,6 +103,14 @@ class Vector<float, 4> {
     simd4f_ustore4(simd, vector->data);
   }
 
+  inline void Pack(float a[4]) const {
+    simd4f_ustore4(simd, a);
+  }
+
+  inline const float* const Data() const {
+    return data_;
+  }
+
   inline Vector<float, 4> operator-() const {
     return Vector<float, 4>(simd4f_sub(simd4f_zero(), simd));
   }

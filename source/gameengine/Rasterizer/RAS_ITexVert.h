@@ -149,7 +149,7 @@ public:
 
 	inline void SetXYZ(const MT_Vector3& xyz)
 	{
-		xyz.getValue(m_localxyz);
+		xyz.Pack(m_localxyz);
 	}
 
 	inline void SetXYZ(const float xyz[3])
@@ -159,12 +159,12 @@ public:
 
 	inline void SetNormal(const MT_Vector3& normal)
 	{
-		normal.getValue(m_normal);
+		normal.Pack(m_normal);
 	}
 
 	inline void SetTangent(const MT_Vector4& tangent)
 	{
-		tangent.getValue(m_tangent);
+		tangent.Pack(m_tangent);
 	}
 
 	// compare two vertices, to test if they can be shared, used for

@@ -70,6 +70,14 @@ class Matrix<float, 4> {
                         simd4f_create(m[12], m[13], m[14], m[15]));
   }
 
+  explicit inline Matrix<float, 4>(const float m[4][4]) {
+    data_.simd_matrix =
+        simd4x4f_create(simd4f_create(m[0][0], m[0][1], m[0][2], m[0][3]),
+                        simd4f_create(m[1][0], m[1][1], m[1][2], m[1][3]),
+                        simd4f_create(m[2][0], m[2][1], m[2][2], m[2][3]),
+                        simd4f_create(m[3][0], m[3][1], m[3][2], m[3][3]));
+  }
+
   inline Matrix<float, 4>(const Vector<float, 4>& column0,
                           const Vector<float, 4>& column1,
                           const Vector<float, 4>& column2,

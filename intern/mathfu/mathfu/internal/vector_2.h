@@ -68,6 +68,14 @@ class Vector<T, 2> {
     MATHFU_VECTOR_OPERATION(vector->data[i] = data_[i]);
   }
 
+  inline void Pack(T a[2]) const {
+    MATHFU_VECTOR_OPERATION(a[i] = data_[i]);
+  }
+
+  inline const T* const Data() const {
+    return data_;
+  }
+
   inline T LengthSquared() const { return LengthSquaredHelper(*this); }
 
   inline T Length() const { return LengthHelper(*this); }

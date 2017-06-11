@@ -473,9 +473,8 @@ PyObject *PyObjectPlus::py_get_attrdef(PyObject *self_py, const PyAttributeDef *
 			{
 				MT_Vector3 *val = reinterpret_cast<MT_Vector3 *>(ptr);
 #ifdef USE_MATHUTILS
-				float fval[3];
-				val->getValue(fval);
-				return Vector_CreatePyObject(fval, 3, nullptr);
+				MT_Vector3Packed fval(*val);
+				return Vector_CreatePyObject(fval.data, 3, nullptr);
 #else
 				PyObject *resultlist = PyList_New(3);
 				for (unsigned int i = 0; i < 3; i++)

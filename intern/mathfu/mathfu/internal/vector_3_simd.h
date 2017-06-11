@@ -134,6 +134,20 @@ class Vector<float, 3> {
 #endif  // MATHFU_COMPILE_WITH_PADDING
   }
 
+  inline void Pack(float a[3]) const {
+#ifdef MATHFU_COMPILE_WITH_PADDING
+    simd4f_ustore3(simd, a);
+#else
+    a[0] = data_[0];
+    a[1] = data_[1];
+    a[2] = data_[2];
+#endif  // MATHFU_COMPILE_WITH_PADDING
+  }
+
+  inline const float* const Data() const {
+    return data_;
+  }
+
   inline Vector<float, 3> operator-() const {
     return Vector<float, 3>(
         simd4f_sub(simd4f_zero(), MATHFU_VECTOR3_LOAD3(*this)));

@@ -59,7 +59,7 @@ public:
 		:RAS_ITexVert(xyz, tangent, normal)
 	{
 		for (int i = 0; i < UvSize; ++i) {
-			uvs[i].getValue(m_uvs[i]);
+			uvs[i].Pack(m_uvs[i]);
 		}
 
 		for (unsigned short i = 0; i < ColorSize; ++i) {
@@ -83,7 +83,7 @@ public:
 
 	virtual void SetUV(const int index, const MT_Vector2& uv)
 	{
-		uv.getValue(m_uvs[index]);
+		uv.Pack(m_uvs[index]);
 	}
 
 	virtual void SetUV(const int index, const float uv[2])

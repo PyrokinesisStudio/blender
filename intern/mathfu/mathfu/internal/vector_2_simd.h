@@ -74,6 +74,14 @@ class Vector<float, 2> {
     simd2f_ustore2(simd, vector->data);
   }
 
+  inline void Pack(float a[2]) const {
+    simd2f_ustore2(simd, a);
+  }
+
+  inline const float* const Data() const {
+    return data_;
+  }
+
   inline Vector<float, 2> operator-() const {
     return Vector<float, 2>(simd2f_sub(simd2f_zero(), simd));
   }

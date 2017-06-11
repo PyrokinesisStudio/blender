@@ -374,6 +374,20 @@ class Vector {
     MATHFU_VECTOR_OPERATION(vector->data[i] = data_[i]);
   }
 
+  /// @brief Pack a Vector to a array "d" element.
+  ///
+  /// @param vector array "d" element to write to.
+  inline void Pack(T *a) const {
+    MATHFU_VECTOR_OPERATION(a[i] = data_[i]);
+  }
+
+  /// @brief Return the array of this vector.
+  ///
+  /// @return The array of this vector.
+  inline const T* const Data() const {
+    return data_;
+  }
+
   /// @brief Calculate the squared length of this vector.
   ///
   /// @return The length of this vector squared.

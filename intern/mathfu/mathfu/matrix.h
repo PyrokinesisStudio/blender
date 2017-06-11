@@ -295,6 +295,13 @@ class Matrix {
     MATHFU_MAT_OPERATION((data_[i] = Vector<T, rows>(&a[i * columns])));
   }
 
+  /// @brief Create a Matrix from the first row * column elements of an array.
+  ///
+  /// @param a Array of values that the matrix will be iniitlized to.
+  explicit inline Matrix(const T a[columns][rows]) {
+    MATHFU_MAT_OPERATION((data_[i] = Vector<T, rows>(a[i])));
+  }
+
   /// @brief Create a Matrix from an array of "columns", "rows" element packed
   /// vectors.
   ///
@@ -372,6 +379,14 @@ class Matrix {
   inline void Pack(VectorPacked<T, rows>* const vector) const {
     MATHFU_MAT_OPERATION(GetColumn(i).Pack(&vector[i]));
   }
+
+  /// @brief Pack the matrix to an array of "rows" element vectors,
+  /// one vector per matrix column.
+  ///
+  /// @param vector Array of "columns" entries to write to.
+  /*inline void Pack(T* a) const {
+    MATHFU_MAT_OPERATION(GetColumn(i).Pack(&a[i]));
+  }*/
 
   /// @cond MATHFU_INTERNAL
   /// @brief Access a column vector of the Matrix.
