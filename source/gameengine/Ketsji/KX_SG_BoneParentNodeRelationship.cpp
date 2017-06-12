@@ -102,16 +102,14 @@ UpdateChildCoordinates(
 				child_transform = parent_matrix * child_transform;
 				
 				// Recompute the child transform components from the transform.
-				child_w_scale = MT_Vector3( 
-					MT_Vector3(child_transform[0][0], child_transform[0][1], child_transform[0][2]).Length(),
-					MT_Vector3(child_transform[1][0], child_transform[1][1], child_transform[1][2]).Length(),
-					MT_Vector3(child_transform[2][0], child_transform[2][1], child_transform[2][2]).Length());
-				child_w_rotation = MT_Matrix3x3(child_transform[0][0], child_transform[0][1], child_transform[0][2], 
-					child_transform[1][0], child_transform[1][1], child_transform[1][2], 
-					child_transform[2][0], child_transform[2][1], child_transform[2][2]);
-				child_w_rotation.scale(1.0f/child_w_scale[0], 1.0f/child_w_scale[1], 1.0f/child_w_scale[2]);
+				child_w_scale = MT_Vector3(child_transform.GetColumn(0).Length(),
+										   child_transform.GetColumn(1).Length(),
+										   child_transform.GetColumn(2).Length());
+				child_w_rotation = MT_Matrix3x3(child_transform.GetColumn(0).xyz() / child_w_scale.x,
+												child_transform.GetColumn(1).xyz() / child_w_scale.y,
+												child_transform.GetColumn(2).xyz() / child_w_scale.z);
 					
-				child_w_pos = MT_Vector3(child_transform[0][3], child_transform[1][3], child_transform[2][3]);
+				child_w_pos = child_transform.GetColumn(3).xyz();
 					
 				valid_parent_transform = true;
 			}

@@ -58,10 +58,10 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		const MT_Matrix3x3& rot = aabb.m_rot;
 		const MT_Vector3& pos = aabb.m_pos;
 		float mat[16] = {
-			rot[0][0], rot[1][0], rot[2][0], 0.0,
-			rot[0][1], rot[1][1], rot[2][1], 0.0,
-			rot[0][2], rot[1][2], rot[2][2], 0.0,
-			pos[0], pos[1], pos[2], 1.0
+			rot(0, 0), rot(0, 1), rot(0, 2), 0.0f,
+			rot(1, 0), rot(1, 1), rot(1, 2), 0.0f,
+			rot(2, 0), rot(2, 1), rot(2, 2), 0.0f,
+			pos.x, pos.y, pos.z, 1.0f
 		};
 		rasty->PushMatrix();
 		rasty->MultMatrix(mat);

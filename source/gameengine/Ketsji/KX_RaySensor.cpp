@@ -223,44 +223,44 @@ bool KX_RaySensor::Evaluate()
 	{
 	case SENS_RAY_X_AXIS: // X
 		{
-			todir[0] = invmat[0][0];
-			todir[1] = invmat[0][1];
-			todir[2] = invmat[0][2];
+			todir[0] = invmat(0, 0);
+			todir[1] = invmat(1, 0);
+			todir[2] = invmat(2, 0);
 			break;
 		}
 	case SENS_RAY_Y_AXIS: // Y
 		{
-			todir[0] = invmat[1][0];
-			todir[1] = invmat[1][1];
-			todir[2] = invmat[1][2];
+			todir[0] = invmat(0, 1);
+			todir[1] = invmat(1, 1);
+			todir[2] = invmat(2, 1);
 			break;
 		}
 	case SENS_RAY_Z_AXIS: // Z
 		{
-			todir[0] = invmat[2][0];
-			todir[1] = invmat[2][1];
-			todir[2] = invmat[2][2];
+			todir[0] = invmat(0, 2);
+			todir[1] = invmat(1, 2);
+			todir[2] = invmat(2, 2);
 			break;
 		}
 	case SENS_RAY_NEG_X_AXIS: // -X
 		{
-			todir[0] = -invmat[0][0];
-			todir[1] = -invmat[0][1];
-			todir[2] = -invmat[0][2];
+			todir[0] = -invmat(0, 0);
+			todir[1] = -invmat(1, 0);
+			todir[2] = -invmat(2, 0);
 			break;
 		}
 	case SENS_RAY_NEG_Y_AXIS: // -Y
 		{
-			todir[0] = -invmat[1][0];
-			todir[1] = -invmat[1][1];
-			todir[2] = -invmat[1][2];
+			todir[0] = -invmat(0, 1);
+			todir[1] = -invmat(1, 1);
+			todir[2] = -invmat(2, 1);
 			break;
 		}
 	case SENS_RAY_NEG_Z_AXIS: // -Z
 		{
-			todir[0] = -invmat[2][0];
-			todir[1] = -invmat[2][1];
-			todir[2] = -invmat[2][2];
+			todir[0] = -invmat(0, 2);
+			todir[1] = -invmat(1, 2);
+			todir[2] = -invmat(2, 2);
 			break;
 		}
 	}

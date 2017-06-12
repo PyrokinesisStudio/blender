@@ -288,6 +288,42 @@ class Matrix {
     data_[2] = column2;
   }
 
+  inline Matrix(const T& yaw, const T& pitch, const T& roll) {
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 3);
+    const T ci = cosf(yaw);
+    const T cj = cosf(pitch);
+    const T ch = cosf(roll);
+    const T si = sinf(yaw);
+    const T sj = sinf(pitch);
+    const T sh = sinf(roll);
+    const T cc = ci * ch;
+    const T cs = ci * sh;
+    const T sc = si * ch;
+    const T ss = si * sh;
+
+    data_[0] = Vector<T, rows>(cj * ch, sj * sc - cs, sj * cc + ss);
+    data_[1] = Vector<T, rows>(cj * sh, sj * ss + cc, sj * cs - sc);
+    data_[2] = Vector<T, rows>(-sj, cj * si, cj * ci);
+  }
+
+  inline Matrix(const Vector<T, rows>& euler) {
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 3);
+    const T ci = cosf(euler.x);
+    const T cj = cosf(euler.y);
+    const T ch = cosf(euler.z);
+    const T si = sinf(euler.x);
+    const T sj = sinf(euler.y);
+    const T sh = sinf(euler.z);
+    const T cc = ci * ch;
+    const T cs = ci * sh;
+    const T sc = si * ch;
+    const T ss = si * sh;
+
+    data_[0] = Vector<T, rows>(cj * ch, sj * sc - cs, sj * cc + ss);
+    data_[1] = Vector<T, rows>(cj * sh, sj * ss + cc, sj * cs - sc);
+    data_[2] = Vector<T, rows>(-sj, cj * si, cj * ci);
+  }
+
   /// @brief Create a Matrix from the first row * column elements of an array.
   ///
   /// @param a Array of values that the matrix will be iniitlized to.
@@ -531,6 +567,10 @@ class Matrix {
     const Matrix<T, rows, columns> copy_of_this(*this);
     TimesHelper(copy_of_this, m, this);
     return *this;
+  }
+
+  inline Vector<T, rows> GetEuler() const {
+     return EulerHelper(*this);
   }
 
   /// @brief Calculate the inverse of this Matrix.
@@ -1234,6 +1274,21 @@ class Constants<double> {
   /// @related mathfu::Matrix::InverseWithDeterminantCheck()
   static double GetDeterminantThreshold() { return 1e-15; }
 };
+
+template <class T, int rows, int columns>
+inline Vector<T, rows> EulerHelper(const Matrix<T, rows, columns>& m) {
+	const T cy = sqrtf(m(0, 0) * m(0, 0) + m(1, 0) * m(1, 0));
+	Vector<T, rows> eul;
+
+	if (cy > (float)(16.0f * FLT_EPSILON)) {
+		return Vector<T, rows>(atan2f(m(2, 1), m(2, 2)), atan2f(-m(2, 0), cy), atan2f(m(1, 0), m(0, 0)))
+	}
+	else {
+		return Vector<T, rows>(atan2f(-m(1, 2), m(1, 1)), atan2f(-m(2, 0), cy), 0.0)
+	}
+
+	return eul
+}
 
 /// @cond MATHFU_INTERNAL
 /// @brief Compute the inverse of a matrix.

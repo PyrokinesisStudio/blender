@@ -821,7 +821,7 @@ void RAS_Rasterizer::SetProjectionMatrix(const MT_Matrix4x4 & mat)
 	mat.getValue(matrix);
 	LoadMatrix(matrix);
 
-	m_camortho = (mat[3][3] != 0.0f);
+	m_camortho = (mat(3, 3) != 0.0f);
 }
 
 MT_Matrix4x4 RAS_Rasterizer::GetFrustumMatrix(
@@ -872,7 +872,7 @@ MT_Matrix4x4 RAS_Rasterizer::GetFrustumMatrix(
 	float mat[4][4];
 	perspective_m4(mat, left, right, bottom, top, frustnear, frustfar);
 
-	return MT_Matrix4x4(&mat[0][0]);
+	return MT_Matrix4x4(mat);
 }
 
 MT_Matrix4x4 RAS_Rasterizer::GetOrthoMatrix(
@@ -886,7 +886,7 @@ MT_Matrix4x4 RAS_Rasterizer::GetOrthoMatrix(
 	float mat[4][4];
 	orthographic_m4(mat, left, right, bottom, top, frustnear, frustfar);
 
-	return MT_Matrix4x4(&mat[0][0]);
+	return MT_Matrix4x4(mat);
 }
 
 // next arguments probably contain redundant info, for later...

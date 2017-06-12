@@ -101,7 +101,7 @@ public:
 
 		// Normal and tangent matrix.
 		MT_Matrix4x4 nmat = mat;
-		nmat[0][3] = nmat[1][3] = nmat[2][3] = 0.0f;
+		nmat(3, 0) = nmat(3, 1) = nmat(3, 2) = 0.0f;
 
 		// Copy the vertex by not using a reference in the loop.
 		for (unsigned int i = 0; i < vertexcount; ++i) {

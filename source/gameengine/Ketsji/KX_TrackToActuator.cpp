@@ -102,15 +102,15 @@ static MT_Matrix3x3 EulToMat3(float eul[3])
 	sc = si*ch; 
 	ss = si*sh;
 
-	mat[0][0] = cj*ch; 
-	mat[1][0] = sj*sc-cs; 
-	mat[2][0] = sj*cc+ss;
-	mat[0][1] = cj*sh; 
-	mat[1][1] = sj*ss+cc; 
-	mat[2][1] = sj*cs-sc;
-	mat[0][2] = -sj;	 
-	mat[1][2] = cj*si;    
-	mat[2][2] = cj*ci;
+	mat(0, 0) = cj*ch; 
+	mat(0, 1) = sj*sc-cs; 
+	mat(0, 2) = sj*cc+ss;
+	mat(1, 0) = cj*sh; 
+	mat(1, 1) = sj*ss+cc; 
+	mat(1, 2) = sj*cs-sc;
+	mat(2, 0) = -sj;	 
+	mat(2, 1) = cj*si;    
+	mat(2, 2) = cj*ci;
 
 	return mat;
 }
@@ -120,16 +120,16 @@ static MT_Matrix3x3 EulToMat3(float eul[3])
 /* old function from Blender */
 static void Mat3ToEulOld(MT_Matrix3x3 mat, float eul[3])
 {
-	const float cy = sqrtf(mat[0][0] * mat[0][0] + mat[0][1] * mat[0][1]);
+	const float cy = sqrtf(mat(0, 0) * mat(0, 0) + mat(1, 0) * mat(1, 0));
 
 	if (cy > (float)(16.0f * FLT_EPSILON)) {
-		eul[0] = atan2f( mat[1][2], mat[2][2]);
-		eul[1] = atan2f(-mat[0][2], cy);
-		eul[2] = atan2f( mat[0][1], mat[0][0]);
+		eul[0] = atan2f( mat(2, 1), mat(2, 2));
+		eul[1] = atan2f(-mat(2, 0), cy);
+		eul[2] = atan2f( mat(1, 0), mat(0, 0));
 	}
 	else {
-		eul[0] = atan2f(-mat[2][1], mat[1][1]);
-		eul[1] = atan2f(-mat[0][2], cy);
+		eul[0] = atan2f(-mat(1, 2), mat(1, 1));
+		eul[1] = atan2f(-mat(2, 0), cy);
 		eul[2] = 0.0f;
 	}
 }

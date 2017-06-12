@@ -209,9 +209,9 @@ void KX_WorldInfo::RenderBackground(RAS_Rasterizer *rasty)
 		if (m_scene->world->skytype & (WO_SKYBLEND | WO_SKYPAPER | WO_SKYREAL)) {
 			GPUMaterial *gpumat = GPU_material_world(m_scene, m_scene->world);
 			float viewmat[4][4];
-			rasty->GetViewMatrix().getValue(&viewmat[0][0]);
+			rasty->GetViewMatrix().getValue(viewmat);
 			float invviewmat[4][4];
-			rasty->GetViewInvMatrix().getValue(&invviewmat[0][0]);
+			rasty->GetViewInvMatrix().getValue(invviewmat);
 
 			static float texcofac[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 			GPU_material_bind(gpumat, 0xFFFFFFFF, m_scene->lay, 1.0f, false, viewmat, invviewmat, texcofac, false);

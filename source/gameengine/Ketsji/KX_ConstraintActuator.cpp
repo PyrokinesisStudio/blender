@@ -198,21 +198,15 @@ bool KX_ConstraintActuator::Update(double curtime)
 		case KX_ACT_CONSTRAINT_ORIZ:
 			switch (m_locrot) {
 			case KX_ACT_CONSTRAINT_ORIX:
-				direction[0] = rotation[0][0];
-				direction[1] = rotation[1][0];
-				direction[2] = rotation[2][0];
+				direction = rotation.GetColumn(0);
 				axis = 0;
 				break;
 			case KX_ACT_CONSTRAINT_ORIY:
-				direction[0] = rotation[0][1];
-				direction[1] = rotation[1][1];
-				direction[2] = rotation[2][1];
+				direction = rotation.GetColumn(1);
 				axis = 1;
 				break;
 			default:
-				direction[0] = rotation[0][2];
-				direction[1] = rotation[1][2];
-				direction[2] = rotation[2][2];
+				direction = rotation.GetColumn(2);
 				axis = 2;
 				break;
 			}
@@ -263,44 +257,32 @@ bool KX_ConstraintActuator::Update(double curtime)
 		case KX_ACT_CONSTRAINT_DIRNZ:
 			switch (m_locrot) {
 			case KX_ACT_CONSTRAINT_DIRPX:
-				normal[0] = rotation[0][0];
-				normal[1] = rotation[1][0];
-				normal[2] = rotation[2][0];
+				normal = rotation.GetColumn(0);
 				axis = 0;		// axis according to KX_GameObject::AlignAxisToVect()
 				sign = 0;		// X axis will be parrallel to direction of ray
 				break;
 			case KX_ACT_CONSTRAINT_DIRPY:
-				normal[0] = rotation[0][1];
-				normal[1] = rotation[1][1];
-				normal[2] = rotation[2][1];
+				normal = rotation.GetColumn(1);
 				axis = 1;
 				sign = 0;
 				break;
 			case KX_ACT_CONSTRAINT_DIRPZ:
-				normal[0] = rotation[0][2];
-				normal[1] = rotation[1][2];
-				normal[2] = rotation[2][2];
+				normal = rotation.GetColumn(2);
 				axis = 2;
 				sign = 0;
 				break;
 			case KX_ACT_CONSTRAINT_DIRNX:
-				normal[0] = -rotation[0][0];
-				normal[1] = -rotation[1][0];
-				normal[2] = -rotation[2][0];
+				normal = -rotation.GetColumn(0);
 				axis = 0;
 				sign = 1;
 				break;
 			case KX_ACT_CONSTRAINT_DIRNY:
-				normal[0] = -rotation[0][1];
-				normal[1] = -rotation[1][1];
-				normal[2] = -rotation[2][1];
+				normal = -rotation.GetColumn(1);
 				axis = 1;
 				sign = 1;
 				break;
 			case KX_ACT_CONSTRAINT_DIRNZ:
-				normal[0] = -rotation[0][2];
-				normal[1] = -rotation[1][2];
-				normal[2] = -rotation[2][2];
+				normal = -rotation.GetColumn(2);
 				axis = 2;
 				sign = 1;
 				break;
@@ -407,39 +389,27 @@ bool KX_ConstraintActuator::Update(double curtime)
 		case KX_ACT_CONSTRAINT_FHNZ:
 			switch (m_locrot) {
 			case KX_ACT_CONSTRAINT_FHPX:
-				normal[0] = -rotation[0][0];
-				normal[1] = -rotation[1][0];
-				normal[2] = -rotation[2][0];
+				normal = -rotation.GetColumn(0);
 				direction = MT_Vector3(1.0f,0.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHPY:
-				normal[0] = -rotation[0][1];
-				normal[1] = -rotation[1][1];
-				normal[2] = -rotation[2][1];
+				normal = -rotation.GetColumn(1);
 				direction = MT_Vector3(0.0f,1.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHPZ:
-				normal[0] = -rotation[0][2];
-				normal[1] = -rotation[1][2];
-				normal[2] = -rotation[2][2];
+				normal = -rotation.GetColumn(2);
 				direction = MT_Vector3(0.0f,0.0f,1.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHNX:
-				normal[0] = rotation[0][0];
-				normal[1] = rotation[1][0];
-				normal[2] = rotation[2][0];
+				normal = rotation.GetColumn(0);
 				direction = MT_Vector3(-1.0f,0.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHNY:
-				normal[0] = rotation[0][1];
-				normal[1] = rotation[1][1];
-				normal[2] = rotation[2][1];
+				normal = rotation.GetColumn(1);
 				direction = MT_Vector3(0.0f,-1.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHNZ:
-				normal[0] = rotation[0][2];
-				normal[1] = rotation[1][2];
-				normal[2] = rotation[2][2];
+				normal = rotation.GetColumn(2);
 				direction = MT_Vector3(0.0f,0.0f,-1.0f);
 				break;
 			}

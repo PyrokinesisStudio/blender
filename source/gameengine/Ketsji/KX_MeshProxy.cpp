@@ -218,7 +218,7 @@ PyObject *KX_MeshProxy::PyTransform(PyObject *args, PyObject *kwds)
 	}
 
 	MT_Matrix4x4 ntransform = transform;
-	ntransform[0][3] = ntransform[1][3] = ntransform[2][3] = 0.0f;
+	ntransform(3, 0) = ntransform(3, 1) = ntransform(3, 2) = MT_Zeros3;
 
 	/* transform mesh verts */
 	for (unsigned short i = 0, num = m_meshobj->NumMaterials(); i < num; ++i) {

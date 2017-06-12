@@ -1057,9 +1057,9 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 	switch (axis)
 	{
 		case 0: // align x axis of new coord system to vect
-			ori = MT_Vector3(orimat[0][2], orimat[1][2], orimat[2][2]); // pivot axis
+			ori = orimat.GetColumn(2); // pivot axis
 			if (1.0f - MT_abs(vect.dot(ori)) < eps)  { // vect parallel to pivot?
-				ori = MT_Vector3(orimat[0][1], orimat[1][1], orimat[2][1]); // change the pivot!
+				ori = orimat.GetColumn(1) // change the pivot!
 			}
 
 			if (fac == 1.0f) {
@@ -1074,9 +1074,9 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 			z = x.cross(y);
 			break;
 		case 1: // y axis
-			ori = MT_Vector3orimat[0][0], orimat[1][0], orimat[2][0]);
+			ori = orimat.GetColumn(0);
 			if (1.0f - MT_abs(vect.dot(ori)) < eps) {
-				ori = MT_Vector3orimat[0][2], orimat[1][2], orimat[2][2]);
+				ori = orimat.GetColumn(2);
 			}
 
 			if (fac == 1.0f) {
@@ -1091,9 +1091,9 @@ void KX_GameObject::AlignAxisToVect(const MT_Vector3& dir, int axis, float fac)
 			x = y.cross(z);
 			break;
 		case 2: // z axis
-			ori = MT_Vector3orimat[0][1], orimat[1][1], orimat[2][1]);
+			ori = orimat.GetColumn(1);
 			if (1.0f - MT_abs(vect.dot(ori)) < eps) {
-				ori = MT_Vector3orimat[0][0], orimat[1][0], orimat[2][0]);
+				ori = orimat.GetColumn(0);
 			}
 
 			if (fac == 1.0f) {
