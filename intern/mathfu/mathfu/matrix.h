@@ -1280,14 +1280,14 @@ inline Vector<T, rows> EulerHelper(const Matrix<T, rows, columns>& m) {
 	const T cy = sqrtf(m(0, 0) * m(0, 0) + m(1, 0) * m(1, 0));
 	Vector<T, rows> eul;
 
-	if (cy > (float)(16.0f * FLT_EPSILON)) {
-		return Vector<T, rows>(atan2f(m(2, 1), m(2, 2)), atan2f(-m(2, 0), cy), atan2f(m(1, 0), m(0, 0)))
+	if (cy > (float)(16.0f * Constants<T>::GetDeterminantThreshold())) {
+		return Vector<T, rows>(atan2f(m(2, 1), m(2, 2)), atan2f(-m(2, 0), cy), atan2f(m(1, 0), m(0, 0)));
 	}
 	else {
-		return Vector<T, rows>(atan2f(-m(1, 2), m(1, 1)), atan2f(-m(2, 0), cy), 0.0)
+		return Vector<T, rows>(atan2f(-m(1, 2), m(1, 1)), atan2f(-m(2, 0), cy), 0.0);
 	}
 
-	return eul
+	return Vector<T, rows>(0.0);
 }
 
 /// @cond MATHFU_INTERNAL
