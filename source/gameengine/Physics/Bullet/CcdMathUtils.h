@@ -34,24 +34,24 @@ inline MT_Quaternion ToMoto(const btQuaternion& quat)
 
 inline btVector3 ToBullet(const MT_Vector3& vec)
 {
-	return btVector3(vec.x(), vec.y(), vec.z());
+	return btVector3(vec.x, vec.y, vec.z);
 }
 
 inline btVector4 ToBullet(const MT_Vector4& vec)
 {
-	return btVector4(vec.x(), vec.y(), vec.z(), vec.w());
+	return btVector4(vec.x, vec.y, vec.z, vec.w);
 }
 
 inline btMatrix3x3 ToBullet(const MT_Matrix3x3& mat)
 {
-	return btMatrix3x3(mat[0][0], mat[0][1], mat[0][2],
-					   mat[1][0], mat[1][1], mat[1][2],
-					   mat[2][0], mat[2][1], mat[2][2]);
+	return btMatrix3x3(mat(0, 0), mat(1, 0), mat(2, 0),
+					   mat(0, 1), mat(1, 1), mat(2, 1),
+					   mat(0, 2), mat(1, 2), mat(2, 2));
 }
 
 inline btQuaternion ToBullet(const MT_Quaternion& quat)
 {
-	return btQuaternion(quat.x(), quat.y(), quat.z(), quat.w());
+	return btQuaternion(quat.x, quat.y, quat.z, quat.w);
 }
 
 #endif  // __CCD_MATH_UTILS__

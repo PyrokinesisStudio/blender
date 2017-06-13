@@ -525,9 +525,18 @@ class Quaternion {
 
   MATHFU_DEFINE_CLASS_SIMD_AWARE_NEW_DELETE
 
- private:
-  T s_;
-  Vector<T, 3> v_;
+  union {
+    struct {
+      T s_;
+      Vector<T, 3> v_;
+    };
+    struct {
+      float x;
+      float y;
+      float z;
+      float w;
+    };
+  };
 };
 
 template <typename T>
