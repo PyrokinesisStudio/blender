@@ -1359,9 +1359,9 @@ static void bl_ConvertBlenderObject_Single(
 
 		// Extract the rotation and the scaling from the basis
 		MT_Matrix3x3 ori(parinvtrans.getBasis());
-		MT_Vector3 x(ori.getColumn(0));
-		MT_Vector3 y(ori.getColumn(1));
-		MT_Vector3 z(ori.getColumn(2));
+		MT_Vector3 x(ori.GetColumn(0));
+		MT_Vector3 y(ori.GetColumn(1));
+		MT_Vector3 z(ori.GetColumn(2));
 		MT_Vector3 parscale(x.Length(), y.Length(), z.Length());
 		if (!MT_fuzzyZero(parscale[0]))
 			x /= parscale[0];

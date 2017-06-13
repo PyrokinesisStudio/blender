@@ -420,7 +420,7 @@ void KX_SteeringActuator::HandleActorFace(MT_Vector3& velocity)
 	if (m_facingMode==0 && (!m_navmesh || !m_normalUp))
 		return;
 	KX_GameObject* curobj = (KX_GameObject*) GetParent();
-	MT_Vector3 dir = m_facingMode==0 ?  curobj->NodeGetLocalOrientation().getColumn(1) : velocity;
+	MT_Vector3 dir = m_facingMode==0 ?  curobj->NodeGetLocalOrientation().GetColumn(1) : velocity;
 	if (dir.fuzzyZero())
 		return;
 	dir.Normalize();

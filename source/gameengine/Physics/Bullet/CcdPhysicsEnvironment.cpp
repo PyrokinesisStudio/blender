@@ -896,7 +896,7 @@ void CcdPhysicsEnvironment::ProcessFhSprings(double curTime, float interval)
 
 
 					if (ctrl->GetConstructionInfo().m_do_rot_fh) {
-						btVector3 up2 = cl_object->getWorldTransform().getBasis().getColumn(2);
+						btVector3 up2 = cl_object->getWorldTransform().getBasis().GetColumn(2);
 
 						btVector3 t_spring = up2.cross(normal) * hitObjShapeProps.m_fh_spring;
 						btVector3 ang_vel = cl_object->getAngularVelocity();
@@ -3299,9 +3299,9 @@ void CcdPhysicsEnvironment::SetupObjectConstraints(KX_GameObject *obj_src, KX_Ga
 
 	/* We need to pass a full constraint frame, not just axis. */
 	MT_Matrix3x3 localCFrame(MT_Vector3(dat->axX, dat->axY, dat->axZ));
-	MT_Vector3 axis0 = localCFrame.getColumn(0);
-	MT_Vector3 axis1 = localCFrame.getColumn(1);
-	MT_Vector3 axis2 = localCFrame.getColumn(2);
+	MT_Vector3 axis0 = localCFrame.GetColumn(0);
+	MT_Vector3 axis1 = localCFrame.GetColumn(1);
+	MT_Vector3 axis2 = localCFrame.GetColumn(2);
 	MT_Vector3 scale = obj_src->NodeGetWorldScaling();
 
 	/* Apply not only the pivot and axis values, but also take scale into count
