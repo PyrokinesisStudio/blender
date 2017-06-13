@@ -99,7 +99,7 @@ PyObject *PyObjectFrom(const MT_Matrix4x4 &mat)
 {
 #ifdef USE_MATHUTILS
 	float fmat[16];
-	mat.getValue(fmat);
+	mat.Pack(fmat);
 	return Matrix_CreatePyObject(fmat, 4, 4, nullptr);
 #else
 	PyObject *collist = PyList_New(4);
@@ -123,7 +123,7 @@ PyObject *PyObjectFrom(const MT_Matrix3x3 &mat)
 {
 #ifdef USE_MATHUTILS
 	float fmat[9];
-	mat.getValue3x3(fmat);
+	mat.Pack(fmat);
 	return Matrix_CreatePyObject(fmat, 3, 3, nullptr);
 #else
 	PyObject *collist = PyList_New(3);
@@ -146,18 +146,14 @@ PyObject *PyObjectFrom(const MT_Matrix3x3 &mat)
 PyObject *PyObjectFrom(const MT_Quaternion &qrot)
 {
 	/* NOTE, were re-ordering here for Mathutils compat */
-	float fvec[4];
-	qrot.getValue(fvec);
-	return Quaternion_CreatePyObject(fvec, nullptr);
+	return Quaternion_CreatePyObject(qrot.Data(), nullptr);
 }
 #endif
 
 PyObject *PyObjectFrom(const MT_Vector4 &vec)
 {
 #ifdef USE_MATHUTILS
-	float fvec[4];
-	vec.getValue(fvec);
-	return Vector_CreatePyObject(fvec, 4, nullptr);
+	return Vector_CreatePyObject(vec.Data(), 4, nullptr);
 #else
 	PyObject *list = PyList_New(4);
 	PyList_SET_ITEM(list, 0, PyFloat_FromDouble(vec[0]));
@@ -171,9 +167,7 @@ PyObject *PyObjectFrom(const MT_Vector4 &vec)
 PyObject *PyObjectFrom(const MT_Vector3 &vec)
 {
 #ifdef USE_MATHUTILS
-	float fvec[3];
-	vec.getValue(fvec);
-	return Vector_CreatePyObject(fvec, 3, nullptr);
+	return Vector_CreatePyObject(vec.Data(), 3, nullptr);
 #else
 	PyObject *list = PyList_New(3);
 	PyList_SET_ITEM(list, 0, PyFloat_FromDouble(vec[0]));
@@ -186,9 +180,7 @@ PyObject *PyObjectFrom(const MT_Vector3 &vec)
 PyObject *PyObjectFrom(const MT_Vector2 &vec)
 {
 #ifdef USE_MATHUTILS
-	float fvec[2];
-	vec.getValue(fvec);
-	return Vector_CreatePyObject(fvec, 2, nullptr);
+	return Vector_CreatePyObject(vec.Data(), 2, nullptr);
 #else
 	PyObject *list = PyList_New(2);
 	PyList_SET_ITEM(list, 0, PyFloat_FromDouble(vec[0]));
@@ -200,9 +192,7 @@ PyObject *PyObjectFrom(const MT_Vector2 &vec)
 PyObject *PyColorFromVector(const MT_Vector3 &vec)
 {
 #ifdef USE_MATHUTILS
-	float fvec[3];
-	vec.getValue(fvec);
-	return Color_CreatePyObject(fvec, nullptr);
+	return Color_CreatePyObject(vec.Data(), nullptr);
 #else
 	PyObject *list = PyList_New(3);
 	PyList_SET_ITEM(list, 0, PyFloat_FromDouble(vec[0]));

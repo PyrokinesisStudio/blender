@@ -809,7 +809,7 @@ KX_PYMETHODDEF_DOC(BL_Shader, setUniformMatrix4,
 
 	// Sanity checks done!
 #ifdef SORT_UNIFORMS
-	mat.getValue(matr);
+	mat.Pack(matr);
 	SetUniformfv(loc, RAS_Uniform::UNI_MAT4, matr, (sizeof(float) * 16), 1, (transp != 0));
 #else
 	SetUniform(loc, mat, (transp != 0));
@@ -856,7 +856,7 @@ KX_PYMETHODDEF_DOC(BL_Shader, setUniformMatrix3,
 	}
 
 #ifdef SORT_UNIFORMS
-	mat.getValue3x3(matr);
+	mat.Pack(matr);
 	SetUniformfv(loc, RAS_Uniform::UNI_MAT3, matr, (sizeof(float) * 9), 1, (transp != 0));
 #else
 	SetUniform(loc, mat, (transp != 0));

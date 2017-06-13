@@ -311,7 +311,7 @@ int KX_LightObject::pyattr_set_color(PyObjectPlus *self_v, const KX_PYATTRIBUTE_
 
 	MT_Vector3 color;
 	if (PyVecTo(value, color)) {
-		color.getValue(self->m_lightobj->m_color);
+		color.Pack(self->m_lightobj->m_color);
 		return PY_SET_ATTR_SUCCESS;
 	}
 	return PY_SET_ATTR_FAIL;

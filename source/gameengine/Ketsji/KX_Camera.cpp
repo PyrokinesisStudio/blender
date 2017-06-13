@@ -852,8 +852,8 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, getScreenPosition,
 	MT_Matrix4x4 m_modelmatrix = MT_Matrix4x4(GetWorldToCamera());
 	MT_Matrix4x4 m_projmatrix = this->GetProjectionMatrix();
 
-	m_modelmatrix.getValue(modelmatrix);
-	m_projmatrix.getValue(projmatrix);
+	m_modelmatrix.Pack(modelmatrix);
+	m_projmatrix.Pack(projmatrix);
 
 	viewport = KX_GetActiveEngine()->GetCanvas()->GetViewPort();
 
@@ -895,8 +895,8 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, getScreenVect,
 	MT_Matrix4x4 m_modelmatrix = MT_Matrix4x4(GetWorldToCamera());
 	MT_Matrix4x4 m_projmatrix = this->GetProjectionMatrix();
 
-	m_modelmatrix.getValue(modelmatrix);
-	m_projmatrix.getValue(projmatrix);
+	m_modelmatrix.Pack(modelmatrix);
+	m_projmatrix.Pack(projmatrix);
 
 	viewport = KX_GetActiveEngine()->GetCanvas()->GetViewPort();
 

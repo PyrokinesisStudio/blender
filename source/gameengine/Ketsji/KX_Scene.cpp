@@ -1339,10 +1339,10 @@ void KX_Scene::CalculateVisibleMeshes(KX_CullingNodeList& nodes, KX_Camera *cam,
 
 		CullingInfo info(layer, nodes);
 
-		float mvmat[16] = {0.0f};
-		cam->GetModelviewMatrix().getValue(mvmat);
-		float pmat[16] = {0.0f};
-		cam->GetProjectionMatrix().getValue(pmat);
+		float mvmat[16];
+		cam->GetModelviewMatrix().Pack(mvmat);
+		float pmat[16];
+		cam->GetProjectionMatrix().Pack(pmat);
 
 		dbvt_culling = m_physicsEnvironment->CullingTest(PhysicsCullingCallback,&info,planes,6,m_dbvt_occlusion_res,
 		                                                 KX_GetActiveEngine()->GetCanvas()->GetViewPort(),

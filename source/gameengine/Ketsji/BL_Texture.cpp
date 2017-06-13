@@ -702,7 +702,7 @@ int BL_Texture::pyattr_set_uv_offset(PyObjectPlus *self_v, const KX_PYATTRIBUTE_
 		return PY_SET_ATTR_FAIL;
 	}
 
-	offset.getValue(self->GetMTex()->ofs);
+	offset.Pack(self->GetMTex()->ofs);
 
 	return PY_SET_ATTR_SUCCESS;
 }
@@ -726,7 +726,7 @@ int BL_Texture::pyattr_set_uv_size(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DE
 		return PY_SET_ATTR_FAIL;
 	}
 
-	size.getValue(self->GetMTex()->size);
+	size.Pack(self->GetMTex()->size);
 
 	return PY_SET_ATTR_SUCCESS;
 }

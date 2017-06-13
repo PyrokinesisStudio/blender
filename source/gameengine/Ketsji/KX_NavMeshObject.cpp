@@ -586,8 +586,8 @@ int KX_NavMeshObject::FindPath(const MT_Vector3& from, const MT_Vector3& to, flo
 	MT_Vector3 localfrom = TransformToLocalCoords(from);
 	MT_Vector3 localto = TransformToLocalCoords(to);
 	float spos[3], epos[3];
-	localfrom.getValue(spos); flipAxes(spos);
-	localto.getValue(epos); flipAxes(epos);
+	localfrom.Pack(spos); flipAxes(spos);
+	localto.Pack(epos); flipAxes(epos);
 	dtStatPolyRef sPolyRef = m_navMesh->findNearestPoly(spos, polyPickExt);
 	dtStatPolyRef ePolyRef = m_navMesh->findNearestPoly(epos, polyPickExt);
 
@@ -605,7 +605,7 @@ int KX_NavMeshObject::FindPath(const MT_Vector3& from, const MT_Vector3& to, flo
 				flipAxes(&path[i*3]);
 				MT_Vector3 waypoint(&path[i*3]);
 				waypoint = TransformToWorldCoords(waypoint);
-				waypoint.getValue(&path[i*3]);
+				waypoint.Pack(&path[i*3]);
 			}
 		}
 
@@ -622,8 +622,8 @@ float KX_NavMeshObject::Raycast(const MT_Vector3& from, const MT_Vector3& to)
 	MT_Vector3 localfrom = TransformToLocalCoords(from);
 	MT_Vector3 localto = TransformToLocalCoords(to);
 	float spos[3], epos[3];
-	localfrom.getValue(spos); flipAxes(spos);
-	localto.getValue(epos); flipAxes(epos);
+	localfrom.Pack(spos); flipAxes(spos);
+	localto.Pack(epos); flipAxes(epos);
 	dtStatPolyRef sPolyRef = m_navMesh->findNearestPoly(spos, polyPickExt);
 	float t=0;
 	static dtStatPolyRef polys[MAX_PATH_LEN];

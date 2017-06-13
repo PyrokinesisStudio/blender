@@ -146,7 +146,9 @@ void KX_WorldInfo::setMistColor(const MT_Vector3& mistcolor)
 	m_mistcolor = mistcolor;
 
 	if (m_do_color_management) {
-		linearrgb_to_srgb_v3_v3(m_con_mistcolor.getValue(), m_mistcolor.getValue());
+		float col[4];
+		linearrgb_to_srgb_v3_v3(col, m_mistcolor.Data());
+		m_con_mistcolor = MT_Vector4(col);
 	}
 	else {
 		m_con_mistcolor = m_mistcolor;
@@ -158,7 +160,9 @@ void KX_WorldInfo::setAmbientColor(const MT_Vector3& ambientcolor)
 	m_ambientcolor = ambientcolor;
 
 	if (m_do_color_management) {
-		linearrgb_to_srgb_v3_v3(m_con_ambientcolor.getValue(), m_ambientcolor.getValue());
+		float col[4];
+		linearrgb_to_srgb_v3_v3(col, m_ambientcolor.Data());
+		m_con_ambientcolor = MT_Vector4(col);
 	}
 	else {
 		m_con_ambientcolor = m_ambientcolor;
@@ -177,8 +181,8 @@ void KX_WorldInfo::UpdateBackGround(RAS_Rasterizer *rasty)
 		m_scene->world->horb = m_horizoncolor[2];
 
 		// Update GPUWorld values for regular materials.
-		GPU_horizon_update_color(m_horizoncolor.getValue());
-		GPU_zenith_update_color(m_zenithcolor.getValue());
+		GPU_horizon_update_color(m_horizoncolor.Data());
+		GPU_zenith_update_color(m_zenithcolor.Data());
 	}
 }
 
@@ -186,13 +190,13 @@ void KX_WorldInfo::UpdateWorldSettings(RAS_Rasterizer *rasty)
 {
 	if (m_hasworld) {
 		rasty->SetAmbientColor(m_con_ambientcolor);
-		GPU_ambient_update_color(m_ambientcolor.getValue());
+		GPU_ambient_update_color(m_ambientcolor.Data());
 		GPU_update_exposure_range(m_exposure, m_range);
 		GPU_update_envlight_energy(m_envLightEnergy);
 
 		if (m_hasmist) {
 			rasty->SetFog(m_misttype, m_miststart, m_mistdistance, m_mistintensity, m_con_mistcolor);
-			GPU_mist_update_values(m_misttype, m_miststart, m_mistdistance, m_mistintensity, m_mistcolor.getValue());
+			GPU_mist_update_values(m_misttype, m_miststart, m_mistdistance, m_mistintensity, m_mistcolor.Data());
 			rasty->EnableFog(true);
 			GPU_mist_update_enable(true);
 		}
@@ -209,9 +213,9 @@ void KX_WorldInfo::RenderBackground(RAS_Rasterizer *rasty)
 		if (m_scene->world->skytype & (WO_SKYBLEND | WO_SKYPAPER | WO_SKYREAL)) {
 			GPUMaterial *gpumat = GPU_material_world(m_scene, m_scene->world);
 			float viewmat[4][4];
-			rasty->GetViewMatrix().getValue(viewmat);
+			rasty->GetViewMatrix().Pack(viewmat);
 			float invviewmat[4][4];
-			rasty->GetViewInvMatrix().getValue(invviewmat);
+			rasty->GetViewInvMatrix().Pack(invviewmat);
 
 			static float texcofac[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
 			GPU_material_bind(gpumat, 0xFFFFFFFF, m_scene->lay, 1.0f, false, viewmat, invviewmat, texcofac, false);
@@ -229,7 +233,7 @@ void KX_WorldInfo::RenderBackground(RAS_Rasterizer *rasty)
 		}
 		else {
 			float srgbcolor[4];
-			linearrgb_to_srgb_v4(srgbcolor, m_horizoncolor.getValue());
+			linearrgb_to_srgb_v4(srgbcolor, m_horizoncolor.Data());
 			rasty->SetClearColor(srgbcolor[0], srgbcolor[1], srgbcolor[2], srgbcolor[3]);
 			rasty->Clear(RAS_Rasterizer::RAS_COLOR_BUFFER_BIT);
 		}
@@ -337,17 +341,17 @@ static int mathutils_world_color_get(BaseMathObject *bmo, int subtype)
 
 	switch (subtype) {
 		case MATHUTILS_COL_CB_MIST_COLOR:
-			self->m_mistcolor.getValue(bmo->data);
+			self->m_mistcolor.Pack(bmo->data);
 			break;
 		case MATHUTILS_COL_CB_HOR_COLOR:
 		case MATHUTILS_COL_CB_BACK_COLOR:
-			self->m_horizoncolor.getValue(bmo->data);
+			self->m_horizoncolor.Pack(bmo->data);
 			break;
 		case MATHUTILS_COL_CB_ZEN_COLOR:
-			self->m_zenithcolor.getValue(bmo->data);
+			self->m_zenithcolor.Pack(bmo->data);
 			break;
 		case MATHUTILS_COL_CB_AMBIENT_COLOR:
-			self->m_ambientcolor.getValue(bmo->data);
+			self->m_ambientcolor.Pack(bmo->data);
 			break;
 	default:
 		return -1;

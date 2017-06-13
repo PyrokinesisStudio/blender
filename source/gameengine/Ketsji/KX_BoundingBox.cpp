@@ -128,12 +128,12 @@ static int mathutils_kxboundingbox_vector_get(BaseMathObject *bmo, int subtype)
 	switch (subtype) {
 		case MATHUTILS_VEC_CB_BOX_MIN:
 		{
-			self->GetMin().getValue(bmo->data);
+			self->GetMin().Pack(bmo->data);
 			break;
 		}
 		case MATHUTILS_VEC_CB_BOX_MAX:
 		{
-			self->GetMax().getValue(bmo->data);
+			self->GetMax().Pack(bmo->data);
 			break;
 		}
 	}

@@ -44,16 +44,16 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 	// draw lines
 	glBegin(GL_LINES);
 	for (const RAS_DebugDraw::Line& line : debugDraw->m_lines) {
-		glColor4fv(line.m_color.getValue());
-		glVertex3fv(line.m_from.getValue());
-		glVertex3fv(line.m_to.getValue());
+		glColor4fv(line.m_color.Data());
+		glVertex3fv(line.m_from.Data());
+		glVertex3fv(line.m_to.Data());
 	}
 	glEnd();
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	// Draw aabbs
 	for (const RAS_DebugDraw::Aabb& aabb : debugDraw->m_aabbs) {
-		glColor4fv(aabb.m_color.getValue());
+		glColor4fv(aabb.m_color.Data());
 
 		const MT_Matrix3x3& rot = aabb.m_rot;
 		const MT_Vector3& pos = aabb.m_pos;
@@ -99,22 +99,22 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 	static const GLubyte wireIndices[24] = {0, 1, 1, 2, 2, 3, 3, 0, 0, 4, 4, 5, 5, 6, 6, 7, 7, 4, 1, 5, 2, 6, 3, 7};
 	for (const RAS_DebugDraw::Box& box : debugDraw->m_boxes) {
 		glVertexPointer(3, GL_FLOAT, sizeof(MT_Vector3), box.m_vertices.data());
-		glColor4fv(box.m_color.getValue());
+		glColor4fv(box.m_color.Data());
 		glDrawRangeElements(GL_LINES, 0, 7, 24, GL_UNSIGNED_BYTE, wireIndices);
 	}
 
 	static const GLubyte solidIndices[24] = {0, 1, 2, 3, 7, 6, 5, 4, 4, 5, 1, 0, 3, 2, 6, 7, 3, 7, 4, 0, 1, 5, 6, 2};
 	for (const RAS_DebugDraw::SolidBox& box : debugDraw->m_solidBoxes) {
 		glVertexPointer(3, GL_FLOAT, sizeof(MT_Vector3), box.m_vertices.data());
-		glColor4fv(box.m_color.getValue());
+		glColor4fv(box.m_color.Data());
 		glDrawRangeElements(GL_LINES, 0, 7, 24, GL_UNSIGNED_BYTE, wireIndices);
 
 		rasty->SetFrontFace(false);
-		glColor4fv(box.m_insideColor.getValue());
+		glColor4fv(box.m_insideColor.Data());
 		glDrawRangeElements(GL_QUADS, 0, 7, 24, GL_UNSIGNED_BYTE, solidIndices);
 
 		rasty->SetFrontFace(true);
-		glColor4fv(box.m_outsideColor.getValue());
+		glColor4fv(box.m_outsideColor.Data());
 		glDrawRangeElements(GL_QUADS, 0, 7, 24, GL_UNSIGNED_BYTE, solidIndices);
 	}
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -122,7 +122,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 	// draw circles
 	for (const RAS_DebugDraw::Circle& circle : debugDraw->m_circles) {
 		glBegin(GL_LINE_LOOP);
-		glColor4fv(circle.m_color.getValue());
+		glColor4fv(circle.m_color.Data());
 
 		static const MT_Vector3 worldUp(0.0f, 0.0f, 1.0f);
 		const MT_Vector3& norm = circle.m_normal;
@@ -144,7 +144,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 			MT_Vector3 pos(cosf(theta) * rad, sinf(theta) * rad, 0.0f);
 			pos = pos * tr;
 			pos += circle.m_center;
-			glVertex3fv(pos.getValue());
+			glVertex3fv(pos.Data());
 		}
 		glEnd();
 	}
@@ -170,7 +170,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		const float xsize = box2d.m_size.x;
 		const float ysize = box2d.m_size.y;
 
-		glColor4fv(box2d.m_color.getValue());
+		glColor4fv(box2d.m_color.Data());
 		glVertex2f(xco + 1 + xsize, yco + ysize);
 		glVertex2f(xco, yco + ysize);
 		glVertex2f(xco, yco);
@@ -190,7 +190,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		const float xco = text2d.m_pos.x;
 		const float yco = height - text2d.m_pos.y;
 
-		glColor4fv(text2d.m_color.getValue());
+		glColor4fv(text2d.m_color.Data());
 		BLF_position(blf_mono_font, xco, yco, 0.0f);
 		BLF_draw(blf_mono_font, text.c_str(), text.size());
 	}

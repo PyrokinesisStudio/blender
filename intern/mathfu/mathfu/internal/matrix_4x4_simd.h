@@ -134,6 +134,14 @@ class Matrix<float, 4> {
     simd4f_ustore4(data_.simd_matrix.w, vector[3].data);
   }
 
+  inline void Pack(float a[4][4]) const {
+    MATHFU_MAT_OPERATION(GetColumn(i).Pack(a[i]));
+  }
+
+  inline void Pack(float a[16]) const {
+    MATHFU_MAT_OPERATION(GetColumn(i).Pack(&a[i * 4]));
+  }
+
   inline Matrix<float, 4> operator-() const {
     Matrix<float, 4> m(0.f);
     simd4x4f_sub(&m.data_.simd_matrix, &data_.simd_matrix,

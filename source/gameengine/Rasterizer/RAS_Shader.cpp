@@ -514,23 +514,17 @@ int RAS_Shader::GetUniformLocation(const std::string& name, bool debug)
 
 void RAS_Shader::SetUniform(int uniform, const MT_Vector2 &vec)
 {
-	float value[2];
-	vec.getValue(value);
-	GPU_shader_uniform_vector(m_shader, uniform, 2, 1, value);
+	GPU_shader_uniform_vector(m_shader, uniform, 2, 1, vec.Data());
 }
 
 void RAS_Shader::SetUniform(int uniform, const MT_Vector3 &vec)
 {
-	float value[3];
-	vec.getValue(value);
-	GPU_shader_uniform_vector(m_shader, uniform, 3, 1, value);
+	GPU_shader_uniform_vector(m_shader, uniform, 3, 1, vec.Data());
 }
 
 void RAS_Shader::SetUniform(int uniform, const MT_Vector4 &vec)
 {
-	float value[4];
-	vec.getValue(value);
-	GPU_shader_uniform_vector(m_shader, uniform, 4, 1, value);
+	GPU_shader_uniform_vector(m_shader, uniform, 4, 1, vec.Data());
 }
 
 void RAS_Shader::SetUniform(int uniform, const unsigned int &val)
@@ -551,8 +545,8 @@ void RAS_Shader::SetUniform(int uniform, const float &val)
 void RAS_Shader::SetUniform(int uniform, const MT_Matrix4x4 &vec, bool transpose)
 {
 	float value[16];
-	// note: getValue gives back column major as needed by OpenGL
-	vec.getValue(value);
+	// note: Pack gives back column major as needed by OpenGL
+	vec.Pack(value);
 	GPU_shader_uniform_vector(m_shader, uniform, 16, 1, value);
 }
 

@@ -265,13 +265,13 @@ bool KX_SoundActuator::Update(double curtime)
 				Mo = cam->NodeGetWorldOrientation().inverse();
 				p = (obj->NodeGetWorldPosition() - cam->NodeGetWorldPosition());
 				p = Mo * p;
-				p.getValue(data);
+				p.Pack(data);
 				AUD_Handle_setLocation(m_handle, data);
 				p = (obj->GetLinearVelocity() - cam->GetLinearVelocity());
 				p = Mo * p;
-				p.getValue(data);
+				p.Pack(data);
 				AUD_Handle_setVelocity(m_handle, data);
-				(Mo * obj->NodeGetWorldOrientation()).getRotation().getValue(data);
+				(Mo * obj->NodeGetWorldOrientation()).getRotation().Pack(data);
 				AUD_Handle_setOrientation(m_handle, data);
 			}
 		}

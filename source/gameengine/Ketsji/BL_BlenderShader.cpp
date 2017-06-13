@@ -118,8 +118,8 @@ void BL_BlenderShader::SetProg(bool enable, double time, RAS_Rasterizer *rasty)
 			float viewmat[4][4], viewinvmat[4][4];
 			const MT_Matrix4x4& view = rasty->GetViewMatrix();
 			const MT_Matrix4x4& viewinv = rasty->GetViewInvMatrix();
-			view.getValue((float *)viewmat);
-			viewinv.getValue((float *)viewinvmat);
+			view.Pack(viewmat);
+			viewinv.Pack(viewinvmat);
 
 			GPU_material_bind(m_gpuMat, m_lightLayer, m_blenderScene->lay, time, 1, viewmat, viewinvmat, nullptr, false);
 		}
@@ -178,9 +178,9 @@ void BL_BlenderShader::Update(RAS_MeshSlot *ms, RAS_Rasterizer *rasty)
 	}
 
 	float viewmat[4][4];
-	float *obcol = (float *)ms->m_meshUser->GetColor().getValue();
+	float *obcol = (float *)ms->m_meshUser->GetColor().Data();
 
-	rasty->GetViewMatrix().getValue((float *)viewmat);
+	rasty->GetViewMatrix().Pack(viewmat);
 	float auto_bump_scale = ms->m_pDerivedMesh != 0 ? ms->m_pDerivedMesh->auto_bump_scale : 1.0f;
 	GPU_material_bind_uniforms(m_gpuMat, (float(*)[4])ms->m_meshUser->GetMatrix(), viewmat, obcol, auto_bump_scale, nullptr, nullptr);
 

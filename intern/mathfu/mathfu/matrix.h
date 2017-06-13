@@ -420,9 +420,13 @@ class Matrix {
   /// one vector per matrix column.
   ///
   /// @param vector Array of "columns" entries to write to.
-  /*inline void Pack(T* a) const {
-    MATHFU_MAT_OPERATION(GetColumn(i).Pack(&a[i]));
-  }*/
+  inline void Pack(T a[columns][rows]) const {
+    MATHFU_MAT_OPERATION(GetColumn(i).Pack(a[i]));
+  }
+
+  inline void Pack(T a[columns * rows]) const {
+    MATHFU_MAT_OPERATION(GetColumn(i).Pack(&a[i * columns]));
+  }
 
   /// @cond MATHFU_INTERNAL
   /// @brief Access a column vector of the Matrix.

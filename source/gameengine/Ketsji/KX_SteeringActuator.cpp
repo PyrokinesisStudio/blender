@@ -362,7 +362,7 @@ static bool getNavmeshNormal(dtStatNavMesh* navmesh, const MT_Vector3& pos, MT_V
 {
 	static const float polyPickExt[3] = {2, 4, 2};
 	float spos[3];
-	pos.getValue(spos);
+	pos.Pack(spos);
 	flipAxes(spos);
 	dtStatPolyRef sPolyRef = navmesh->findNearestPoly(spos, polyPickExt);
 	if (sPolyRef == 0)

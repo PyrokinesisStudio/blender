@@ -150,10 +150,10 @@ void KX_FontObject::UpdateBuckets()
 	// Font Objects don't use the glsl shader, this color management code is copied from gpu_shader_material.glsl
 	float color[4];
 	if (m_do_color_management) {
-		linearrgb_to_srgb_v4(color, m_objectColor.getValue());
+		linearrgb_to_srgb_v4(color, m_objectColor.Data());
 	}
 	else {
-		m_objectColor.getValue(color);
+		m_objectColor.Pack(color);
 	}
 
 	// HARDCODED MULTIPLICATION FACTOR - this will affect the render resolution directly

@@ -703,8 +703,10 @@ void KX_GameObject::UpdateBlenderObjectMatrix(Object* blendobj)
 		const MT_Matrix3x3& rot = NodeGetWorldOrientation();
 		const MT_Vector3& scale = NodeGetWorldScaling();
 		const MT_Vector3& pos = NodeGetWorldPosition();
-		rot.getValue(blendobj->obmat[0]);
-		pos.getValue(blendobj->obmat[3]);
+		rot.GetColumn(0).Pack(blendobj->obmat[0]);
+		rot.GetColumn(1).Pack(blendobj->obmat[1]);
+		rot.GetColumn(2).Pack(blendobj->obmat[2]);
+		pos.Pack(blendobj->obmat[3]);
 		mul_v3_fl(blendobj->obmat[0], scale[0]);
 		mul_v3_fl(blendobj->obmat[1], scale[1]);
 		mul_v3_fl(blendobj->obmat[2], scale[2]);
@@ -1627,39 +1629,39 @@ static int mathutils_kxgameob_vector_get(BaseMathObject *bmo, int subtype)
 
 	switch (subtype) {
 		case MATHUTILS_VEC_CB_POS_LOCAL:
-			self->NodeGetLocalPosition().getValue(bmo->data);
+			self->NodeGetLocalPosition().Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_POS_GLOBAL:
-			self->NodeGetWorldPosition().getValue(bmo->data);
+			self->NodeGetWorldPosition().Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_SCALE_LOCAL:
-			self->NodeGetLocalScaling().getValue(bmo->data);
+			self->NodeGetLocalScaling().Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_SCALE_GLOBAL:
-			self->NodeGetWorldScaling().getValue(bmo->data);
+			self->NodeGetWorldScaling().Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_INERTIA_LOCAL:
 			PYTHON_CHECK_PHYSICS_CONTROLLER(self, "localInertia", -1);
-			self->GetPhysicsController()->GetLocalInertia().getValue(bmo->data);
+			self->GetPhysicsController()->GetLocalInertia().Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_OBJECT_COLOR:
-			self->GetObjectColor().getValue(bmo->data);
+			self->GetObjectColor().Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_LINVEL_LOCAL:
 			PYTHON_CHECK_PHYSICS_CONTROLLER(self, "localLinearVelocity", -1);
-			self->GetLinearVelocity(true).getValue(bmo->data);
+			self->GetLinearVelocity(true).Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_LINVEL_GLOBAL:
 			PYTHON_CHECK_PHYSICS_CONTROLLER(self, "worldLinearVelocity", -1);
-			self->GetLinearVelocity(false).getValue(bmo->data);
+			self->GetLinearVelocity(false).Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_ANGVEL_LOCAL:
 			PYTHON_CHECK_PHYSICS_CONTROLLER(self, "localLinearVelocity", -1);
-			self->GetAngularVelocity(true).getValue(bmo->data);
+			self->GetAngularVelocity(true).Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_ANGVEL_GLOBAL:
 			PYTHON_CHECK_PHYSICS_CONTROLLER(self, "worldLinearVelocity", -1);
-			self->GetAngularVelocity(false).getValue(bmo->data);
+			self->GetAngularVelocity(false).Pack(bmo->data);
 			break;
 			
 	}
@@ -1757,10 +1759,10 @@ static int mathutils_kxgameob_matrix_get(BaseMathObject *bmo, int subtype)
 
 	switch (subtype) {
 		case MATHUTILS_MAT_CB_ORI_LOCAL:
-			self->NodeGetLocalOrientation().getValue3x3(bmo->data);
+			self->NodeGetLocalOrientation().Pack(bmo->data);
 			break;
 		case MATHUTILS_MAT_CB_ORI_GLOBAL:
-			self->NodeGetWorldOrientation().getValue3x3(bmo->data);
+			self->NodeGetWorldOrientation().Pack(bmo->data);
 			break;
 	}
 	
@@ -2742,7 +2744,7 @@ int KX_GameObject::pyattr_set_localTransform(PyObjectPlus *self_v, const KX_PYAT
 	float rot[3][3];
 	MT_Matrix3x3 orientation;
 
-	temp.getValue(*transform);
+	temp.Pack(transform);
 	mat4_to_loc_rot_size(loc, rot, size, transform);
 
 	self->NodeSetLocalPosition(MT_Vector3(loc));
@@ -2776,7 +2778,7 @@ int KX_GameObject::pyattr_set_worldTransform(PyObjectPlus *self_v, const KX_PYAT
 	float rot[3][3];
 	MT_Matrix3x3 orientation;
 
-	temp.getValue(*transform);
+	temp.pack(transform);
 	mat4_to_loc_rot_size(loc, rot, size, transform);
 
 	self->NodeSetWorldPosition(MT_Vector3(loc));

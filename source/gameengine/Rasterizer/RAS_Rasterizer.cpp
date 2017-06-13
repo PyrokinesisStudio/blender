@@ -743,7 +743,7 @@ void RAS_Rasterizer::IndexPrimitivesText(RAS_MeshSlot *ms)
 			mat[14] -= spacing[2];
 		}
 		RenderText3D(textUser->GetFontId(), textUser->GetTexts()[i], textUser->GetSize(), textUser->GetDpi(),
-					 textUser->GetColor().getValue(), mat, textUser->GetAspect());
+					 textUser->GetColor().Data(), mat, textUser->GetAspect());
 	}
 }
 
@@ -818,7 +818,7 @@ void RAS_Rasterizer::SetProjectionMatrix(const MT_Matrix4x4 & mat)
 	SetMatrixMode(RAS_PROJECTION);
 	float matrix[16];
 	/* Get into argument. Looks a bit dodgy, but it's ok. */
-	mat.getValue(matrix);
+	mat.Pack(matrix);
 	LoadMatrix(matrix);
 
 	m_camortho = (mat(3, 3) != 0.0f);
@@ -951,9 +951,9 @@ void RAS_Rasterizer::SetViewMatrix(const MT_Matrix4x4& viewmat, const MT_Vector3
 	m_viewinvmatrix = m_viewmatrix.inverse();
 	m_campos = pos;
 
-	// note: getValue gives back column major as needed by OpenGL
+	// note: Pack gives back column major as needed by OpenGL
 	float glviewmat[16];
-	m_viewmatrix.getValue(glviewmat);
+	m_viewmatrix.Pack(glviewmat);
 
 	SetMatrixMode(RAS_MODELVIEW);
 	LoadMatrix(glviewmat);
@@ -1295,7 +1295,7 @@ void RAS_Rasterizer::ProcessLighting(bool uselights, const MT_Transform& viewmat
 			m_impl->DisableLight(count);
 		}
 
-		viewmat.getValue(glviewmat);
+		viewmat.Pack(glviewmat);
 
 		PushMatrix();
 		LoadMatrix(glviewmat);

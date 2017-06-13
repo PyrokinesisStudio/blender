@@ -56,7 +56,7 @@ RAS_ITexVert::RAS_ITexVert(const MT_Vector3& xyz,
 						 const MT_Vector4& tangent,
 						 const MT_Vector3& normal)
 {
-	xyz.getValue(m_localxyz);
+	xyz.Pack(m_localxyz);
 	SetNormal(normal);
 	SetTangent(tangent);
 }

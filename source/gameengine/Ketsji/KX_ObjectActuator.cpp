@@ -458,10 +458,10 @@ static int mathutils_obactu_vector_get(BaseMathObject *bmo, int subtype)
 
 	switch (subtype) {
 		case MATHUTILS_VEC_CB_LINV:
-			self->m_linear_velocity.getValue(bmo->data);
+			self->m_linear_velocity.Pack(bmo->data);
 			break;
 		case MATHUTILS_VEC_CB_ANGV:
-			self->m_angular_velocity.getValue(bmo->data);
+			self->m_angular_velocity.Pack(bmo->data);
 			break;
 	}
 
