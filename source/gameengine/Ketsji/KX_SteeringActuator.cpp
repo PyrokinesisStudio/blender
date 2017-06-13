@@ -93,7 +93,7 @@ KX_SteeringActuator::KX_SteeringActuator(SCA_IObject *gameobj,
 		m_parentlocalmat = parent->GetSGNode()->GetLocalOrientation();
 	}
 	else
-		m_parentlocalmat.setIdentity();
+		m_parentlocalmat = MT_Matrix3x3::Identity();
 } 
 
 KX_SteeringActuator::~KX_SteeringActuator()

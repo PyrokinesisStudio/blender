@@ -128,7 +128,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		const MT_Vector3& norm = circle.m_normal;
 		MT_Matrix3x3 tr;
 		if (norm.fuzzyZero() || norm == worldUp) {
-			tr.setIdentity();
+			tr = MT_Matrix3x3::Identity();
 		}
 		else {
 			const MT_Vector3 xaxis = MT_cross(norm, worldUp);

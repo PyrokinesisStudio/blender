@@ -241,7 +241,7 @@ static MT_Matrix3x3 vectomat(MT_Vector3 vec, short axis, short upflag, short thr
 	}
 	/* identity matrix - don't do anything if the two axes are the same */
 	else {
-		mat.setIdentity();
+		mat = MT_Matrix3x3::Identity();
 	}
 
 	return mat;

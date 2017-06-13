@@ -63,8 +63,6 @@ template<class T>
 bool PyMatTo(PyObject *pymat, T& mat)
 {
 	bool noerror = true;
-	mat.setIdentity();
-
 
 #ifdef USE_MATHUTILS
 

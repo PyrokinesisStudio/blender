@@ -207,9 +207,8 @@ MT_Matrix4x4 RAS_OpenGLLight::GetShadowMatrix()
 
 	if ((lamp = GetGPULamp()))
 		return MT_Matrix4x4(GPU_lamp_dynpersmat(lamp));
-	MT_Matrix4x4 mat;
-	mat.setIdentity();
-	return mat;
+
+	return MT_Matrix4x4::Identity();
 }
 
 int RAS_OpenGLLight::GetShadowLayer()

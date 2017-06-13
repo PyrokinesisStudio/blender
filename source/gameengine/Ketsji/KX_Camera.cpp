@@ -51,6 +51,8 @@ KX_Camera::KX_Camera(void* sgReplicationInfo,
     :
       KX_GameObject(sgReplicationInfo,callbacks),
       m_camdata(camdata),
+      m_projection_matrix(MT_Matrix4x4::Identity()),
+      m_modelview_matrix(MT_Matrix4x4::Identity()),
       m_dirty(true),
       m_normalized(false),
       m_frustum_culling(frustum_culling),
@@ -61,8 +63,6 @@ KX_Camera::KX_Camera(void* sgReplicationInfo,
 {
 	// setting a name would be nice...
 	m_name = "cam";
-	m_projection_matrix.setIdentity();
-	m_modelview_matrix.setIdentity();
 }
 
 

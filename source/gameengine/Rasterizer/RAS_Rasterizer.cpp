@@ -198,6 +198,8 @@ RAS_Rasterizer::RAS_Rasterizer()
 	:m_fogenabled(false),
 	m_time(0.0f),
 	m_ambient(0.0f, 0.0f, 0.0f),
+	m_viewmatrix(MT_Matrix4x4::Identity()),
+	m_viewinvmatrix(MT_Matrix4x4::Identity()),
 	m_campos(0.0f, 0.0f, 0.0f),
 	m_camortho(false),
 	m_camnegscale(false),
@@ -217,9 +219,6 @@ RAS_Rasterizer::RAS_Rasterizer()
 	m_last_frontface(true),
 	m_overrideShader(RAS_OVERRIDE_SHADER_NONE)
 {
-	m_viewmatrix.setIdentity();
-	m_viewinvmatrix.setIdentity();
-
 	m_impl.reset(new RAS_OpenGLRasterizer(this));
 	m_storage.reset(new RAS_StorageVBO(&m_storageAttribs));
 
