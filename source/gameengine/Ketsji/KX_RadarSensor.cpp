@@ -89,7 +89,7 @@ CValue* KX_RadarSensor::GetReplica()
 void KX_RadarSensor::SynchronizeTransform()
 {
 	// Getting the parent location was commented out. Why?
-	mt::trans trans;
+	mt::mat4x3 trans;
 	trans.setOrigin(((KX_GameObject*)GetParent())->NodeGetWorldPosition());
 	trans.setBasis(((KX_GameObject*)GetParent())->NodeGetWorldOrientation());
 	// What is the default orientation? pointing in the -y direction?

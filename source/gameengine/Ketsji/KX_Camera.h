@@ -60,7 +60,7 @@ protected:
 //	void MoveTo(const mt::vec3& movevec)
 //	{
 #if 0
-		mt::trans camtrans;
+		mt::mat4x3 camtrans;
 		camtrans.invert(m_trans1);
 		mt::mat3 camorient = camtrans.getBasis();
 		camtrans.translate(camorient.inverse()*movevec);
@@ -141,8 +141,8 @@ public:
 	);
 	virtual void ProcessReplica();
 
-	mt::trans		GetWorldToCamera() const;
-	mt::trans		GetCameraToWorld() const;
+	mt::mat4x3		GetWorldToCamera() const;
+	mt::mat4x3		GetCameraToWorld() const;
 
 	/** Sets the projection matrix that is used by the rasterizer. */
 	void				SetProjectionMatrix(const mt::mat4 & mat);

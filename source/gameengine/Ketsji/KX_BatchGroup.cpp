@@ -69,7 +69,7 @@ void KX_BatchGroup::MergeObjects(const std::vector<KX_GameObject *>& objects)
 			continue;
 		}
 
-		mt::trans trans(gameobj->NodeGetWorldPosition(), gameobj->NodeGetWorldOrientation());
+		mt::mat4x3 trans(gameobj->NodeGetWorldPosition(), gameobj->NodeGetWorldOrientation());
 		const mt::vec3& scale = gameobj->NodeGetWorldScaling();
 		trans.scale(scale.x, scale.y, scale.z);
 

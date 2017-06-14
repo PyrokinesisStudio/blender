@@ -551,9 +551,9 @@ void SG_Node::SetWorldFromLocalTransform()
 	m_worldRotation = m_localRotation;
 }
 
-mt::trans SG_Node::GetWorldTransform() const
+mt::mat4x3 SG_Node::GetWorldTransform() const
 {
-	return mt::trans(m_worldPosition,
+	return mt::mat4x3(m_worldPosition,
 	                    m_worldRotation.scaled(
 							m_worldScaling[0], m_worldScaling[1], m_worldScaling[2]));
 }

@@ -91,7 +91,7 @@ UpdateChildCoordinates(
 			{
 				// Get the child's transform, and the bone matrix.
 				mt::mat4 child_transform ( 
-					mt::trans(child_pos + mt::vec3(0.0f, armature->GetBoneLength(m_bone), 0.0f), 
+					mt::mat4x3(child_pos + mt::vec3(0.0f, armature->GetBoneLength(m_bone), 0.0f), 
 						child_rotation.scaled(
 							child_scale[0], 
 							child_scale[1], 

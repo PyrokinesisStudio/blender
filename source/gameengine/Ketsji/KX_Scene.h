@@ -325,7 +325,7 @@ public:
 	KX_TextureRendererManager *GetTextureRendererManager() const;
 	RAS_BoundingBoxManager *GetBoundingBoxManager() const;
 	RAS_MaterialBucket*	FindBucket(RAS_IPolyMaterial* polymat, bool &bucketCreated);
-	void RenderBuckets(const KX_CullingNodeList& nodes, const mt::trans& cameratransform, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen);
+	void RenderBuckets(const KX_CullingNodeList& nodes, const mt::mat4x3& cameratransform, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen);
 	void RenderTextureRenderers(KX_TextureRendererManager::RendererCategory category, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen,
 								KX_Camera *sceneCamera, const RAS_Rect& viewport, const RAS_Rect& area);
 

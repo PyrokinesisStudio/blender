@@ -840,7 +840,7 @@ void KX_KetsjiEngine::RenderShadowBuffers(KX_Scene *scene)
 			KX_Camera *cam = new KX_Camera(scene, scene->m_callbacks, camdata, true, true);
 			cam->SetName("__shadow__cam__");
 
-			mt::trans camtrans;
+			mt::mat4x3 camtrans;
 
 			/* switch drawmode for speed */
 			RAS_Rasterizer::DrawType drawmode = m_rasterizer->GetDrawingMode();
@@ -1099,8 +1099,8 @@ void KX_KetsjiEngine::PostProcessScene(KX_Scene *scene)
 
 		// set transformation
 		if (override_camera) {
-			mt::trans trans = m_overrideCamViewMat.toTransform();
-			mt::trans camtrans;
+			mt::mat4x3 trans = m_overrideCamViewMat.toTransform();
+			mt::mat4x3 camtrans;
 			camtrans.invert(trans);
 
 			activecam->NodeSetLocalPosition(camtrans.getOrigin());

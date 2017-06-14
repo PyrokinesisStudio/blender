@@ -46,8 +46,8 @@ public:
 		m_deltaScaling(MT_Zero3)
 		{}
 
-	mt::trans         GetTransform() const {
-		return mt::trans(m_position + m_deltaPosition,
+	mt::mat4x3         GetTransform() const {
+		return mt::mat4x3(m_position + m_deltaPosition,
 		                    mt::mat3(m_eulerAngles + m_deltaEulerAngles,
 		                                 m_scaling + m_deltaScaling));
 	}

@@ -221,7 +221,7 @@ int RAS_OpenGLLight::GetShadowLayer()
 		return 0;
 }
 
-void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::trans& camtrans)
+void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::mat4x3& camtrans)
 {
 	GPULamp *lamp;
 	float viewmat[4][4], winmat[4][4];
@@ -245,7 +245,7 @@ void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::
 	mt::mat4 modelviewmat((float *)viewmat);
 	mt::mat4 projectionmat((float *)winmat);
 
-	mt::trans trans = mt::trans((float *)viewmat);
+	mt::mat4x3 trans = mt::mat4x3((float *)viewmat);
 	camtrans.invert(trans);
 
 	cam->SetModelviewMatrix(modelviewmat);

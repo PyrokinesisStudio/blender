@@ -164,7 +164,7 @@ public:
 	void GenerateAttribLayers();
 
 	// polygon sorting by Z for alpha
-	void SortPolygons(RAS_IDisplayArray *array, const mt::trans &transform, unsigned int *indexmap);
+	void SortPolygons(RAS_IDisplayArray *array, const mt::mat4x3 &transform, unsigned int *indexmap);
 
 	bool HasColliderPolygon();
 

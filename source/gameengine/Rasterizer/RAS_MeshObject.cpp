@@ -407,7 +407,7 @@ void RAS_MeshObject::GenerateAttribLayers()
 	}
 }
 
-void RAS_MeshObject::SortPolygons(RAS_IDisplayArray *array, const mt::trans &transform, unsigned int *indexmap)
+void RAS_MeshObject::SortPolygons(RAS_IDisplayArray *array, const mt::mat4x3 &transform, unsigned int *indexmap)
 {
 	// Limitations: sorting is quite simple, and handles many
 	// cases wrong, partially due to polygons being sorted per

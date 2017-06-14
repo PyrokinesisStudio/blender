@@ -12,7 +12,7 @@ KX_CullingHandler::KX_CullingHandler(KX_CullingNodeList& nodes, const SG_Frustum
 void KX_CullingHandler::Process(KX_CullingNode *node)
 {
 	SG_Node *sgnode = node->GetObject()->GetSGNode();
-	const mt::trans trans = sgnode->GetWorldTransform();
+	const mt::mat4x3 trans = sgnode->GetWorldTransform();
 	const mt::vec3 &scale = sgnode->GetWorldScaling();
 	const SG_BBox& aabb = node->GetAabb();
 

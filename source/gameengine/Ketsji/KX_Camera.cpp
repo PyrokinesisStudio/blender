@@ -93,19 +93,19 @@ void KX_Camera::ProcessReplica()
 	m_delete_node = false;
 }
 
-mt::trans KX_Camera::GetWorldToCamera() const
+mt::mat4x3 KX_Camera::GetWorldToCamera() const
 { 
-	mt::trans camtrans;
-	camtrans.invert(mt::trans(NodeGetWorldPosition(), NodeGetWorldOrientation()));
+	mt::mat4x3 camtrans;
+	camtrans.invert(mt::mat4x3(NodeGetWorldPosition(), NodeGetWorldOrientation()));
 	
 	return camtrans;
 }
 
 
 	 
-mt::trans KX_Camera::GetCameraToWorld() const
+mt::mat4x3 KX_Camera::GetCameraToWorld() const
 {
-	return mt::trans(NodeGetWorldPosition(), NodeGetWorldOrientation());
+	return mt::mat4x3(NodeGetWorldPosition(), NodeGetWorldOrientation());
 }
 
 /**

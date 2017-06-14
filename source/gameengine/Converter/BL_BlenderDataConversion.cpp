@@ -1349,7 +1349,7 @@ static void bl_ConvertBlenderObject_Single(
 		vec_parent_child.push_back(pclink);
 
 		float* fl = (float*) blenderobject->parentinv;
-		mt::trans parinvtrans(fl);
+		mt::mat4x3 parinvtrans(fl);
 		parentinversenode->SetLocalPosition(parinvtrans.getOrigin());
 		// problem here: the parent inverse transform combines scaling and rotation
 		// in the basis but the scenegraph needs separate rotation and scaling.
