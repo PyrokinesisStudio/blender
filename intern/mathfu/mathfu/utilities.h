@@ -279,6 +279,23 @@ namespace mathfu {
 /// @addtogroup mathfu_utilities
 /// @{
 
+template <class T>
+bool FuzzyZero(const T &x) {
+  // No constant defined for the general case.
+  assert(false);
+  return 0;
+}
+
+template <>
+bool FuzzyZero(const float &x) {
+  return (x < 1.0e-7f);
+}
+
+template <>
+bool FuzzyZero(const double &x) {
+  return (x < 1.0e-15);
+}
+
 /// @brief Clamp x within [lower, upper].
 /// @anchor mathfu_Clamp
 ///

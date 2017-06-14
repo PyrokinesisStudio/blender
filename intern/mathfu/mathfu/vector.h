@@ -408,6 +408,10 @@ class Vector {
   /// @return The normalized vector.
   inline Vector<T, d> Normalized() const { return NormalizedHelper(*this); }
 
+  static inline bool FuzzyZero(const Vector<T, d>& v) {
+    return FuzzyZeroHelper(v);
+  }
+
   /// @brief Load from any type that is some formulation of a length d array of
   ///        type T.
   ///
@@ -928,6 +932,11 @@ static inline T DotProductHelper(const Vector<T, 4>& v1,
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2] + v1[3] * v2[3];
 }
 /// @endcond
+
+template <class T, int d>
+static inline bool FuzzyZeroHelper(const Vector<T, d>& v) {
+    return FuzzyZero(v.LengthSquared());
+}
 
 /// @cond MATHFU_INTERNAL
 template <typename T, int d, typename CompatibleT>

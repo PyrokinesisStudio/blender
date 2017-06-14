@@ -151,13 +151,13 @@ public:
 	void SetForceLoc(const double force[3])	{ /*m_force=force;*/ }
 	void UpdateFuzzyFlags()
 		{ 
-			m_bitLocalFlag.ZeroForce = MT_fuzzyZero(m_force);
-			m_bitLocalFlag.ZeroTorque = MT_fuzzyZero(m_torque);
-			m_bitLocalFlag.ZeroDLoc = MT_fuzzyZero(m_dloc);
-			m_bitLocalFlag.ZeroDRot = MT_fuzzyZero(m_drot);
-			m_bitLocalFlag.ZeroLinearVelocity = MT_fuzzyZero(m_linear_velocity);
+			m_bitLocalFlag.ZeroForce = MT_Vector3::FuzzyZero(m_force);
+			m_bitLocalFlag.ZeroTorque = MT_Vector3::FuzzyZero(m_torque);
+			m_bitLocalFlag.ZeroDLoc = MT_Vector3::FuzzyZero(m_dloc);
+			m_bitLocalFlag.ZeroDRot = MT_Vector3::FuzzyZero(m_drot);
+			m_bitLocalFlag.ZeroLinearVelocity = MT_Vector3::FuzzyZero(m_linear_velocity);
 			m_linear_length2 = (m_bitLocalFlag.ZeroLinearVelocity) ? 0.0f : m_linear_velocity.LengthSquared();
-			m_bitLocalFlag.ZeroAngularVelocity = MT_fuzzyZero(m_angular_velocity);
+			m_bitLocalFlag.ZeroAngularVelocity = MT_Vector3::FuzzyZero(m_angular_velocity);
 			m_angular_length2 = (m_bitLocalFlag.ZeroAngularVelocity) ? 0.0f : m_angular_velocity.LengthSquared();
 		}
 	virtual bool Update();

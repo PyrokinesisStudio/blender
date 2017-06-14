@@ -214,6 +214,10 @@ class Vector<float, 4> {
     return Vector<float, 4>(simd4f_normalize4(simd));
   }
 
+  static inline bool FuzzyZero(const Vector<float, 4>& v) {
+    return FuzzyZeroHelper(v);
+  }
+
   template <typename CompatibleT>
   static inline Vector<float, 4> FromType(const CompatibleT& compatible) {
     return FromTypeHelper<float, 4, CompatibleT>(compatible);

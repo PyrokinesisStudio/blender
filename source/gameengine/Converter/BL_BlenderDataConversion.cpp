@@ -54,6 +54,7 @@
 #include "BL_BlenderDataConversion.h"
 
 #include "MT_Transform.h"
+#include "MT_Utilities.h"
 
 #include "GPU_texture.h"
 
@@ -1363,11 +1364,11 @@ static void bl_ConvertBlenderObject_Single(
 		MT_Vector3 y(ori.GetColumn(1));
 		MT_Vector3 z(ori.GetColumn(2));
 		MT_Vector3 parscale(x.Length(), y.Length(), z.Length());
-		if (!MT_fuzzyZero(parscale[0]))
+		if (!mt::FuzzyZero(parscale[0]))
 			x /= parscale[0];
-		if (!MT_fuzzyZero(parscale[1]))
+		if (!mt::FuzzyZero(parscale[1]))
 			y /= parscale[1];
-		if (!MT_fuzzyZero(parscale[2]))
+		if (!mt::FuzzyZero(parscale[2]))
 			z /= parscale[2];
 		ori.setColumn(0, x);
 		ori.setColumn(1, y);

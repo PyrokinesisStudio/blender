@@ -84,6 +84,10 @@ class Vector<T, 2> {
 
   inline Vector<T, 2> Normalized() const { return NormalizedHelper(*this); }
 
+  static inline bool FuzzyZero(const Vector<T, 2>& v) {
+    return FuzzyZeroHelper(v);
+  }
+
   template <typename CompatibleT>
   static inline Vector<T, 2> FromType(const CompatibleT& compatible) {
     return FromTypeHelper<T, d, CompatibleT>(compatible);

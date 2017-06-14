@@ -233,11 +233,11 @@ bool KX_ObjectActuator::Update()
 			if (m_bitLocalFlag.AddOrSetCharLoc) {
 				MT_Vector3 old_dir = character->GetWalkDirection();
 
-				if (!old_dir.fuzzyZero()) {
+				if (!MT_Vector3::FuzzyZero(old_dir)) {
 					float mag = old_dir.Length();
 
 					dir = dir + old_dir;
-					if (!dir.fuzzyZero())
+					if (!MT_Vector3::FuzzyZero(dir))
 						dir = dir.Normalized() * mag;
 				}
 			}
