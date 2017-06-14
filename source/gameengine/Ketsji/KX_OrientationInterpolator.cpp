@@ -35,7 +35,7 @@
 
 void KX_OrientationInterpolator::Execute(float currentTime) const
 {
-	MT_Vector3 eul(m_ipos[0]->GetValue(currentTime),
+	mt::vec3 eul(m_ipos[0]->GetValue(currentTime),
 				   m_ipos[1]->GetValue(currentTime),
 				   m_ipos[2]->GetValue(currentTime));
 	float ci = cosf(eul[0]);
@@ -49,7 +49,7 @@ void KX_OrientationInterpolator::Execute(float currentTime) const
 	float sc = si*ch; 
 	float ss = si*sh;
 
-	m_target = MT_Matrix3x3(cj*ch, sj*sc-cs, sj*cc+ss,
+	m_target = mt::mat3(cj*ch, sj*sc-cs, sj*cc+ss,
 	                  cj*sh, sj*ss+cc, sj*cs-sc,
 	                  -sj,    cj*si,    cj*ci);
 }

@@ -90,13 +90,13 @@ class KX_ObjectActuator : public SCA_IActuator
 {
 	Py_Header
 
-	MT_Vector3		m_force;
-	MT_Vector3		m_torque;
-	MT_Vector3		m_dloc;
-	MT_Vector3		m_drot;
-	MT_Vector3		m_linear_velocity;
-	MT_Vector3		m_angular_velocity;
-	MT_Vector3		m_pid;
+	mt::vec3		m_force;
+	mt::vec3		m_torque;
+	mt::vec3		m_dloc;
+	mt::vec3		m_drot;
+	mt::vec3		m_linear_velocity;
+	mt::vec3		m_angular_velocity;
+	mt::vec3		m_pid;
 	float		m_linear_length2;
 	float		m_angular_length2;
 	// used in damping
@@ -104,8 +104,8 @@ class KX_ObjectActuator : public SCA_IActuator
 	float		m_current_angular_factor;
 	short			m_damping;
 	// used in servo control
-	MT_Vector3		m_previous_error;
-	MT_Vector3		m_error_accumulator;
+	mt::vec3		m_previous_error;
+	mt::vec3		m_error_accumulator;
 	KX_LocalFlags	m_bitLocalFlag;
 	KX_GameObject*  m_reference;
 	// A hack bool -- oh no sorry everyone
@@ -133,12 +133,12 @@ public:
 	KX_ObjectActuator(
 		SCA_IObject* gameobj,
 		KX_GameObject* refobj,
-		const MT_Vector3& force,
-		const MT_Vector3& torque,
-		const MT_Vector3& dloc,
-		const MT_Vector3& drot,
-		const MT_Vector3& linV,
-		const MT_Vector3& angV,
+		const mt::vec3& force,
+		const mt::vec3& torque,
+		const mt::vec3& dloc,
+		const mt::vec3& drot,
+		const mt::vec3& linV,
+		const mt::vec3& angV,
 		const short damping,
 		const KX_LocalFlags& flag
 	);
@@ -151,13 +151,13 @@ public:
 	void SetForceLoc(const double force[3])	{ /*m_force=force;*/ }
 	void UpdateFuzzyFlags()
 		{ 
-			m_bitLocalFlag.ZeroForce = MT_Vector3::FuzzyZero(m_force);
-			m_bitLocalFlag.ZeroTorque = MT_Vector3::FuzzyZero(m_torque);
-			m_bitLocalFlag.ZeroDLoc = MT_Vector3::FuzzyZero(m_dloc);
-			m_bitLocalFlag.ZeroDRot = MT_Vector3::FuzzyZero(m_drot);
-			m_bitLocalFlag.ZeroLinearVelocity = MT_Vector3::FuzzyZero(m_linear_velocity);
+			m_bitLocalFlag.ZeroForce = mt::vec3::FuzzyZero(m_force);
+			m_bitLocalFlag.ZeroTorque = mt::vec3::FuzzyZero(m_torque);
+			m_bitLocalFlag.ZeroDLoc = mt::vec3::FuzzyZero(m_dloc);
+			m_bitLocalFlag.ZeroDRot = mt::vec3::FuzzyZero(m_drot);
+			m_bitLocalFlag.ZeroLinearVelocity = mt::vec3::FuzzyZero(m_linear_velocity);
 			m_linear_length2 = (m_bitLocalFlag.ZeroLinearVelocity) ? 0.0f : m_linear_velocity.LengthSquared();
-			m_bitLocalFlag.ZeroAngularVelocity = MT_Vector3::FuzzyZero(m_angular_velocity);
+			m_bitLocalFlag.ZeroAngularVelocity = mt::vec3::FuzzyZero(m_angular_velocity);
 			m_angular_length2 = (m_bitLocalFlag.ZeroAngularVelocity) ? 0.0f : m_angular_velocity.LengthSquared();
 		}
 	virtual bool Update();

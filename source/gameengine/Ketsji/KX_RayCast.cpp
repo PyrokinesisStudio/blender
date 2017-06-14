@@ -46,15 +46,15 @@ KX_RayCast::KX_RayCast(PHY_IPhysicsController* ignoreController, bool faceNormal
 void KX_RayCast::reportHit(PHY_RayCastResult* result)
 {
 	m_hitFound = true;
-	m_hitPoint = MT_Vector3(result->m_hitPoint);
-	m_hitNormal = MT_Vector3(result->m_hitNormal);
+	m_hitPoint = mt::vec3(result->m_hitPoint);
+	m_hitNormal = mt::vec3(result->m_hitNormal);
 	m_hitUVOK = result->m_hitUVOK;
-	m_hitUV = MT_Vector2(result->m_hitUV);
+	m_hitUV = mt::vec2(result->m_hitUV);
 	m_hitMesh = result->m_meshObject;
 	m_hitPolygon = result->m_polygon;
 }
 
-bool KX_RayCast::RayTest(PHY_IPhysicsEnvironment* physics_environment, const MT_Vector3& _frompoint, const MT_Vector3& topoint, KX_RayCast& callback)
+bool KX_RayCast::RayTest(PHY_IPhysicsEnvironment* physics_environment, const mt::vec3& _frompoint, const mt::vec3& topoint, KX_RayCast& callback)
 {
 	if (physics_environment==nullptr) return false; /* prevents crashing in some cases */
 	
@@ -65,9 +65,9 @@ bool KX_RayCast::RayTest(PHY_IPhysicsEnvironment* physics_environment, const MT_
 	//
 	// returns true if an object was found, false if not.
 	
-	MT_Vector3 frompoint(_frompoint);
-	const MT_Vector3 todir( (topoint - frompoint).safe_normalized() );
-	MT_Vector3 prevpoint(_frompoint+todir*(-1.f));
+	mt::vec3 frompoint(_frompoint);
+	const mt::vec3 todir( (topoint - frompoint).safe_normalized() );
+	mt::vec3 prevpoint(_frompoint+todir*(-1.f));
 	
 	PHY_IPhysicsController* hit_controller;
 

@@ -50,7 +50,7 @@ class KX_TrackToActuator : public SCA_IActuator
 	int	m_trackflag;
 	int m_upflag;
 	
-	MT_Matrix3x3 m_parentlocalmat;
+	mt::mat3 m_parentlocalmat;
 	KX_GameObject* m_parentobj;
 
   public:

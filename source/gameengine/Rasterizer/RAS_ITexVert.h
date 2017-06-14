@@ -105,16 +105,16 @@ public:
 	RAS_ITexVert()
 	{
 	}
-	RAS_ITexVert(const MT_Vector3& xyz,
-	            const MT_Vector4& tangent,
-	            const MT_Vector3& normal);
+	RAS_ITexVert(const mt::vec3& xyz,
+	            const mt::vec4& tangent,
+	            const mt::vec3& normal);
 
 	virtual ~RAS_ITexVert();
 
 	virtual const unsigned short getUvSize() const = 0;
 	virtual const float *getUV(const int unit) const = 0;
 
-	virtual void SetUV(const int index, const MT_Vector2& uv) = 0;
+	virtual void SetUV(const int index, const mt::vec2& uv) = 0;
 	virtual void SetUV(const int index, const float uv[2]) = 0;
 
 	virtual const unsigned short getColorSize() const = 0;
@@ -122,7 +122,7 @@ public:
 	virtual const unsigned int getRawRGBA(const int index) const = 0;
 
 	virtual void SetRGBA(const int index, const unsigned int rgba) = 0;
-	virtual void SetRGBA(const int index, const MT_Vector4& rgba) = 0;
+	virtual void SetRGBA(const int index, const mt::vec4& rgba) = 0;
 
 	inline const float *getXYZ() const
 	{
@@ -139,12 +139,12 @@ public:
 		return m_tangent;
 	}
 
-	inline MT_Vector3 xyz() const
+	inline mt::vec3 xyz() const
 	{
-		return MT_Vector3(m_localxyz);
+		return mt::vec3(m_localxyz);
 	}
 
-	inline void SetXYZ(const MT_Vector3& xyz)
+	inline void SetXYZ(const mt::vec3& xyz)
 	{
 		xyz.Pack(m_localxyz);
 	}
@@ -154,12 +154,12 @@ public:
 		copy_v3_v3(m_localxyz, xyz);
 	}
 
-	inline void SetNormal(const MT_Vector3& normal)
+	inline void SetNormal(const mt::vec3& normal)
 	{
 		normal.Pack(m_normal);
 	}
 
-	inline void SetTangent(const MT_Vector4& tangent)
+	inline void SetTangent(const mt::vec4& tangent)
 	{
 		tangent.Pack(m_tangent);
 	}
@@ -190,16 +190,16 @@ public:
 				);
 	}
 
-	inline void Transform(const MT_Matrix4x4& mat, const MT_Matrix4x4& nmat)
+	inline void Transform(const mt::mat4& mat, const mt::mat4& nmat)
 	{
-		SetXYZ((mat * MT_Vector4(m_localxyz[0], m_localxyz[1], m_localxyz[2], 1.0f)).xyz());
-		SetNormal((nmat * MT_Vector4(m_normal[0], m_normal[1], m_normal[2], 1.0f)).xyz());
-		SetTangent((nmat * MT_Vector4(m_tangent[0], m_tangent[1], m_tangent[2], 1.0f)));
+		SetXYZ((mat * mt::vec4(m_localxyz[0], m_localxyz[1], m_localxyz[2], 1.0f)).xyz());
+		SetNormal((nmat * mt::vec4(m_normal[0], m_normal[1], m_normal[2], 1.0f)).xyz());
+		SetTangent((nmat * mt::vec4(m_tangent[0], m_tangent[1], m_tangent[2], 1.0f)));
 	}
 
-	inline void TransformUV(const int index, const MT_Matrix4x4& mat)
+	inline void TransformUV(const int index, const mt::mat4& mat)
 	{
-		SetUV(index, (mat * MT_Vector4(getUV(index)[0], getUV(index)[1], 0.0f, 1.0f)).xy());
+		SetUV(index, (mat * mt::vec4(getUV(index)[0], getUV(index)[1], 0.0f, 1.0f)).xy());
 	}
 };
 

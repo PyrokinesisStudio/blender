@@ -52,9 +52,9 @@ RAS_TexVertInfo::~RAS_TexVertInfo()
 {
 }
 
-RAS_ITexVert::RAS_ITexVert(const MT_Vector3& xyz,
-						 const MT_Vector4& tangent,
-						 const MT_Vector3& normal)
+RAS_ITexVert::RAS_ITexVert(const mt::vec3& xyz,
+						 const mt::vec4& tangent,
+						 const mt::vec3& normal)
 {
 	xyz.Pack(m_localxyz);
 	SetNormal(normal);

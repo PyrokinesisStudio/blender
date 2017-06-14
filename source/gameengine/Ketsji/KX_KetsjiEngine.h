@@ -251,7 +251,7 @@ private:
 	void UpdateSuspendedScenes(double framestep);
 
 	/// Update and return the projection matrix of a camera depending on the viewport.
-	MT_Matrix4x4 GetCameraProjectionMatrix(KX_Scene *scene, KX_Camera *cam, RAS_Rasterizer::StereoEye eye,
+	mt::mat4 GetCameraProjectionMatrix(KX_Scene *scene, KX_Camera *cam, RAS_Rasterizer::StereoEye eye,
 										   const RAS_Rect& viewport, const RAS_Rect& area) const;
 	CameraRenderData GetCameraRenderData(KX_Scene *scene, KX_Camera *camera, KX_Camera *overrideCullingCam, const RAS_Rect& displayArea,
 											  RAS_Rasterizer::StereoEye eye, bool usestereo);

@@ -183,32 +183,32 @@ int RAS_OpenGLLight::GetShadowBindCode()
 	return -1;
 }
 
-MT_Matrix4x4 RAS_OpenGLLight::GetViewMat()
+mt::mat4 RAS_OpenGLLight::GetViewMat()
 {
 	GPULamp *lamp = GetGPULamp();
 	if (lamp) {
-		return MT_Matrix4x4(GPU_lamp_get_viewmat(lamp));
+		return mt::mat4(GPU_lamp_get_viewmat(lamp));
 	}
-	return MT_Matrix4x4::Identity();
+	return mt::mat4::Identity();
 }
 
-MT_Matrix4x4 RAS_OpenGLLight::GetWinMat()
+mt::mat4 RAS_OpenGLLight::GetWinMat()
 {
 	GPULamp *lamp = GetGPULamp();
 	if (lamp) {
-		return MT_Matrix4x4(GPU_lamp_get_winmat(lamp));
+		return mt::mat4(GPU_lamp_get_winmat(lamp));
 	}
-	return MT_Matrix4x4::Identity();
+	return mt::mat4::Identity();
 }
 
-MT_Matrix4x4 RAS_OpenGLLight::GetShadowMatrix()
+mt::mat4 RAS_OpenGLLight::GetShadowMatrix()
 {
 	GPULamp *lamp;
 
 	if ((lamp = GetGPULamp()))
-		return MT_Matrix4x4(GPU_lamp_dynpersmat(lamp));
+		return mt::mat4(GPU_lamp_dynpersmat(lamp));
 
-	return MT_Matrix4x4::Identity();
+	return mt::mat4::Identity();
 }
 
 int RAS_OpenGLLight::GetShadowLayer()
@@ -221,7 +221,7 @@ int RAS_OpenGLLight::GetShadowLayer()
 		return 0;
 }
 
-void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, MT_Transform& camtrans)
+void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::trans& camtrans)
 {
 	GPULamp *lamp;
 	float viewmat[4][4], winmat[4][4];
@@ -242,10 +242,10 @@ void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, MT_T
 	canvas->UpdateViewPort(0, 0, winsize, winsize);
 
 	/* setup camera transformation */
-	MT_Matrix4x4 modelviewmat((float *)viewmat);
-	MT_Matrix4x4 projectionmat((float *)winmat);
+	mt::mat4 modelviewmat((float *)viewmat);
+	mt::mat4 projectionmat((float *)winmat);
 
-	MT_Transform trans = MT_Transform((float *)viewmat);
+	mt::trans trans = mt::trans((float *)viewmat);
 	camtrans.invert(trans);
 
 	cam->SetModelviewMatrix(modelviewmat);

@@ -130,7 +130,7 @@ void BL_Shader::Update(RAS_Rasterizer *rasty, RAS_MeshSlot *ms)
 	}
 #endif  // WITH_PYTHON
 
-	RAS_Shader::Update(rasty, MT_Matrix4x4(ms->m_meshUser->GetMatrix()));
+	RAS_Shader::Update(rasty, mt::mat4(ms->m_meshUser->GetMatrix()));
 }
 
 #ifdef WITH_PYTHON
@@ -799,7 +799,7 @@ KX_PYMETHODDEF_DOC(BL_Shader, setUniformMatrix4,
 		return nullptr;
 	}
 
-	MT_Matrix4x4 mat;
+	mt::mat4 mat;
 
 	if (!PyMatTo(matrix, mat)) {
 		PyErr_SetString(PyExc_TypeError,
@@ -847,7 +847,7 @@ KX_PYMETHODDEF_DOC(BL_Shader, setUniformMatrix3,
 		return nullptr;
 	}
 
-	MT_Matrix3x3 mat;
+	mt::mat3 mat;
 
 	if (!PyMatTo(matrix, mat)) {
 		PyErr_SetString(PyExc_TypeError,

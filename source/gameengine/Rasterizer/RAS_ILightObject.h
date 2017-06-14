@@ -87,11 +87,11 @@ public:
 	virtual bool HasShadowBuffer() = 0;
 	virtual bool NeedShadowUpdate() = 0;
 	virtual int GetShadowBindCode() = 0;
-	virtual MT_Matrix4x4 GetShadowMatrix() = 0;
-	virtual MT_Matrix4x4 GetViewMat() = 0;
-	virtual MT_Matrix4x4 GetWinMat() = 0;
+	virtual mt::mat4 GetShadowMatrix() = 0;
+	virtual mt::mat4 GetViewMat() = 0;
+	virtual mt::mat4 GetWinMat() = 0;
 	virtual int GetShadowLayer() = 0;
-	virtual void BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, MT_Transform& camtrans) = 0;
+	virtual void BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::trans& camtrans) = 0;
 	virtual void UnbindShadowBuffer() = 0;
 	virtual Image *GetTextureImage(short texslot) = 0;
 	virtual void Update() = 0;

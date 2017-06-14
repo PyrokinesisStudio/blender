@@ -41,13 +41,13 @@
 
 #include "KX_PyMath.h"
 
-bool PyOrientationTo(PyObject *pyval, MT_Matrix3x3 &rot, const char *error_prefix)
+bool PyOrientationTo(PyObject *pyval, mt::mat3 &rot, const char *error_prefix)
 {
 	int size= PySequence_Size(pyval);
 	
 	if (size == 4)
 	{
-		MT_Quaternion qrot;
+		mt::quat qrot;
 		if (PyQuatTo(pyval, qrot))
 		{
 			rot.setRotation(qrot);
@@ -56,7 +56,7 @@ bool PyOrientationTo(PyObject *pyval, MT_Matrix3x3 &rot, const char *error_prefi
 	}
 	else if (size == 3) {
 		/* 3x3 matrix or euler */
-		MT_Vector3 erot;
+		mt::vec3 erot;
 		if (PyVecTo(pyval, erot))
 		{
 			rot.setEuler(erot);
@@ -74,7 +74,7 @@ bool PyOrientationTo(PyObject *pyval, MT_Matrix3x3 &rot, const char *error_prefi
 	return false;
 }
 
-bool PyQuatTo(PyObject *pyval, MT_Quaternion &qrot)
+bool PyQuatTo(PyObject *pyval, mt::quat &qrot)
 {
 	if (!PyVecTo(pyval, qrot))
 		return false;
@@ -89,7 +89,7 @@ bool PyQuatTo(PyObject *pyval, MT_Quaternion &qrot)
 	return true;
 }
 
-PyObject *PyObjectFrom(const MT_Matrix4x4 &mat)
+PyObject *PyObjectFrom(const mt::mat4 &mat)
 {
 #ifdef USE_MATHUTILS
 	float fmat[16];
@@ -113,7 +113,7 @@ PyObject *PyObjectFrom(const MT_Matrix4x4 &mat)
 #endif
 }
 
-PyObject *PyObjectFrom(const MT_Matrix3x3 &mat)
+PyObject *PyObjectFrom(const mt::mat3 &mat)
 {
 #ifdef USE_MATHUTILS
 	float fmat[9];
@@ -137,14 +137,14 @@ PyObject *PyObjectFrom(const MT_Matrix3x3 &mat)
 }
 
 #ifdef USE_MATHUTILS
-PyObject *PyObjectFrom(const MT_Quaternion &qrot)
+PyObject *PyObjectFrom(const mt::quat &qrot)
 {
 	/* NOTE, were re-ordering here for Mathutils compat */
 	return Quaternion_CreatePyObject(qrot.Data(), nullptr);
 }
 #endif
 
-PyObject *PyObjectFrom(const MT_Vector4 &vec)
+PyObject *PyObjectFrom(const mt::vec4 &vec)
 {
 #ifdef USE_MATHUTILS
 	return Vector_CreatePyObject(vec.Data(), 4, nullptr);
@@ -158,7 +158,7 @@ PyObject *PyObjectFrom(const MT_Vector4 &vec)
 #endif
 }
 
-PyObject *PyObjectFrom(const MT_Vector3 &vec)
+PyObject *PyObjectFrom(const mt::vec3 &vec)
 {
 #ifdef USE_MATHUTILS
 	return Vector_CreatePyObject(vec.Data(), 3, nullptr);
@@ -171,7 +171,7 @@ PyObject *PyObjectFrom(const MT_Vector3 &vec)
 #endif
 }
 
-PyObject *PyObjectFrom(const MT_Vector2 &vec)
+PyObject *PyObjectFrom(const mt::vec2 &vec)
 {
 #ifdef USE_MATHUTILS
 	return Vector_CreatePyObject(vec.Data(), 2, nullptr);
@@ -183,7 +183,7 @@ PyObject *PyObjectFrom(const MT_Vector2 &vec)
 #endif
 }
 
-PyObject *PyColorFromVector(const MT_Vector3 &vec)
+PyObject *PyColorFromVector(const mt::vec3 &vec)
 {
 #ifdef USE_MATHUTILS
 	return Color_CreatePyObject(vec.Data(), nullptr);

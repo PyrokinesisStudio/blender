@@ -49,8 +49,8 @@ struct KX_Obstacle
 {
 	KX_OBSTACLE_TYPE m_type;
 	KX_OBSTACLE_SHAPE m_shape;
-	MT_Vector3 m_pos;
-	MT_Vector3 m_pos2;
+	mt::vec3 m_pos;
+	mt::vec3 m_pos2;
 	float m_rad;
 	
 	float vel[2];
@@ -87,7 +87,7 @@ public:
 	KX_Obstacle* GetObstacle(KX_GameObject* gameobj);
 	void UpdateObstacles();
 	virtual void AdjustObstacleVelocity(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
-	                                    MT_Vector3& velocity, float maxDeltaSpeed,float maxDeltaAngle);
+	                                    mt::vec3& velocity, float maxDeltaSpeed,float maxDeltaAngle);
 
 };
 class KX_ObstacleSimulationTOI: public KX_ObstacleSimulation
@@ -106,7 +106,7 @@ protected:
 public:
 	KX_ObstacleSimulationTOI(float levelHeight, bool enableVisualization);
 	virtual void AdjustObstacleVelocity(KX_Obstacle* activeObst, KX_NavMeshObject* activeNavMeshObj, 
-		MT_Vector3& velocity, float maxDeltaSpeed,float maxDeltaAngle);
+		mt::vec3& velocity, float maxDeltaSpeed,float maxDeltaAngle);
 };
 
 class KX_ObstacleSimulationTOI_rays: public KX_ObstacleSimulationTOI

@@ -86,9 +86,9 @@ KX_TrackToActuator::KX_TrackToActuator(SCA_IObject *gameobj,
 
 
 /* old function from Blender */
-static MT_Matrix3x3 EulToMat3(float eul[3])
+static mt::mat3 EulToMat3(float eul[3])
 {
-	MT_Matrix3x3 mat;
+	mt::mat3 mat;
 	float ci, cj, ch, si, sj, sh, cc, cs, sc, ss;
 	
 	ci = cosf(eul[0]);
@@ -118,7 +118,7 @@ static MT_Matrix3x3 EulToMat3(float eul[3])
 
 
 /* old function from Blender */
-static void Mat3ToEulOld(MT_Matrix3x3 mat, float eul[3])
+static void Mat3ToEulOld(mt::mat3 mat, float eul[3])
 {
 	const float cy = sqrtf(mat(0, 0) * mat(0, 0) + mat(1, 0) * mat(1, 0));
 
@@ -160,7 +160,7 @@ static void compatible_eulFast(float *eul, float *oldrot)
 
 
 
-static MT_Matrix3x3 matrix3x3_interpol(MT_Matrix3x3 oldmat, MT_Matrix3x3 mat, int m_time)
+static mt::mat3 matrix3x3_interpol(mt::mat3 oldmat, mt::mat3 mat, int m_time)
 {
 	float eul[3], oldeul[3];
 
@@ -192,13 +192,13 @@ static float basis_cross(int n, int m)
 }
 
 /* vectomat function obtained from constrain.c and modified to work with MOTO library */
-static MT_Matrix3x3 vectomat(MT_Vector3 vec, short axis, short upflag, short threedimup)
+static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimup)
 {
-	MT_Matrix3x3 mat;
-	MT_Vector3 y(0.0f, 1.0f, 0.0f);
-	MT_Vector3 z(0.0f, 0.0f, 1.0f); /* world Z axis is the global up axis */
-	MT_Vector3 proj;
-	MT_Vector3 right;
+	mt::mat3 mat;
+	mt::vec3 y(0.0f, 1.0f, 0.0f);
+	mt::vec3 z(0.0f, 0.0f, 1.0f); /* world Z axis is the global up axis */
+	mt::vec3 proj;
+	mt::vec3 right;
 	float mul;
 	int right_index;
 
@@ -241,7 +241,7 @@ static MT_Matrix3x3 vectomat(MT_Vector3 vec, short axis, short upflag, short thr
 	}
 	/* identity matrix - don't do anything if the two axes are the same */
 	else {
-		mat = MT_Matrix3x3::Identity();
+		mat = mt::mat3::Identity();
 	}
 
 	return mat;
@@ -315,9 +315,9 @@ bool KX_TrackToActuator::Update(double curtime)
 	else if (m_object)
 	{
 		KX_GameObject* curobj = (KX_GameObject*) GetParent();
-		MT_Vector3 dir = curobj->NodeGetWorldPosition() - ((KX_GameObject*)m_object)->NodeGetWorldPosition();
-		MT_Matrix3x3 mat;
-		MT_Matrix3x3 oldmat;
+		mt::vec3 dir = curobj->NodeGetWorldPosition() - ((KX_GameObject*)m_object)->NodeGetWorldPosition();
+		mt::mat3 mat;
+		mt::mat3 oldmat;
 
 		mat = vectomat(dir, m_trackflag, m_upflag, m_allow3D);
 		oldmat = curobj->NodeGetWorldOrientation();
@@ -328,10 +328,10 @@ bool KX_TrackToActuator::Update(double curtime)
 		/* check if the model is parented and calculate the child transform */
 		if (m_parentobj) {
 				
-			MT_Vector3 localpos;
+			mt::vec3 localpos;
 			localpos = curobj->GetSGNode()->GetLocalPosition();
 			// Get the inverse of the parent matrix
-			MT_Matrix3x3 parentmatinv;
+			mt::mat3 parentmatinv;
 			parentmatinv = m_parentobj->NodeGetWorldOrientation().inverse();
 			// transform the local coordinate system into the parents system
 			mat = parentmatinv * mat;

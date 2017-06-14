@@ -42,9 +42,9 @@ public:
 	float           m_mist_start;
 	float           m_mist_dist;
 	float           m_mist_intensity;
-	MT_Vector3 m_hori_rgb;
-	MT_Vector3 m_zeni_rgb;
-	MT_Vector3 m_ambi_rgb;
+	mt::vec3 m_hori_rgb;
+	mt::vec3 m_zeni_rgb;
+	mt::vec3 m_ambi_rgb;
 
 private:
 	T_InterpolatorList	m_interpolators;

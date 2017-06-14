@@ -58,7 +58,7 @@ protected:
 	float m_maximumSine;
 	// reference direction
 	float m_refDirection[3];
-	MT_Vector3 m_refDirVector;	// same as m_refDirection
+	mt::vec3 m_refDirVector;	// same as m_refDirection
 	// locrotxyz choice (pick one): only one choice allowed at a time!
 	int m_locrot;
 	// active time of actuator

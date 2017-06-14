@@ -48,10 +48,10 @@ public:
 	}
 
 	virtual unsigned int GetNumContacts() const = 0;
-	virtual MT_Vector3 GetLocalPointA(unsigned int index, bool first) const = 0;
-	virtual MT_Vector3 GetLocalPointB(unsigned int index, bool first) const = 0;
-	virtual MT_Vector3 GetWorldPoint(unsigned int index, bool first) const = 0;
-	virtual MT_Vector3 GetNormal(unsigned int index, bool first) const = 0;
+	virtual mt::vec3 GetLocalPointA(unsigned int index, bool first) const = 0;
+	virtual mt::vec3 GetLocalPointB(unsigned int index, bool first) const = 0;
+	virtual mt::vec3 GetWorldPoint(unsigned int index, bool first) const = 0;
+	virtual mt::vec3 GetNormal(unsigned int index, bool first) const = 0;
 	virtual float GetCombinedFriction(unsigned int index, bool first) const = 0;
 	virtual float GetCombinedRollingFriction(unsigned int index, bool first) const = 0;
 	virtual float GetCombinedRestitution(unsigned int index, bool first) const = 0;

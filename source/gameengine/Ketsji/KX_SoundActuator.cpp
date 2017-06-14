@@ -258,8 +258,8 @@ bool KX_SoundActuator::Update(double curtime)
 			if (cam)
 			{
 				KX_GameObject* obj = (KX_GameObject*)this->GetParent();
-				MT_Vector3 p;
-				MT_Matrix3x3 Mo;
+				mt::vec3 p;
+				mt::mat3 Mo;
 				float data[4];
 
 				Mo = cam->NodeGetWorldOrientation().inverse();

@@ -134,7 +134,7 @@ bool KX_IpoSGController::Update(double currentTime)
 		{
 			if (m_ipo_as_force == true) {
 				if (m_game_object && ob && m_game_object->GetPhysicsController()) {
-					MT_Vector3 vec = m_ipo_local ?
+					mt::vec3 vec = m_ipo_local ?
 					                     ob->GetWorldOrientation() * m_ipo_xform.GetPosition() :
 										 m_ipo_xform.GetPosition();
 					m_game_object->GetPhysicsController()->ApplyForce(vec, false);
@@ -143,7 +143,7 @@ bool KX_IpoSGController::Update(double currentTime)
 			else {
 				// Local ipo should be defined with the object position at (0,0,0)
 				// Local transform is applied to the object based on initial position
-				MT_Vector3 newPosition(0.0f, 0.0f, 0.0f);
+				mt::vec3 newPosition(0.0f, 0.0f, 0.0f);
 
 				if (!m_ipo_add)
 					newPosition = ob->GetLocalPosition();
@@ -213,7 +213,7 @@ bool KX_IpoSGController::Update(double currentTime)
 					if (m_ipo_channels_active[OB_DROT_Z])
 						roll += m_ipo_xform.GetDeltaEulerAngles()[2];
 
-					MT_Matrix3x3 rotation(MT_Vector3(yaw, pitch, roll));
+					mt::mat3 rotation(mt::vec3(yaw, pitch, roll));
 					if (m_ipo_local)
 						rotation = m_ipo_start_orient * rotation;
 					else
@@ -253,7 +253,7 @@ bool KX_IpoSGController::Update(double currentTime)
 						roll += m_ipo_xform.GetDeltaEulerAngles()[2];
 					}
 					if (m_game_object)
-						m_game_object->NodeSetLocalOrientation(MT_Matrix3x3(MT_Vector3(yaw, pitch, roll)));
+						m_game_object->NodeSetLocalOrientation(mt::mat3(mt::vec3(yaw, pitch, roll)));
 				}
 			}
 			else if (m_ipo_start_initialized) {
@@ -273,7 +273,7 @@ bool KX_IpoSGController::Update(double currentTime)
 					roll = m_ipo_xform.GetDeltaEulerAngles()[2];
 
 				// dRot are always local
-				MT_Matrix3x3 rotation(MT_Vector3(yaw, pitch, roll));
+				mt::mat3 rotation(mt::vec3(yaw, pitch, roll));
 				rotation = m_ipo_start_orient * rotation;
 				if (m_game_object)
 					m_game_object->NodeSetLocalOrientation(rotation);
@@ -284,7 +284,7 @@ bool KX_IpoSGController::Update(double currentTime)
 		    m_ipo_channels_active[OB_DSIZE_X] || m_ipo_channels_active[OB_DSIZE_Y] || m_ipo_channels_active[OB_DSIZE_Z])
 		{
 			//default is no scale change
-			MT_Vector3 newScale(1.0f, 1.0f, 1.0f);
+			mt::vec3 newScale(1.0f, 1.0f, 1.0f);
 			if (!m_ipo_add)
 				newScale = ob->GetLocalScale();
 

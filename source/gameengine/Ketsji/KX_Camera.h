@@ -57,12 +57,12 @@ protected:
 	RAS_CameraData	m_camdata;
 
 	// Never used, I think...
-//	void MoveTo(const MT_Vector3& movevec)
+//	void MoveTo(const mt::vec3& movevec)
 //	{
 #if 0
-		MT_Transform camtrans;
+		mt::trans camtrans;
 		camtrans.invert(m_trans1);
-		MT_Matrix3x3 camorient = camtrans.getBasis();
+		mt::mat3 camorient = camtrans.getBasis();
 		camtrans.translate(camorient.inverse()*movevec);
 		m_trans1.invert(camtrans);
 #endif
@@ -71,13 +71,13 @@ protected:
 	/**
 	 * Storage for the projection matrix that is passed to the
 	 * rasterizer. */
-	MT_Matrix4x4 m_projection_matrix;
-	//MT_Matrix4x4 m_projection_matrix1;
+	mt::mat4 m_projection_matrix;
+	//mt::mat4 m_projection_matrix1;
 
 	/**
 	 * Storage for the modelview matrix that is passed to the
 	 * rasterizer. */
-	MT_Matrix4x4 m_modelview_matrix;
+	mt::mat4 m_modelview_matrix;
 
 	/**
 	 * true if the view frustum (modelview/projection matrix)
@@ -93,7 +93,7 @@ protected:
 	/**
 	 * View Frustum clip planes.
 	 */
-	MT_Vector4   m_planes[6];
+	mt::vec4   m_planes[6];
 	
 	/**
 	 * This camera is frustum culling.
@@ -141,17 +141,17 @@ public:
 	);
 	virtual void ProcessReplica();
 
-	MT_Transform		GetWorldToCamera() const;
-	MT_Transform		GetCameraToWorld() const;
+	mt::trans		GetWorldToCamera() const;
+	mt::trans		GetCameraToWorld() const;
 
 	/** Sets the projection matrix that is used by the rasterizer. */
-	void				SetProjectionMatrix(const MT_Matrix4x4 & mat);
+	void				SetProjectionMatrix(const mt::mat4 & mat);
 
 	/** Sets the modelview matrix that is used by the rasterizer. */
-	void				SetModelviewMatrix(const MT_Matrix4x4 & mat);
+	void				SetModelviewMatrix(const mt::mat4 & mat);
 		
 	/** Gets the projection matrix that is used by the rasterizer. */
-	const MT_Matrix4x4&		GetProjectionMatrix() const;
+	const mt::mat4&		GetProjectionMatrix() const;
 	
 	/** returns true if this camera has been set a projection matrix. */
 	bool				hasValidProjectionMatrix() const;
@@ -165,7 +165,7 @@ public:
 	/** Gets the modelview matrix that is used by the rasterizer. 
 	 *  \warning If the Camera is a dynamic object then this method may return garbage.  Use GetWorldToCamera() instead.
 	 */
-	const MT_Matrix4x4&		GetModelviewMatrix() const;
+	const mt::mat4&		GetModelviewMatrix() const;
 
 	/** Gets the aperture. */
 	float				GetLens() const;

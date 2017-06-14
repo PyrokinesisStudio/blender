@@ -224,7 +224,7 @@ void BL_ConvertSensors(struct Object* blenderobject,
 						// this sumoObject is not deleted by a gameobj, so delete it ourself
 						// later (memleaks)!
 						float radius = blendernearsensor->dist;
-						const MT_Vector3& wpos = gameobj->NodeGetWorldPosition();
+						const mt::vec3& wpos = gameobj->NodeGetWorldPosition();
 						bool bFindMaterial = false;
 						PHY_IPhysicsController* physCtrl = kxscene->GetPhysicsEnvironment()->CreateSphereController(radius,wpos);
 

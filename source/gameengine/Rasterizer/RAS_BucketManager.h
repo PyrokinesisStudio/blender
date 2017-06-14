@@ -55,8 +55,8 @@ public:
 		};
 
 		SortedMeshSlot() = default;
-		SortedMeshSlot(RAS_MeshSlot *ms, const MT_Vector3& pnorm);
-		SortedMeshSlot(RAS_MeshSlotUpwardNode *node, const MT_Vector3& pnorm);
+		SortedMeshSlot(RAS_MeshSlot *ms, const mt::vec3& pnorm);
+		SortedMeshSlot(RAS_MeshSlotUpwardNode *node, const mt::vec3& pnorm);
 	};
 
 	struct backtofront
@@ -103,7 +103,7 @@ public:
 	RAS_BucketManager(RAS_IPolyMaterial *textMaterial);
 	virtual ~RAS_BucketManager();
 
-	void Renderbuckets(const MT_Transform & cameratrans, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen);
+	void Renderbuckets(const mt::trans & cameratrans, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen);
 
 	RAS_MaterialBucket *FindBucket(RAS_IPolyMaterial *material, bool &bucketCreated);
 	RAS_DisplayArrayBucket *GetTextDisplayArrayBucket() const;

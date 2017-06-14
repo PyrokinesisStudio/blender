@@ -89,7 +89,7 @@ CValue* KX_RadarSensor::GetReplica()
 void KX_RadarSensor::SynchronizeTransform()
 {
 	// Getting the parent location was commented out. Why?
-	MT_Transform trans;
+	mt::trans trans;
 	trans.setOrigin(((KX_GameObject*)GetParent())->NodeGetWorldPosition());
 	trans.setBasis(((KX_GameObject*)GetParent())->NodeGetWorldOrientation());
 	// What is the default orientation? pointing in the -y direction?
@@ -102,44 +102,44 @@ void KX_RadarSensor::SynchronizeTransform()
 	{
 	case SENS_RADAR_X_AXIS: // +X Axis
 		{
-			MT_Quaternion rotquatje(MT_Vector3(0,0,1),MT_radians(90));
+			mt::quat rotquatje(mt::vec3(0,0,1),MT_radians(90));
 			trans.rotate(rotquatje);
-			trans.translate(MT_Vector3 (0, -m_coneheight/2.0f, 0));
+			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_Y_AXIS: // +Y Axis
 		{
-			MT_Quaternion rotquatje(MT_Vector3(1,0,0),MT_radians(-180));
+			mt::quat rotquatje(mt::vec3(1,0,0),MT_radians(-180));
 			trans.rotate(rotquatje);
-			trans.translate(MT_Vector3 (0, -m_coneheight/2.0f, 0));
+			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_Z_AXIS: // +Z Axis
 		{
-			MT_Quaternion rotquatje(MT_Vector3(1,0,0),MT_radians(-90));
+			mt::quat rotquatje(mt::vec3(1,0,0),MT_radians(-90));
 			trans.rotate(rotquatje);
-			trans.translate(MT_Vector3 (0, -m_coneheight/2.0f, 0));
+			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_NEG_X_AXIS: // -X Axis
 		{
-			MT_Quaternion rotquatje(MT_Vector3(0,0,1),MT_radians(-90));
+			mt::quat rotquatje(mt::vec3(0,0,1),MT_radians(-90));
 			trans.rotate(rotquatje);
-			trans.translate(MT_Vector3 (0, -m_coneheight/2.0f, 0));
+			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_NEG_Y_AXIS: // -Y Axis
 		{
-			//MT_Quaternion rotquatje(MT_Vector3(1,0,0),MT_radians(-180));
+			//mt::quat rotquatje(mt::vec3(1,0,0),MT_radians(-180));
 			//trans.rotate(rotquatje);
-			trans.translate(MT_Vector3 (0, -m_coneheight/2.0f, 0));
+			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_NEG_Z_AXIS: // -Z Axis
 		{
-			MT_Quaternion rotquatje(MT_Vector3(1,0,0),MT_radians(90));
+			mt::quat rotquatje(mt::vec3(1,0,0),MT_radians(90));
 			trans.rotate(rotquatje);
-			trans.translate(MT_Vector3 (0, -m_coneheight/2.0f, 0));
+			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	default:
@@ -147,14 +147,14 @@ void KX_RadarSensor::SynchronizeTransform()
 		}
 	}
 	
-	//Using a temp variable to translate MT_Vector3 to float[3].
+	//Using a temp variable to translate mt::vec3 to float[3].
 	//float[3] works better for the Python interface.
-	MT_Vector3 temp = trans.getOrigin();
+	mt::vec3 temp = trans.getOrigin();
 	m_cone_origin[0] = temp[0];
 	m_cone_origin[1] = temp[1];
 	m_cone_origin[2] = temp[2];
 
-	temp = trans(MT_Vector3(0, -m_coneheight/2.0f, 0));
+	temp = trans(mt::vec3(0, -m_coneheight/2.0f, 0));
 	m_cone_target[0] = temp[0];
 	m_cone_target[1] = temp[1];
 	m_cone_target[2] = temp[2];

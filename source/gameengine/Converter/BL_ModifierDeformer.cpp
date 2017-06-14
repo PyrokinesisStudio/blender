@@ -201,7 +201,7 @@ bool BL_ModifierDeformer::Update(void)
 				float min[3], max[3];
 				INIT_MINMAX(min, max);
 				m_dm->getMinMax(m_dm, min, max);
-				m_boundingBox->SetAabb(MT_Vector3(min), MT_Vector3(max));
+				m_boundingBox->SetAabb(mt::vec3(min), mt::vec3(max));
 			}
 		}
 		m_lastModifierUpdate = m_gameobj->GetLastFrame();

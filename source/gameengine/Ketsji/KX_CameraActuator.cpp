@@ -114,7 +114,7 @@ void KX_CameraActuator::Relink(std::map<SCA_IObject *, SCA_IObject *>& obj_map)
 
 /* copied from blender BLI_math ... don't know if there's an equivalent */
 
-static void Kx_VecUpMat3(MT_Vector3 vec, MT_Matrix3x3& mat, short axis)
+static void Kx_VecUpMat3(mt::vec3 vec, mt::mat3& mat, short axis)
 {
 
 	// Construct a camera matrix s.t. the specified axis
@@ -168,7 +168,7 @@ static void Kx_VecUpMat3(MT_Vector3 vec, MT_Matrix3x3& mat, short axis)
 		mat.GetColumn(coy) = MT_AxisY3;
 	}
 
-	mat.GetColumn(cox) = MT_Vector3::CrossProduct(mat.GetColumn(coy), mat.GetColumn(coz));
+	mat.GetColumn(cox) = mt::vec3::CrossProduct(mat.GetColumn(coy), mat.GetColumn(coz));
 }
 
 bool KX_CameraActuator::Update(double curtime)
@@ -182,16 +182,16 @@ bool KX_CameraActuator::Update(double curtime)
 		return false;
 	
 	KX_GameObject *obj = (KX_GameObject*) GetParent();
-	MT_Vector3 from = obj->NodeGetWorldPosition();
-	MT_Matrix3x3 frommat = obj->NodeGetWorldOrientation();
+	mt::vec3 from = obj->NodeGetWorldPosition();
+	mt::mat3 frommat = obj->NodeGetWorldOrientation();
 	/* These casts are _very_ dangerous!!! */
-	MT_Vector3 lookat = ((KX_GameObject*)m_ob)->NodeGetWorldPosition();
-	MT_Matrix3x3 actormat = ((KX_GameObject*)m_ob)->NodeGetWorldOrientation();
+	mt::vec3 lookat = ((KX_GameObject*)m_ob)->NodeGetWorldPosition();
+	mt::mat3 actormat = ((KX_GameObject*)m_ob)->NodeGetWorldOrientation();
 
-	MT_Vector3 fp1, fp2, rc;
+	mt::vec3 fp1, fp2, rc;
 	float inp, fac; //, factor = 0.0; /* some factor...                                    */
 	float mindistsq, maxdistsq, distsq;
-	MT_Matrix3x3 mat;
+	mt::mat3 mat;
 	
 	/* The rules:                                                            */
 	/* CONSTRAINT 1: not implemented */
@@ -257,7 +257,7 @@ bool KX_CameraActuator::Update(double curtime)
 			break;
 	}
 
-	inp = MT_Vector3::DotProduct(fp1, fp2);
+	inp = mt::vec3::DotProduct(fp1, fp2);
 	fac = (-1.0f + inp) * m_damping;
 
 	from += fac * fp1;

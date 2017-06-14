@@ -50,8 +50,8 @@ KX_Camera::KX_Camera(void* sgReplicationInfo,
     :
       KX_GameObject(sgReplicationInfo,callbacks),
       m_camdata(camdata),
-      m_projection_matrix(MT_Matrix4x4::Identity()),
-      m_modelview_matrix(MT_Matrix4x4::Identity()),
+      m_projection_matrix(mt::mat4::Identity()),
+      m_modelview_matrix(mt::mat4::Identity()),
       m_dirty(true),
       m_normalized(false),
       m_frustum_culling(frustum_culling),
@@ -93,25 +93,25 @@ void KX_Camera::ProcessReplica()
 	m_delete_node = false;
 }
 
-MT_Transform KX_Camera::GetWorldToCamera() const
+mt::trans KX_Camera::GetWorldToCamera() const
 { 
-	MT_Transform camtrans;
-	camtrans.invert(MT_Transform(NodeGetWorldPosition(), NodeGetWorldOrientation()));
+	mt::trans camtrans;
+	camtrans.invert(mt::trans(NodeGetWorldPosition(), NodeGetWorldOrientation()));
 	
 	return camtrans;
 }
 
 
 	 
-MT_Transform KX_Camera::GetCameraToWorld() const
+mt::trans KX_Camera::GetCameraToWorld() const
 {
-	return MT_Transform(NodeGetWorldPosition(), NodeGetWorldOrientation());
+	return mt::trans(NodeGetWorldPosition(), NodeGetWorldOrientation());
 }
 
 /**
  * Sets the projection matrix that is used by the rasterizer.
  */
-void KX_Camera::SetProjectionMatrix(const MT_Matrix4x4 & mat)
+void KX_Camera::SetProjectionMatrix(const mt::mat4 & mat)
 {
 	m_projection_matrix = mat;
 	m_dirty = true;
@@ -123,7 +123,7 @@ void KX_Camera::SetProjectionMatrix(const MT_Matrix4x4 & mat)
 /**
  * Sets the modelview matrix that is used by the rasterizer.
  */
-void KX_Camera::SetModelviewMatrix(const MT_Matrix4x4 & mat)
+void KX_Camera::SetModelviewMatrix(const mt::mat4 & mat)
 {
 	m_modelview_matrix = mat;
 	m_dirty = true;
@@ -134,7 +134,7 @@ void KX_Camera::SetModelviewMatrix(const MT_Matrix4x4 & mat)
 /**
  * Gets the projection matrix that is used by the rasterizer.
  */
-const MT_Matrix4x4& KX_Camera::GetProjectionMatrix() const
+const mt::mat4& KX_Camera::GetProjectionMatrix() const
 {
 	return m_projection_matrix;
 }
@@ -144,7 +144,7 @@ const MT_Matrix4x4& KX_Camera::GetProjectionMatrix() const
 /**
  * Gets the modelview matrix that is used by the rasterizer.
  */
-const MT_Matrix4x4& KX_Camera::GetModelviewMatrix() const
+const mt::mat4& KX_Camera::GetModelviewMatrix() const
 {
 	return m_modelview_matrix;
 }
@@ -411,7 +411,7 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, sphereInsideFrustum,
 	float radius;
 	if (PyArg_ParseTuple(args, "Of:sphereInsideFrustum", &pycenter, &radius))
 	{
-		MT_Vector3 center;
+		mt::vec3 center;
 		if (PyVecTo(pycenter, center))
 		{
 			return PyLong_FromLong(GetFrustum().SphereInsideFrustum(center, radius)); /* new ref */
@@ -455,7 +455,7 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, boxInsideFrustum,
 		return nullptr;
 	}
 	
-	std::array<MT_Vector3, 8> box;
+	std::array<mt::vec3, 8> box;
 	for (unsigned int p = 0; p < 8 ; p++)
 	{
 		PyObject *item = PySequence_GetItem(value, p); /* new ref */
@@ -484,7 +484,7 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, pointInsideFrustum,
 "\t\t# Box is outside the frustum !\n"
 )
 {
-	MT_Vector3 point;
+	mt::vec3 point;
 	if (PyVecTo(value, point))
 	{
 		return PyLong_FromLong(GetFrustum().PointInsideFrustum(point)); /* new ref */
@@ -500,7 +500,7 @@ KX_PYMETHODDEF_DOC_NOARGS(KX_Camera, getCameraToWorld,
 "\tie: [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])\n"
 )
 {
-	return PyObjectFrom(MT_Matrix4x4(GetCameraToWorld())); /* new ref */
+	return PyObjectFrom(mt::mat4(GetCameraToWorld())); /* new ref */
 }
 
 KX_PYMETHODDEF_DOC_NOARGS(KX_Camera, getWorldToCamera,
@@ -509,7 +509,7 @@ KX_PYMETHODDEF_DOC_NOARGS(KX_Camera, getWorldToCamera,
 "\tie: [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])\n"
 )
 {
-	return PyObjectFrom(MT_Matrix4x4(GetWorldToCamera())); /* new ref */
+	return PyObjectFrom(mt::mat4(GetWorldToCamera())); /* new ref */
 }
 
 KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, setViewport,
@@ -728,7 +728,7 @@ PyObject *KX_Camera::pyattr_get_projection_matrix(PyObjectPlus *self_v, const KX
 int KX_Camera::pyattr_set_projection_matrix(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef, PyObject *value)
 {
 	KX_Camera* self = static_cast<KX_Camera*>(self_v);
-	MT_Matrix4x4 mat;
+	mt::mat4 mat;
 	if (!PyMatTo(value, mat)) 
 		return PY_SET_ATTR_FAIL;
 	
@@ -739,19 +739,19 @@ int KX_Camera::pyattr_set_projection_matrix(PyObjectPlus *self_v, const KX_PYATT
 PyObject *KX_Camera::pyattr_get_modelview_matrix(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_Camera* self = static_cast<KX_Camera*>(self_v);
-	return PyObjectFrom(MT_Matrix4x4(self->GetWorldToCamera()));
+	return PyObjectFrom(mt::mat4(self->GetWorldToCamera()));
 }
 
 PyObject *KX_Camera::pyattr_get_camera_to_world(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_Camera* self = static_cast<KX_Camera*>(self_v);
-	return PyObjectFrom(MT_Matrix4x4(self->GetCameraToWorld()));
+	return PyObjectFrom(mt::mat4(self->GetCameraToWorld()));
 }
 
 PyObject *KX_Camera::pyattr_get_world_to_camera(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_Camera* self = static_cast<KX_Camera*>(self_v);
-	return PyObjectFrom(MT_Matrix4x4(self->GetWorldToCamera())); 
+	return PyObjectFrom(mt::mat4(self->GetWorldToCamera())); 
 }
 
 
@@ -824,7 +824,7 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, getScreenPosition,
 )
 
 {
-	MT_Vector3 vect;
+	mt::vec3 vect;
 	KX_GameObject *obj = nullptr;
 
 	if (!PyVecTo(value, vect))
@@ -834,7 +834,7 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, getScreenPosition,
 		if (ConvertPythonToGameObject(GetScene()->GetLogicManager(), value, &obj, false, ""))
 		{
 			PyErr_Clear();
-			vect = MT_Vector3(obj->NodeGetWorldPosition());
+			vect = mt::vec3(obj->NodeGetWorldPosition());
 		}
 		else
 		{
@@ -848,8 +848,8 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, getScreenPosition,
 	GLdouble modelmatrix[16];
 	GLdouble projmatrix[16];
 
-	MT_Matrix4x4 m_modelmatrix = MT_Matrix4x4(GetWorldToCamera());
-	MT_Matrix4x4 m_projmatrix = this->GetProjectionMatrix();
+	mt::mat4 m_modelmatrix = mt::mat4(GetWorldToCamera());
+	mt::mat4 m_projmatrix = this->GetProjectionMatrix();
 
 	m_modelmatrix.Pack(modelmatrix);
 	m_projmatrix.Pack(projmatrix);
@@ -883,16 +883,16 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, getScreenVect,
 
 	y = 1.0 - y; //to follow Blender window coordinate system (Top-Down)
 
-	MT_Vector3 vect;
-	MT_Vector3 campos, screenpos;
+	mt::vec3 vect;
+	mt::vec3 campos, screenpos;
 
 	const GLint *viewport;
 	GLdouble win[3];
 	GLdouble modelmatrix[16];
 	GLdouble projmatrix[16];
 
-	MT_Matrix4x4 m_modelmatrix = MT_Matrix4x4(GetWorldToCamera());
-	MT_Matrix4x4 m_projmatrix = this->GetProjectionMatrix();
+	mt::mat4 m_modelmatrix = mt::mat4(GetWorldToCamera());
+	mt::mat4 m_projmatrix = this->GetProjectionMatrix();
 
 	m_modelmatrix.Pack(modelmatrix);
 	m_projmatrix.Pack(projmatrix);
@@ -910,7 +910,7 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, getScreenVect,
 	gluUnProject(vect[0], vect[1], vect[2], modelmatrix, projmatrix, viewport, &win[0], &win[1], &win[2]);
 
 	campos = NodeGetWorldPosition();
-	screenpos = MT_Vector3(win[0], win[1], win[2]);
+	screenpos = mt::vec3(win[0], win[1], win[2]);
 	vect = campos-screenpos;
 
 	vect.Normalize();
@@ -921,7 +921,7 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, getScreenRay,
 "getScreenRay()\n"
 )
 {
-	MT_Vector3 vect;
+	mt::vec3 vect;
 	double x,y,dist;
 	char *propName = nullptr;
 

@@ -183,7 +183,7 @@ void ImageRender::setHorizonFromScene (KX_Scene *scene)
 		m_horizon = scene->GetWorldInfo()->m_horizoncolor;
 	}
 	else {
-		m_horizon = MT_Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+		m_horizon = mt::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 }
 
@@ -194,7 +194,7 @@ void ImageRender::setZenithFromScene(KX_Scene *scene)
 		m_zenith = scene->GetWorldInfo()->m_zenithcolor;
 	}
 	else {
-		m_zenith = MT_Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+		m_zenith = mt::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 	}
 }
 
@@ -239,14 +239,14 @@ bool ImageRender::Render()
 	{
 		// mirror mode, compute camera frustum, position and orientation
 		// convert mirror position and normal in world space
-		const MT_Matrix3x3 & mirrorObjWorldOri = m_mirror->GetSGNode()->GetWorldOrientation();
-		const MT_Vector3 & mirrorObjWorldPos = m_mirror->GetSGNode()->GetWorldPosition();
-		const MT_Vector3 & mirrorObjWorldScale = m_mirror->GetSGNode()->GetWorldScaling();
-		MT_Vector3 mirrorWorldPos =
+		const mt::mat3 & mirrorObjWorldOri = m_mirror->GetSGNode()->GetWorldOrientation();
+		const mt::vec3 & mirrorObjWorldPos = m_mirror->GetSGNode()->GetWorldPosition();
+		const mt::vec3 & mirrorObjWorldScale = m_mirror->GetSGNode()->GetWorldScaling();
+		mt::vec3 mirrorWorldPos =
 		        mirrorObjWorldPos + mirrorObjWorldScale * (mirrorObjWorldOri * m_mirrorPos);
-		MT_Vector3 mirrorWorldZ = mirrorObjWorldOri * m_mirrorZ;
+		mt::vec3 mirrorWorldZ = mirrorObjWorldOri * m_mirrorZ;
 		// get observer world position
-		const MT_Vector3 & observerWorldPos = m_observer->GetSGNode()->GetWorldPosition();
+		const mt::vec3 & observerWorldPos = m_observer->GetSGNode()->GetWorldPosition();
 		// get plane D term = mirrorPos . normal
 		float mirrorPlaneDTerm = mirrorWorldPos.dot(mirrorWorldZ);
 		// compute distance of observer to mirror = D - observerPos . normal
@@ -255,12 +255,12 @@ bool ImageRender::Render()
 		if (observerDistance < 0.01)
 			return false;
 		// set camera world position = observerPos + normal * 2 * distance
-		MT_Vector3 cameraWorldPos = observerWorldPos + (2.0f * observerDistance)*mirrorWorldZ;
+		mt::vec3 cameraWorldPos = observerWorldPos + (2.0f * observerDistance)*mirrorWorldZ;
 		m_camera->GetSGNode()->SetLocalPosition(cameraWorldPos);
 		// set camera orientation: z=normal, y=mirror_up in world space, x= y x z
-		MT_Vector3 mirrorWorldY = mirrorObjWorldOri * m_mirrorY;
-		MT_Vector3 mirrorWorldX = mirrorObjWorldOri * m_mirrorX;
-		MT_Matrix3x3 cameraWorldOri(
+		mt::vec3 mirrorWorldY = mirrorObjWorldOri * m_mirrorY;
+		mt::vec3 mirrorWorldX = mirrorObjWorldOri * m_mirrorX;
+		mt::mat3 cameraWorldOri(
 		            mirrorWorldX[0], mirrorWorldY[0], mirrorWorldZ[0],
 		            mirrorWorldX[1], mirrorWorldY[1], mirrorWorldZ[1],
 		            mirrorWorldX[2], mirrorWorldY[2], mirrorWorldZ[2]);
@@ -268,7 +268,7 @@ bool ImageRender::Render()
 		m_camera->GetSGNode()->UpdateWorldData(0.0);
 		// compute camera frustum:
 		//   get position of mirror relative to camera: offset = mirrorPos-cameraPos
-		MT_Vector3 mirrorOffset = mirrorWorldPos - cameraWorldPos;
+		mt::vec3 mirrorOffset = mirrorWorldPos - cameraWorldPos;
 		//   convert to camera orientation
 		mirrorOffset = mirrorOffset * cameraWorldOri;
 		//   scale mirror size to world scale:
@@ -324,7 +324,7 @@ bool ImageRender::Render()
 	{
 		// frustum was computed above
 		// get frustum matrix and set projection matrix
-		MT_Matrix4x4 projmat = m_rasterizer->GetFrustumMatrix(RAS_Rasterizer::RAS_STEREO_LEFTEYE,
+		mt::mat4 projmat = m_rasterizer->GetFrustumMatrix(RAS_Rasterizer::RAS_STEREO_LEFTEYE,
 		            frustum.x1, frustum.x2, frustum.y1, frustum.y2, frustum.camnear, frustum.camfar);
 
 		m_camera->SetProjectionMatrix(projmat);
@@ -340,7 +340,7 @@ bool ImageRender::Render()
 		float farfrust = m_camera->GetCameraFar();
 		float aspect_ratio = 1.0f;
 		Scene *blenderScene = m_scene->GetBlenderScene();
-		MT_Matrix4x4 projmat;
+		mt::mat4 projmat;
 
 		// compute the aspect ratio from frame blender scene settings so that render to texture
 		// works the same in Blender and in Blender player
@@ -384,8 +384,8 @@ bool ImageRender::Render()
 
 	m_rasterizer->SetProjectionMatrix(m_camera->GetProjectionMatrix());
 
-	MT_Transform camtrans(m_camera->GetWorldToCamera());
-	MT_Matrix4x4 viewmat(camtrans);
+	mt::trans camtrans(m_camera->GetWorldToCamera());
+	mt::mat4 viewmat(camtrans);
 	
 	m_rasterizer->SetViewMatrix(viewmat, m_camera->NodeGetWorldPosition(), m_camera->NodeGetLocalScaling());
 	m_camera->SetModelviewMatrix(viewmat);
@@ -403,8 +403,8 @@ bool ImageRender::Render()
 
 	// Render Background
 	if (m_scene->GetWorldInfo()) {
-		const MT_Vector4 hor = m_scene->GetWorldInfo()->m_horizoncolor;
-		const MT_Vector4 zen = m_scene->GetWorldInfo()->m_zenithcolor;
+		const mt::vec4 hor = m_scene->GetWorldInfo()->m_horizoncolor;
+		const mt::vec4 zen = m_scene->GetWorldInfo()->m_zenithcolor;
 		m_scene->GetWorldInfo()->setHorizonColor(m_horizon);
 		m_scene->GetWorldInfo()->setZenithColor(m_zenith);
 		m_scene->GetWorldInfo()->UpdateBackGround(m_rasterizer);
@@ -1049,10 +1049,10 @@ ImageRender::ImageRender (KX_Scene *scene, KX_GameObject *observer, KX_GameObjec
 	transpose_m3(mirrorMat);
 	mul_m3_v3(mirrorMat, vec);
 	// mirror position in local space
-	m_mirrorPos = MT_Vector3(vec);
+	m_mirrorPos = mt::vec3(vec);
 	// mirror normal vector (pointed towards the back of the mirror) in local space
-	m_mirrorZ = MT_Vector3(-mirrorNormal[0], -mirrorNormal[1], -mirrorNormal[2]);
-	m_mirrorY = MT_Vector3(mirrorUp);
+	m_mirrorZ = mt::vec3(-mirrorNormal[0], -mirrorNormal[1], -mirrorNormal[2]);
+	m_mirrorY = mt::vec3(mirrorUp);
 	m_mirrorX = m_mirrorY.cross(m_mirrorZ);
 	m_render = true;
 

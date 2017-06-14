@@ -70,9 +70,9 @@ UpdateChildCoordinates(
 	}
 	else {
 		// the childs world locations which we will update.
-		const MT_Vector3 & p_world_scale = parent->GetWorldScaling();
-		const MT_Vector3 & p_world_pos = parent->GetWorldPosition();
-		const MT_Matrix3x3 & p_world_rotation = parent->GetWorldOrientation();
+		const mt::vec3 & p_world_scale = parent->GetWorldScaling();
+		const mt::vec3 & p_world_pos = parent->GetWorldPosition();
+		const mt::mat3 & p_world_rotation = parent->GetWorldOrientation();
 
 		child->SetWorldScale(p_world_scale * child->GetLocalScale());
 		child->SetWorldOrientation(p_world_rotation * child->GetLocalOrientation());
@@ -196,28 +196,28 @@ UpdateChildCoordinates(
 	// the child will move even if the parent is not
 	parentUpdated = true;
 
-	const MT_Vector3 & child_scale = child->GetLocalScale();
-	const MT_Vector3 & child_pos = child->GetLocalPosition();
-	const MT_Matrix3x3 & child_rotation = child->GetLocalOrientation();
+	const mt::vec3 & child_scale = child->GetLocalScale();
+	const mt::vec3 & child_pos = child->GetLocalPosition();
+	const mt::mat3 & child_rotation = child->GetLocalOrientation();
 
 	// the childs world locations which we will update.
 	
-	MT_Vector3 child_w_scale;
-	MT_Vector3 child_w_pos;
-	MT_Matrix3x3 child_w_rotation;
+	mt::vec3 child_w_scale;
+	mt::vec3 child_w_pos;
+	mt::mat3 child_w_rotation;
 		
 	if (parent) {
 
 		// This is a slow parent relation
 		// first compute the normal child world coordinates.
 
-		MT_Vector3 child_n_scale;
-		MT_Vector3 child_n_pos;
-		MT_Matrix3x3 child_n_rotation;
+		mt::vec3 child_n_scale;
+		mt::vec3 child_n_pos;
+		mt::mat3 child_n_rotation;
 
-		const MT_Vector3 & p_world_scale = parent->GetWorldScaling();
-		const MT_Vector3 & p_world_pos = parent->GetWorldPosition();
-		const MT_Matrix3x3 & p_world_rotation = parent->GetWorldOrientation();
+		const mt::vec3 & p_world_scale = parent->GetWorldScaling();
+		const mt::vec3 & p_world_pos = parent->GetWorldPosition();
+		const mt::mat3 & p_world_rotation = parent->GetWorldOrientation();
 
 		child_n_scale = p_world_scale * child_scale;
 		child_n_rotation = p_world_rotation * child_rotation;
@@ -241,7 +241,7 @@ UpdateChildCoordinates(
 			child_w_scale = (m_relax * child_w_scale + child_n_scale) * weight;
 			child_w_pos = (m_relax * child_w_pos + child_n_pos) * weight;
 			// for rotation we must go through quaternion
-			MT_Quaternion child_w_quat = child_w_rotation.getRotation().slerp(child_n_rotation.getRotation(), weight);
+			mt::quat child_w_quat = child_w_rotation.getRotation().slerp(child_n_rotation.getRotation(), weight);
 			child_w_rotation.setRotation(child_w_quat);
 			//FIXME: update physics controller.
 		} else {

@@ -40,7 +40,7 @@
 class KX_ObColorIpoSGController : public SG_Controller
 {
 public:
-	MT_Vector4			m_rgba;
+	mt::vec4			m_rgba;
 	
 
 private:

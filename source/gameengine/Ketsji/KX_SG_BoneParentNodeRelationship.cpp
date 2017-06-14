@@ -67,17 +67,17 @@ UpdateChildCoordinates(
 	// This way of accessing child coordinates is a bit cumbersome
 	// be nice to have non constant reference access to these values.
 
-	const MT_Vector3 & child_scale = child->GetLocalScale();
-	const MT_Vector3 & child_pos = child->GetLocalPosition();
-	const MT_Matrix3x3 & child_rotation = child->GetLocalOrientation();
+	const mt::vec3 & child_scale = child->GetLocalScale();
+	const mt::vec3 & child_pos = child->GetLocalPosition();
+	const mt::mat3 & child_rotation = child->GetLocalOrientation();
 	// we don't know if the armature has been updated or not, assume yes
 	parentUpdated = true;
 
 	// the childs world locations which we will update.
 	
-	MT_Vector3 child_w_scale;
-	MT_Vector3 child_w_pos;
-	MT_Matrix3x3 child_w_rotation;
+	mt::vec3 child_w_scale;
+	mt::vec3 child_w_pos;
+	mt::mat3 child_w_rotation;
 	
 	bool valid_parent_transform = false;
 	
@@ -86,26 +86,26 @@ UpdateChildCoordinates(
 		BL_ArmatureObject *armature = (BL_ArmatureObject*)(parent->GetSGClientObject());
 		if (armature)
 		{
-			MT_Matrix4x4 parent_matrix;
+			mt::mat4 parent_matrix;
 			if (armature->GetBoneMatrix(m_bone, parent_matrix))
 			{
 				// Get the child's transform, and the bone matrix.
-				MT_Matrix4x4 child_transform ( 
-					MT_Transform(child_pos + MT_Vector3(0.0f, armature->GetBoneLength(m_bone), 0.0f), 
+				mt::mat4 child_transform ( 
+					mt::trans(child_pos + mt::vec3(0.0f, armature->GetBoneLength(m_bone), 0.0f), 
 						child_rotation.scaled(
 							child_scale[0], 
 							child_scale[1], 
 							child_scale[2])));
 				
 				// The child's world transform is parent * child
-				parent_matrix = MT_Matrix4x4(parent->GetWorldTransform()) * parent_matrix;
+				parent_matrix = mt::mat4(parent->GetWorldTransform()) * parent_matrix;
 				child_transform = parent_matrix * child_transform;
 				
 				// Recompute the child transform components from the transform.
-				child_w_scale = MT_Vector3(child_transform.GetColumn(0).Length(),
+				child_w_scale = mt::vec3(child_transform.GetColumn(0).Length(),
 										   child_transform.GetColumn(1).Length(),
 										   child_transform.GetColumn(2).Length());
-				child_w_rotation = MT_Matrix3x3(child_transform.GetColumn(0).xyz() / child_w_scale.x,
+				child_w_rotation = mt::mat3(child_transform.GetColumn(0).xyz() / child_w_scale.x,
 												child_transform.GetColumn(1).xyz() / child_w_scale.y,
 												child_transform.GetColumn(2).xyz() / child_w_scale.z);
 					

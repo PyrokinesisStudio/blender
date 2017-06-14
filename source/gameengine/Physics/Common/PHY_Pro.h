@@ -38,7 +38,7 @@ struct PHY_ShapeProps {
 	float m_inertia; // Inertia, should be a tensor some time
 	float m_lin_drag; // Linear drag (air, water) 0 = concrete, 1 = vacuum, inverted and called dampening in blenders UI
 	float m_ang_drag; // Angular drag, inverted and called dampening in blenders UI
-	MT_Vector3 m_friction_scaling; // Scaling for anisotropic friction. Component in range [0, 1]
+	mt::vec3 m_friction_scaling; // Scaling for anisotropic friction. Component in range [0, 1]
 	float m_clamp_vel_min; // Clamp the minimum velocity, this ensures an object moves at a minimum speed unless its stationary
 	float m_clamp_vel_max; // Clamp max velocity
 	float m_clamp_angvel_min; // Clamp the minimum angular velocity.

@@ -55,12 +55,12 @@ struct bRigidBodyJointConstraint;
  */
 struct PHY_RayCastResult {
 	PHY_IPhysicsController *m_controller;
-	MT_Vector3 m_hitPoint;
-	MT_Vector3 m_hitNormal;
+	mt::vec3 m_hitPoint;
+	mt::vec3 m_hitNormal;
 	RAS_MeshObject *m_meshObject; // !=nullptr for mesh object (only for Bullet controllers)
 	int m_polygon; // index of the polygon hit by the ray, only if m_meshObject != nullptr
 	int m_hitUVOK; // !=0 if UV coordinate in m_hitUV is valid
-	MT_Vector2 m_hitUV; // UV coordinates of hit point
+	mt::vec2 m_hitUV; // UV coordinates of hit point
 };
 
 /**
@@ -181,7 +181,7 @@ public:
 	}
 
 	virtual void SetGravity(float x, float y, float z) = 0;
-	virtual void GetGravity(MT_Vector3& grav) = 0;
+	virtual void GetGravity(mt::vec3& grav) = 0;
 
 	virtual int CreateConstraint(class PHY_IPhysicsController *ctrl, class PHY_IPhysicsController *ctrl2, PHY_ConstraintType type,
 								 float pivotX, float pivotY, float pivotZ,
@@ -205,7 +205,7 @@ public:
 	// culling based on physical broad phase
 	// the plane number must be set as follow: near, far, left, right, top, botton
 	// the near plane must be the first one and must always be present, it is used to get the direction of the view
-	virtual bool CullingTest(PHY_CullingCallback callback, void *userData, MT_Vector4 * planeNormals, int planeNumber, int occlusionRes, const int *viewport, float modelview[16], float projection[16]) = 0;
+	virtual bool CullingTest(PHY_CullingCallback callback, void *userData, mt::vec4 * planeNormals, int planeNumber, int occlusionRes, const int *viewport, float modelview[16], float projection[16]) = 0;
 
 	// Methods for gamelogic collision/physics callbacks
 	virtual void AddSensor(PHY_IPhysicsController *ctrl) = 0;
@@ -214,7 +214,7 @@ public:
 	virtual bool RequestCollisionCallback(PHY_IPhysicsController *ctrl) = 0;
 	virtual bool RemoveCollisionCallback(PHY_IPhysicsController *ctrl) = 0;
 	//These two methods are *solely* used to create controllers for sensor! Don't use for anything else
-	virtual PHY_IPhysicsController *CreateSphereController(float radius, const MT_Vector3& position) = 0;
+	virtual PHY_IPhysicsController *CreateSphereController(float radius, const mt::vec3& position) = 0;
 	virtual PHY_IPhysicsController *CreateConeController(float coneradius, float coneheight) = 0;
 
 	virtual void SetConstraintParam(int constraintId, int param, float value, float value1) = 0;

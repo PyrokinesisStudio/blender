@@ -12,8 +12,8 @@ KX_CullingHandler::KX_CullingHandler(KX_CullingNodeList& nodes, const SG_Frustum
 void KX_CullingHandler::Process(KX_CullingNode *node)
 {
 	SG_Node *sgnode = node->GetObject()->GetSGNode();
-	const MT_Transform trans = sgnode->GetWorldTransform();
-	const MT_Vector3 &scale = sgnode->GetWorldScaling();
+	const mt::trans trans = sgnode->GetWorldTransform();
+	const mt::vec3 &scale = sgnode->GetWorldScaling();
 	const SG_BBox& aabb = node->GetAabb();
 
 	bool culled = true;
@@ -25,7 +25,7 @@ void KX_CullingHandler::Process(KX_CullingNode *node)
 	}
 	// If the sphere intersects we made a box test because the box could be not homogeneous.
 	else if (sphereTest == SG_Frustum::INTERSECT) {
-		const MT_Matrix4x4 mat = MT_Matrix4x4(trans);
+		const mt::mat4 mat = mt::mat4(trans);
 		culled = (m_frustum.AabbInsideFrustum(aabb.GetMin(), aabb.GetMax(), mat) == SG_Frustum::OUTSIDE);
 	}
 

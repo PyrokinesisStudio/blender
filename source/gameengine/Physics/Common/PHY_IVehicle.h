@@ -21,17 +21,17 @@ public:
 
 	virtual void AddWheel(
 	    PHY_IMotionState *motionState,
-	    MT_Vector3 connectionPoint,
-	    MT_Vector3 downDirection,
-	    MT_Vector3 axleDirection,
+	    mt::vec3 connectionPoint,
+	    mt::vec3 downDirection,
+	    mt::vec3 axleDirection,
 	    float suspensionRestLength,
 	    float wheelRadius,
 	    bool hasSteering) = 0;
 
 	virtual int GetNumWheels() const = 0;
 
-	virtual MT_Vector3 GetWheelPosition(int wheelIndex) const = 0;
-	virtual MT_Quaternion GetWheelOrientationQuaternion(int wheelIndex) const = 0;
+	virtual mt::vec3 GetWheelPosition(int wheelIndex) const = 0;
+	virtual mt::quat GetWheelOrientationQuaternion(int wheelIndex) const = 0;
 	virtual float GetWheelRotation(int wheelIndex) const = 0;
 
 	virtual int GetUserConstraintId() const = 0;

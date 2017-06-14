@@ -59,7 +59,7 @@ public:
 		return m_blendFunc;
 	}
 	// for ipos
-	virtual void UpdateIPO(MT_Vector4 rgba, MT_Vector3 specrgb, float hard, float spec, float ref,
+	virtual void UpdateIPO(mt::vec4 rgba, mt::vec3 specrgb, float hard, float spec, float ref,
 						   float emit, float ambient, float alpha, float specalpha);
 
 	virtual const RAS_Rasterizer::AttribLayerList GetAttribLayers(const RAS_MeshObject::LayersInfo& layersInfo) const;

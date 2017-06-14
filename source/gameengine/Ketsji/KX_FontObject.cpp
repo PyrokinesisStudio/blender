@@ -97,7 +97,7 @@ KX_FontObject::KX_FontObject(void *sgReplicationInfo,
 	Curve *text = static_cast<Curve *> (ob->data);
 	m_fsize = text->fsize;
 	m_line_spacing = text->linedist;
-	m_offset = MT_Vector3(text->xof, text->yof, 0.0f);
+	m_offset = mt::vec3(text->xof, text->yof, 0.0f);
 
 	m_fontid = GetFontId(text->vfont);
 
@@ -163,13 +163,13 @@ void KX_FontObject::UpdateBuckets()
 	const float aspect = m_fsize / size;
 
 	// Account for offset
-	MT_Vector3 offset = NodeGetWorldOrientation() * m_offset * NodeGetWorldScaling();
+	mt::vec3 offset = NodeGetWorldOrientation() * m_offset * NodeGetWorldScaling();
 	// Orient the spacing vector
-	MT_Vector3 spacing = NodeGetWorldOrientation() * MT_Vector3(0.0f, m_fsize * m_line_spacing, 0.0f) * NodeGetWorldScaling()[1];
+	mt::vec3 spacing = NodeGetWorldOrientation() * mt::vec3(0.0f, m_fsize * m_line_spacing, 0.0f) * NodeGetWorldScaling()[1];
 
 	RAS_TextUser *textUser = (RAS_TextUser *)m_meshUser;
 
-	textUser->SetColor(MT_Vector4(color));
+	textUser->SetColor(mt::vec4(color));
 	textUser->SetFrontFace(!m_bIsNegativeScaling);
 	textUser->SetFontId(m_fontid);
 	textUser->SetSize(size);
@@ -186,10 +186,10 @@ void KX_FontObject::SetText(const std::string& text)
 	m_text = text;
 	m_texts = split_string(text);
 
-	MT_Vector2 min;
-	MT_Vector2 max;
+	mt::vec2 min;
+	mt::vec2 max;
 	GetTextAabb(min, max);
-	m_boundingBox->SetAabb(MT_Vector3(min.x, min.y, 0.0f), MT_Vector3(max.x, max.y, 0.0f));
+	m_boundingBox->SetAabb(mt::vec3(min.x, min.y, 0.0f), mt::vec3(max.x, max.y, 0.0f));
 }
 
 void KX_FontObject::UpdateTextFromProperty()
@@ -201,19 +201,19 @@ void KX_FontObject::UpdateTextFromProperty()
 	}
 }
 
-const MT_Vector2 KX_FontObject::GetTextDimensions()
+const mt::vec2 KX_FontObject::GetTextDimensions()
 {
-	MT_Vector2 min;
-	MT_Vector2 max;
+	mt::vec2 min;
+	mt::vec2 max;
 	GetTextAabb(min, max);
 
 	// Scale the width and height by the object's scale
-	const MT_Vector3& scale = NodeGetLocalScaling();
+	const mt::vec3& scale = NodeGetLocalScaling();
 
-	return MT_Vector2((max.x - min.x) * fabs(scale.x), (max.y - min.y) * fabs(scale.y));
+	return mt::vec2((max.x - min.x) * fabs(scale.x), (max.y - min.y) * fabs(scale.y));
 }
 
-void KX_FontObject::GetTextAabb(MT_Vector2& min, MT_Vector2& max)
+void KX_FontObject::GetTextAabb(mt::vec2& min, mt::vec2& max)
 {
 	const float RES = BGE_FONT_RES * m_resolution;
 

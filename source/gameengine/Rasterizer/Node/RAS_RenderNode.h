@@ -49,7 +49,7 @@ class RAS_MeshSlotUpwardNode;
 
 struct RAS_ManagerNodeData
 {
-	MT_Transform m_trans;
+	mt::trans m_trans;
 	RAS_Rasterizer *m_rasty;
 	RAS_Rasterizer::DrawType m_drawingMode;
 	bool m_sort;

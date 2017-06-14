@@ -394,18 +394,18 @@ static void GetRGB(
 	}
 }
 
-static void GetUVs(const RAS_MeshObject::LayerList& layers, MFace *mface, MTFace *tface, MT_Vector2 uvs[4][RAS_Texture::MaxUnits])
+static void GetUVs(const RAS_MeshObject::LayerList& layers, MFace *mface, MTFace *tface, mt::vec2 uvs[4][RAS_Texture::MaxUnits])
 {
 	if (tface) {
-		uvs[0][0] = MT_Vector2(tface->uv[0]);
-		uvs[1][0] = MT_Vector2(tface->uv[1]);
-		uvs[2][0] = MT_Vector2(tface->uv[2]);
+		uvs[0][0] = mt::vec2(tface->uv[0]);
+		uvs[1][0] = mt::vec2(tface->uv[1]);
+		uvs[2][0] = mt::vec2(tface->uv[2]);
 
 		if (mface->v4)
-			uvs[3][0] = MT_Vector2(tface->uv[3]);
+			uvs[3][0] = mt::vec2(tface->uv[3]);
 	}
 	else {
-		uvs[0][0] = uvs[1][0] = uvs[2][0] = uvs[3][0] = MT_Vector2(0.0f, 0.0f);
+		uvs[0][0] = uvs[1][0] = uvs[2][0] = uvs[3][0] = mt::vec2(0.0f, 0.0f);
 	}
 
 	for (RAS_MeshObject::LayerList::const_iterator it = layers.begin(), end = layers.end(); it != end; ++it) {
@@ -414,15 +414,15 @@ static void GetUVs(const RAS_MeshObject::LayerList& layers, MFace *mface, MTFace
 			continue;
 		}
 
-		uvs[0][layer.index] = MT_Vector2(layer.face->uv[0]);
-		uvs[1][layer.index] = MT_Vector2(layer.face->uv[1]);
-		uvs[2][layer.index] = MT_Vector2(layer.face->uv[2]);
+		uvs[0][layer.index] = mt::vec2(layer.face->uv[0]);
+		uvs[1][layer.index] = mt::vec2(layer.face->uv[1]);
+		uvs[2][layer.index] = mt::vec2(layer.face->uv[2]);
 
 		if (mface->v4) {
-			uvs[3][layer.index] = MT_Vector2(layer.face->uv[3]);
+			uvs[3][layer.index] = mt::vec2(layer.face->uv[3]);
 		}
 		else {
-			uvs[3][layer.index] = MT_Vector2(0.0f, 0.0f);
+			uvs[3][layer.index] = mt::vec2(0.0f, 0.0f);
 		}
 	}
 }
@@ -445,7 +445,7 @@ static KX_BlenderMaterial *ConvertMaterial(
 
 /// Convert uv and color layers for a given vertex and material.
 static void uvsRgbFromMesh(Material *ma, MFace *mface, MTFace *tface, const RAS_MeshObject::LayerList& layers,
-	unsigned int rgb[4][RAS_ITexVert::MAX_UNIT], MT_Vector2 uvs[4][RAS_ITexVert::MAX_UNIT])
+	unsigned int rgb[4][RAS_ITexVert::MAX_UNIT], mt::vec2 uvs[4][RAS_ITexVert::MAX_UNIT])
 {
 	if (mface) {
 		GetRGB(mface, layers, rgb);
@@ -569,26 +569,26 @@ RAS_MeshObject* BL_ConvertMesh(Mesh* mesh, Object* blenderobj, KX_Scene* scene, 
 	vertformat.colorSize = max_ii(1, colorLayers);
 
 	Material* ma = 0;
-	MT_Vector2 uvs[4][RAS_ITexVert::MAX_UNIT];
+	mt::vec2 uvs[4][RAS_ITexVert::MAX_UNIT];
 	unsigned int rgb[4][RAS_ITexVert::MAX_UNIT];
 
-	MT_Vector3 pt[4];
-	MT_Vector3 no[4];
-	MT_Vector4 tan[4];
+	mt::vec3 pt[4];
+	mt::vec3 no[4];
+	mt::vec4 tan[4];
 
 	/* ugh, if there is a less annoying way to do this please use that.
 	 * since these are converted from floats to floats, theres no real
 	 * advantage to use MT_ types - campbell */
 	for (unsigned int i = 0; i < 4; i++) {
 		const float zero_vec[4] = {0.0f};
-		pt[i] = MT_Vector3(zero_vec);
-		no[i] = MT_Vector3(zero_vec);
-		tan[i] = MT_Vector4(zero_vec);
+		pt[i] = mt::vec3(zero_vec);
+		no[i] = mt::vec3(zero_vec);
+		tan[i] = mt::vec4(zero_vec);
 	}
 
 	/* we need to manually initialize the uvs (MoTo doesn't do that) [#34550] */
 	for (unsigned int i = 0; i < RAS_ITexVert::MAX_UNIT; i++) {
-		uvs[0][i] = uvs[1][i] = uvs[2][i] = uvs[3][i] = MT_Vector2(0.f, 0.f);
+		uvs[0][i] = uvs[1][i] = uvs[2][i] = uvs[3][i] = mt::vec2(0.f, 0.f);
 		rgb[0][i] = rgb[1][i] = rgb[2][i] = rgb[3][i] = 0xffffffffL;
 	}
 
@@ -607,10 +607,10 @@ RAS_MeshObject* BL_ConvertMesh(Mesh* mesh, Object* blenderobj, KX_Scene* scene, 
 	for (int f=0;f<totface;f++,mface++)
 	{
 		/* get coordinates, normals and tangents */
-		pt[0] = MT_Vector3(mvert[mface->v1].co);
-		pt[1] = MT_Vector3(mvert[mface->v2].co);
-		pt[2] = MT_Vector3(mvert[mface->v3].co);
-		if (mface->v4) pt[3] = MT_Vector3(mvert[mface->v4].co);
+		pt[0] = mt::vec3(mvert[mface->v1].co);
+		pt[1] = mt::vec3(mvert[mface->v2].co);
+		pt[2] = mt::vec3(mvert[mface->v3].co);
+		if (mface->v4) pt[3] = mt::vec3(mvert[mface->v4].co);
 
 		if (mface->flag & ME_SMOOTH) {
 			float n0[3], n1[3], n2[3], n3[3];
@@ -618,13 +618,13 @@ RAS_MeshObject* BL_ConvertMesh(Mesh* mesh, Object* blenderobj, KX_Scene* scene, 
 			normal_short_to_float_v3(n0, mvert[mface->v1].no);
 			normal_short_to_float_v3(n1, mvert[mface->v2].no);
 			normal_short_to_float_v3(n2, mvert[mface->v3].no);
-			no[0] = MT_Vector3(n0);
-			no[1] = MT_Vector3(n1);
-			no[2] = MT_Vector3(n2);
+			no[0] = mt::vec3(n0);
+			no[1] = mt::vec3(n1);
+			no[2] = mt::vec3(n2);
 
 			if (mface->v4) {
 				normal_short_to_float_v3(n3, mvert[mface->v4].no);
-				no[3] = MT_Vector3(n3);
+				no[3] = mt::vec3(n3);
 			}
 		}
 		else {
@@ -635,16 +635,16 @@ RAS_MeshObject* BL_ConvertMesh(Mesh* mesh, Object* blenderobj, KX_Scene* scene, 
 			else
 				normal_tri_v3(fno,mvert[mface->v1].co, mvert[mface->v2].co, mvert[mface->v3].co);
 
-			no[0] = no[1] = no[2] = no[3] = MT_Vector3(fno);
+			no[0] = no[1] = no[2] = no[3] = mt::vec3(fno);
 		}
 
 		if (tangent) {
-			tan[0] = MT_Vector4(tangent[f*4 + 0]);
-			tan[1] = MT_Vector4(tangent[f*4 + 1]);
-			tan[2] = MT_Vector4(tangent[f*4 + 2]);
+			tan[0] = mt::vec4(tangent[f*4 + 0]);
+			tan[1] = mt::vec4(tangent[f*4 + 1]);
+			tan[2] = mt::vec4(tangent[f*4 + 2]);
 
 			if (mface->v4)
-				tan[3] = MT_Vector4(tangent[f*4 + 3]);
+				tan[3] = mt::vec4(tangent[f*4 + 3]);
 		}
 		if (blenderobj)
 			ma = give_current_material(blenderobj, mface->mat_nr+1);
@@ -763,7 +763,7 @@ static PHY_ShapeProps *CreateShapePropsFromBlenderObject(struct Object* blendero
 	shapeProps->m_lin_drag = 1.0f - blenderobject->damping;
 	shapeProps->m_ang_drag = 1.0f - blenderobject->rdamping;
 	
-	shapeProps->m_friction_scaling = MT_Vector3(blenderobject->anisotropicFriction);
+	shapeProps->m_friction_scaling = mt::vec3(blenderobject->anisotropicFriction);
 	shapeProps->m_do_anisotropic = ((blenderobject->gameflag & OB_ANISOTROPIC_FRICTION) != 0);
 	
 	shapeProps->m_do_fh     = (blenderobject->gameflag & OB_DO_FH) != 0; 
@@ -1145,7 +1145,7 @@ static KX_GameObject *gameobject_from_blenderobject(
 	{
 		gameobj->SetLayer(ob->lay);
 		gameobj->SetBlenderObject(ob);
-		gameobj->SetObjectColor(MT_Vector4(ob->col));
+		gameobj->SetObjectColor(mt::vec4(ob->col));
 		/* set the visibility state based on the objects render option in the outliner */
 		if (ob->restrictflag & OB_RESTRICT_RENDER) gameobj->SetVisible(0, 0);
 	}
@@ -1308,18 +1308,18 @@ static void bl_ConvertBlenderObject_Single(
         bool isInActiveLayer
         )
 {
-	MT_Vector3 pos(
+	mt::vec3 pos(
 		blenderobject->loc[0]+blenderobject->dloc[0],
 		blenderobject->loc[1]+blenderobject->dloc[1],
 		blenderobject->loc[2]+blenderobject->dloc[2]
 	);
 
-	MT_Matrix3x3 rotation;
+	mt::mat3 rotation;
 	float rotmat[3][3];
 	BKE_object_rot_to_mat3(blenderobject, rotmat, false);
 	rotation.setValue3x3((float*)rotmat);
 
-	MT_Vector3 scale(blenderobject->size);
+	mt::vec3 scale(blenderobject->size);
 
 	gameobj->NodeSetLocalPosition(pos);
 	gameobj->NodeSetLocalOrientation(rotation);
@@ -1349,7 +1349,7 @@ static void bl_ConvertBlenderObject_Single(
 		vec_parent_child.push_back(pclink);
 
 		float* fl = (float*) blenderobject->parentinv;
-		MT_Transform parinvtrans(fl);
+		mt::trans parinvtrans(fl);
 		parentinversenode->SetLocalPosition(parinvtrans.getOrigin());
 		// problem here: the parent inverse transform combines scaling and rotation
 		// in the basis but the scenegraph needs separate rotation and scaling.
@@ -1358,11 +1358,11 @@ static void bl_ConvertBlenderObject_Single(
 		//parentinversenode->SetLocalOrientation(parinvtrans.getBasis());
 
 		// Extract the rotation and the scaling from the basis
-		MT_Matrix3x3 ori(parinvtrans.getBasis());
-		MT_Vector3 x(ori.GetColumn(0));
-		MT_Vector3 y(ori.GetColumn(1));
-		MT_Vector3 z(ori.GetColumn(2));
-		MT_Vector3 parscale(x.Length(), y.Length(), z.Length());
+		mt::mat3 ori(parinvtrans.getBasis());
+		mt::vec3 x(ori.GetColumn(0));
+		mt::vec3 y(ori.GetColumn(1));
+		mt::vec3 z(ori.GetColumn(2));
+		mt::vec3 parscale(x.Length(), y.Length(), z.Length());
 		if (!mt::FuzzyZero(parscale[0]))
 			x /= parscale[0];
 		if (!mt::FuzzyZero(parscale[1]))
@@ -1483,7 +1483,7 @@ void BL_ConvertBlenderObjects(struct Main* maggie,
 	);
 	kxscene->SetFramingType(frame_settings);
 
-	kxscene->SetGravity(MT_Vector3(0,0, -blenderscene->gm.gravity));
+	kxscene->SetGravity(mt::vec3(0,0, -blenderscene->gm.gravity));
 	
 	/* set activity culling parameters */
 	kxscene->SetActivityCulling( (blenderscene->gm.mode & WO_ACTIVITY_CULLING) != 0);
@@ -1870,8 +1870,8 @@ void BL_ConvertBlenderObjects(struct Main* maggie,
 			gameobj->SetAutoUpdateBounds(false);
 
 			// AABB Box : min/max.
-			MT_Vector3 aabbMin;
-			MT_Vector3 aabbMax;
+			mt::vec3 aabbMin;
+			mt::vec3 aabbMax;
 			// Get the mesh bounding box for none deformer.
 			RAS_BoundingBox *boundingBox = meshobj->GetBoundingBox();
 			// Get the AABB.

@@ -120,11 +120,11 @@ public:
 	}
 
 	virtual RAS_ITexVert *CreateVertex(
-				const MT_Vector3& xyz,
-				const MT_Vector2 * const uvs,
-				const MT_Vector4& tangent,
+				const mt::vec3& xyz,
+				const mt::vec2 * const uvs,
+				const mt::vec4& tangent,
 				const unsigned int *rgba,
-				const MT_Vector3& normal)
+				const mt::vec3& normal)
 	{
 		return new Vertex(xyz, uvs, tangent, rgba, normal);
 	}

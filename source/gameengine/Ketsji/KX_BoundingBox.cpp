@@ -46,7 +46,7 @@ bool KX_BoundingBox::IsValidOwner()
 	return true;
 }
 
-const MT_Vector3& KX_BoundingBox::GetMax() const
+const mt::vec3& KX_BoundingBox::GetMax() const
 {
 	// Update AABB to make sure we have the last one.
 	m_owner->UpdateBounds(false);
@@ -54,7 +54,7 @@ const MT_Vector3& KX_BoundingBox::GetMax() const
 	return box.GetMax();
 }
 
-const MT_Vector3& KX_BoundingBox::GetMin() const
+const mt::vec3& KX_BoundingBox::GetMin() const
 {
 	// Update AABB to make sure we have the last one.
 	m_owner->UpdateBounds(false);
@@ -62,7 +62,7 @@ const MT_Vector3& KX_BoundingBox::GetMin() const
 	return box.GetMin();
 }
 
-const MT_Vector3 KX_BoundingBox::GetCenter() const
+const mt::vec3 KX_BoundingBox::GetCenter() const
 {
 	// Update AABB to make sure we have the last one.
 	m_owner->UpdateBounds(false);
@@ -78,9 +78,9 @@ float KX_BoundingBox::GetRadius() const
 	return box.GetRadius();
 }
 
-bool KX_BoundingBox::SetMax(MT_Vector3 max)
+bool KX_BoundingBox::SetMax(mt::vec3 max)
 {
-	const MT_Vector3& min = GetMin();
+	const mt::vec3& min = GetMin();
 
 	if (min.x > max.x || min.y > max.y || min.z > max.z) {
 		return false;
@@ -90,9 +90,9 @@ bool KX_BoundingBox::SetMax(MT_Vector3 max)
 	return true;
 }
 
-bool KX_BoundingBox::SetMin(MT_Vector3 min)
+bool KX_BoundingBox::SetMin(mt::vec3 min)
 {
-	const MT_Vector3& max = GetMax();
+	const mt::vec3& max = GetMax();
 
 	if (min.x > max.x || min.y > max.y || min.z > max.z) {
 		return false;
@@ -150,7 +150,7 @@ static int mathutils_kxboundingbox_vector_set(BaseMathObject *bmo, int subtype)
 	switch (subtype) {
 		case MATHUTILS_VEC_CB_BOX_MIN:
 		{
-			if (!self->SetMin(MT_Vector3(bmo->data))) {
+			if (!self->SetMin(mt::vec3(bmo->data))) {
 				PyErr_SetString(PyExc_AttributeError, "bounds.min = Vector: KX_BoundingBox, min bigger than max");
 				return -1;
 			}
@@ -158,7 +158,7 @@ static int mathutils_kxboundingbox_vector_set(BaseMathObject *bmo, int subtype)
 		}
 		case MATHUTILS_VEC_CB_BOX_MAX:
 		{
-			if (!self->SetMax(MT_Vector3(bmo->data))) {
+			if (!self->SetMax(mt::vec3(bmo->data))) {
 				PyErr_SetString(PyExc_AttributeError, "bounds.max = Vector: KX_BoundingBox, max smaller than min");
 				return -1;
 			}
@@ -272,7 +272,7 @@ int KX_BoundingBox::pyattr_set_min(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DE
 		return PY_SET_ATTR_FAIL;
 	}
 
-	MT_Vector3 min;
+	mt::vec3 min;
 	if (!PyVecTo(value, min)) {
 		return PY_SET_ATTR_FAIL;
 	}
@@ -307,7 +307,7 @@ int KX_BoundingBox::pyattr_set_max(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DE
 		return PY_SET_ATTR_FAIL;
 	}
 
-	MT_Vector3 max;
+	mt::vec3 max;
 	if (!PyVecTo(value, max)) {
 		return PY_SET_ATTR_FAIL;
 	}

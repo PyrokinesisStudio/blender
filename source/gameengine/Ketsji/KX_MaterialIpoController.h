@@ -18,8 +18,8 @@ class RAS_IPolyMaterial;
 class KX_MaterialIpoController : public SG_Controller
 {
 public:
-	MT_Vector4			m_rgba;
-	MT_Vector3			m_specrgb;
+	mt::vec4			m_rgba;
+	mt::vec3			m_specrgb;
 	float			m_hard;
 	float			m_spec;
 	float			m_ref;

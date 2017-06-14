@@ -60,12 +60,12 @@ class KX_RayCast : public PHY_IRayCastFilterCallback
 {
 public:
 	bool					m_hitFound;
-	MT_Vector3				m_hitPoint;
-	MT_Vector3				m_hitNormal;
+	mt::vec3				m_hitPoint;
+	mt::vec3				m_hitNormal;
 	RAS_MeshObject *m_hitMesh;
 	int						m_hitPolygon;
 	int                     m_hitUVOK;		// !=0 if UV coordinate in m_hitUV is valid
-	MT_Vector2				m_hitUV;
+	mt::vec2				m_hitUV;
 
 	KX_RayCast(PHY_IPhysicsController* ignoreController, bool faceNormal, bool faceUV);
 	virtual ~KX_RayCast() {}
@@ -92,8 +92,8 @@ public:
 	/// Implement bool RayHit in your class to receive ray callbacks.
 	static bool RayTest(
 		PHY_IPhysicsEnvironment* physics_environment, 
-		const MT_Vector3& frompoint, 
-		const MT_Vector3& topoint, 
+		const mt::vec3& frompoint, 
+		const mt::vec3& topoint, 
 		KX_RayCast& callback);
 };
 

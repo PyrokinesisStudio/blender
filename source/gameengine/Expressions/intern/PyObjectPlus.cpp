@@ -469,10 +469,9 @@ PyObject *PyObjectPlus::py_get_attrdef(PyObject *self_py, const PyAttributeDef *
 			}
 			case KX_PYATTRIBUTE_TYPE_VECTOR:
 			{
-				MT_Vector3 *val = reinterpret_cast<MT_Vector3 *>(ptr);
+				mt::vec3 *val = reinterpret_cast<mt::vec3 *>(ptr);
 #ifdef USE_MATHUTILS
-				MT_Vector3Packed fval(*val);
-				return Vector_CreatePyObject(fval.data, 3, nullptr);
+				return Vector_CreatePyObject(val->Data(), 3, nullptr);
 #else
 				PyObject *resultlist = PyList_New(3);
 				for (unsigned int i = 0; i < 3; i++)
@@ -783,7 +782,7 @@ UNDO_AND_ERROR:
 				}
 				case KX_PYATTRIBUTE_TYPE_VECTOR:
 				{
-					bufferSize = sizeof(MT_Vector3);
+					bufferSize = sizeof(mt::vec3);
 					break;
 				}
 				default:
@@ -981,7 +980,7 @@ UNDO_AND_ERROR:
 					PyErr_Format(PyExc_TypeError, "expected a sequence of 3 floats for attribute \"%s\"", attrdef->m_name.c_str());
 					goto FREE_AND_ERROR;
 				}
-				MT_Vector3 *var = reinterpret_cast<MT_Vector3 *>(ptr);
+				mt::vec3 *var = reinterpret_cast<mt::vec3 *>(ptr);
 				for (int i = 0; i < 3; i++)
 				{
 					item = PySequence_GetItem(value, i); // new ref

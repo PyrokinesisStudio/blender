@@ -489,12 +489,12 @@ public:
 	{
 		return getJumpCount();
 	}
-	virtual void SetWalkDirection(const MT_Vector3& dir)
+	virtual void SetWalkDirection(const mt::vec3& dir)
 	{
 		setWalkDirection(ToBullet(dir));
 	}
 
-	virtual MT_Vector3 GetWalkDirection()
+	virtual mt::vec3 GetWalkDirection()
 	{
 		return ToMoto(getWalkDirection());
 	}
@@ -505,7 +505,7 @@ public:
 	virtual float GetJumpSpeed() const;
 	virtual void SetJumpSpeed(float jumpSpeed);
 
-	virtual void SetVelocity(const MT_Vector3& vel, float time, bool local);
+	virtual void SetVelocity(const mt::vec3& vel, float time, bool local);
 
 	virtual void Reset();
 };
@@ -671,24 +671,24 @@ public:
 	virtual void SetPhysicsEnvironment(class PHY_IPhysicsEnvironment *env);
 
 	// kinematic methods
-	virtual void RelativeTranslate(const MT_Vector3& dloc, bool local);
-	virtual void RelativeRotate(const MT_Matrix3x3&rotval, bool local);
-	virtual MT_Matrix3x3 GetOrientation();
-	virtual void SetOrientation(const MT_Matrix3x3& orn);
-	virtual void SetPosition(const MT_Vector3& pos);
-	virtual void GetPosition(MT_Vector3& pos) const;
-	virtual void SetScaling(const MT_Vector3& scale);
+	virtual void RelativeTranslate(const mt::vec3& dloc, bool local);
+	virtual void RelativeRotate(const mt::mat3&rotval, bool local);
+	virtual mt::mat3 GetOrientation();
+	virtual void SetOrientation(const mt::mat3& orn);
+	virtual void SetPosition(const mt::vec3& pos);
+	virtual void GetPosition(mt::vec3& pos) const;
+	virtual void SetScaling(const mt::vec3& scale);
 	virtual void SetTransform();
 
 	virtual float GetMass();
 	virtual void SetMass(float newmass);
 
 	// physics methods
-	virtual void ApplyImpulse(const MT_Vector3& attach, const MT_Vector3& impulsein, bool local);
-	virtual void ApplyTorque(const MT_Vector3& torque, bool local);
-	virtual void ApplyForce(const MT_Vector3& force, bool local);
-	virtual void SetAngularVelocity(const MT_Vector3& ang_vel, bool local);
-	virtual void SetLinearVelocity(const MT_Vector3& lin_vel, bool local);
+	virtual void ApplyImpulse(const mt::vec3& attach, const mt::vec3& impulsein, bool local);
+	virtual void ApplyTorque(const mt::vec3& torque, bool local);
+	virtual void ApplyForce(const mt::vec3& force, bool local);
+	virtual void SetAngularVelocity(const mt::vec3& ang_vel, bool local);
+	virtual void SetLinearVelocity(const mt::vec3& lin_vel, bool local);
 	virtual void Jump();
 	virtual void SetActive(bool active);
 
@@ -699,10 +699,10 @@ public:
 	virtual void SetDamping(float linear, float angular);
 
 	// reading out information from physics
-	virtual MT_Vector3 GetLinearVelocity();
-	virtual MT_Vector3 GetAngularVelocity();
-	virtual MT_Vector3 GetVelocity(const MT_Vector3& posin);
-	virtual MT_Vector3 GetLocalInertia();
+	virtual mt::vec3 GetLinearVelocity();
+	virtual mt::vec3 GetAngularVelocity();
+	virtual mt::vec3 GetVelocity(const mt::vec3& posin);
+	virtual mt::vec3 GetLocalInertia();
 
 	// dyna's that are rigidbody are free in orientation, dyna's with non-rigidbody are restricted
 	virtual void SetRigidBody(bool rigid);
@@ -872,13 +872,13 @@ public:
 
 	virtual ~DefaultMotionState();
 
-	virtual MT_Vector3 GetWorldPosition() const;
-	virtual MT_Vector3 GetWorldScaling() const;
-	virtual MT_Matrix3x3 GetWorldOrientation() const;
+	virtual mt::vec3 GetWorldPosition() const;
+	virtual mt::vec3 GetWorldScaling() const;
+	virtual mt::mat3 GetWorldOrientation() const;
 
-	virtual void SetWorldPosition(const MT_Vector3& pos);
-	virtual void SetWorldOrientation(const MT_Matrix3x3& ori);
-	virtual void SetWorldOrientation(const MT_Quaternion& quat);
+	virtual void SetWorldPosition(const mt::vec3& pos);
+	virtual void SetWorldOrientation(const mt::mat3& ori);
+	virtual void SetWorldOrientation(const mt::quat& quat);
 
 	virtual void CalculateWorldTransformations();
 

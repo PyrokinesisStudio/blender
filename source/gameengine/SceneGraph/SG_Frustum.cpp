@@ -2,7 +2,7 @@
 
 #include "MT_Frustum.h" // TODO replace in mathfu
 
-SG_Frustum::SG_Frustum(const MT_Matrix4x4& matrix)
+SG_Frustum::SG_Frustum(const mt::mat4& matrix)
 	:m_matrix(matrix)
 {
 	// Left clip plane
@@ -19,7 +19,7 @@ SG_Frustum::SG_Frustum(const MT_Matrix4x4& matrix)
 	m_planes[5] = m_matrix[3] - m_matrix[2];
 
 	// Normalize clip planes.
-	for (MT_Vector4& plane : m_planes) {
+	for (mt::vec4& plane : m_planes) {
 		const float factor = sqrtf(plane[0] * plane[0] + plane[1] * plane[1] + plane[2] * plane[2]);
 		if (!MT_fuzzyZero(factor)) {
 			plane /= factor;
@@ -27,14 +27,14 @@ SG_Frustum::SG_Frustum(const MT_Matrix4x4& matrix)
 	}
 }
 
-const std::array<MT_Vector4, 6>& SG_Frustum::GetPlanes() const
+const std::array<mt::vec4, 6>& SG_Frustum::GetPlanes() const
 {
 	return m_planes;
 }
 
-SG_Frustum::TestType SG_Frustum::PointInsideFrustum(const MT_Vector3& point) const
+SG_Frustum::TestType SG_Frustum::PointInsideFrustum(const mt::vec3& point) const
 {
-	for (const MT_Vector4& plane : m_planes) {
+	for (const mt::vec4& plane : m_planes) {
 		if (plane.dot(point) < 0.0f) {
 			return OUTSIDE;
 		}
@@ -43,9 +43,9 @@ SG_Frustum::TestType SG_Frustum::PointInsideFrustum(const MT_Vector3& point) con
 	return INSIDE;
 }
 
-SG_Frustum::TestType SG_Frustum::SphereInsideFrustum(const MT_Vector3& center, float radius) const
+SG_Frustum::TestType SG_Frustum::SphereInsideFrustum(const mt::vec3& center, float radius) const
 {
-	for (const MT_Vector4& plane : m_planes) {
+	for (const mt::vec4& plane : m_planes) {
 		const float distance = plane.dot(center);
 		if (distance < -radius) {
 			return OUTSIDE;
@@ -58,12 +58,12 @@ SG_Frustum::TestType SG_Frustum::SphereInsideFrustum(const MT_Vector3& center, f
 	return INSIDE;
 }
 
-SG_Frustum::TestType SG_Frustum::BoxInsideFrustum(const std::array<MT_Vector3, 8>& box) const
+SG_Frustum::TestType SG_Frustum::BoxInsideFrustum(const std::array<mt::vec3, 8>& box) const
 {
 	unsigned short insidePlane = 0;
-	for (const MT_Vector4& plane : m_planes) {
+	for (const mt::vec4& plane : m_planes) {
 		unsigned short insidePoint = 0;
-		for (const MT_Vector3& point : box) {
+		for (const mt::vec3& point : box) {
 			insidePoint += (plane.dot(point) < 0.0f) ? 0 : 1;
 		}
 
@@ -81,7 +81,7 @@ SG_Frustum::TestType SG_Frustum::BoxInsideFrustum(const std::array<MT_Vector3, 8
 	return INTERSECT;
 }
 
-static void getNearFarAabbPoint(const MT_Vector4& plane, const MT_Vector3& min, const MT_Vector3& max, MT_Vector3& near, MT_Vector3& far)
+static void getNearFarAabbPoint(const mt::vec4& plane, const mt::vec3& min, const mt::vec3& max, mt::vec3& near, mt::vec3& far)
 {
 	for (unsigned short axis = 0; axis < 3; ++axis) {
 		if (plane[axis] < 0.0f) {
@@ -95,7 +95,7 @@ static void getNearFarAabbPoint(const MT_Vector4& plane, const MT_Vector3& min, 
 	}
 }
 
-static bool aabbIntersect(const MT_Vector3& min1, const MT_Vector3& max1, const MT_Vector3& min2, const MT_Vector3& max2)
+static bool aabbIntersect(const mt::vec3& min1, const mt::vec3& max1, const mt::vec3& min2, const mt::vec3& max2)
 {
 	for (unsigned short axis = 0; axis < 3; ++axis) {
 		if (max1[axis] < min2[axis] || min1[axis] > max2[axis]) {
@@ -106,17 +106,17 @@ static bool aabbIntersect(const MT_Vector3& min1, const MT_Vector3& max1, const 
 	return true;
 }
 
-SG_Frustum::TestType SG_Frustum::AabbInsideFrustum(const MT_Vector3& min, const MT_Vector3& max, const MT_Matrix4x4& mat) const
+SG_Frustum::TestType SG_Frustum::AabbInsideFrustum(const mt::vec3& min, const mt::vec3& max, const mt::mat4& mat) const
 {
 	TestType result = INSIDE;
 
-	for (const MT_Vector4& wplane : m_planes) {
+	for (const mt::vec4& wplane : m_planes) {
 		// Compute frustum plane in object space.
-		const MT_Vector4 oplane = wplane * mat;
+		const mt::vec4 oplane = wplane * mat;
 
 		// Test near and far AABB vertices.
-		MT_Vector3 near;
-		MT_Vector3 far;
+		mt::vec3 near;
+		mt::vec3 far;
 
 		// Generate nearest and further points from the positive plane side.
 		getNearFarAabbPoint(oplane, min, max, near, far);
@@ -134,8 +134,8 @@ SG_Frustum::TestType SG_Frustum::AabbInsideFrustum(const MT_Vector3& min, const 
 	/* Big object can intersect two "orthogonal" planes without be inside the frustum.
 	 * In this case the object is outside the AABB of the frustum. */
 	if (result == INTERSECT) {
-		MT_Vector3 fmin;
-		MT_Vector3 fmax;
+		mt::vec3 fmin;
+		mt::vec3 fmax;
 		MT_FrustumAabb((m_matrix * mat).inverse(), fmin, fmax);
 
 		if (!aabbIntersect(min, max, fmin, fmax)) {

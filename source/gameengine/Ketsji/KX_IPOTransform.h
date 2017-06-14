@@ -46,27 +46,27 @@ public:
 		m_deltaScaling(MT_Zero3)
 		{}
 
-	MT_Transform         GetTransform() const {
-		return MT_Transform(m_position + m_deltaPosition,
-		                    MT_Matrix3x3(m_eulerAngles + m_deltaEulerAngles,
+	mt::trans         GetTransform() const {
+		return mt::trans(m_position + m_deltaPosition,
+		                    mt::mat3(m_eulerAngles + m_deltaEulerAngles,
 		                                 m_scaling + m_deltaScaling));
 	}
 
-	MT_Vector3&	         GetPosition()          { return m_position; 	}
-	MT_Vector3&          GetEulerAngles()       { return m_eulerAngles;	}
-	MT_Vector3&          GetScaling()           { return m_scaling;	}
+	mt::vec3&	         GetPosition()          { return m_position; 	}
+	mt::vec3&          GetEulerAngles()       { return m_eulerAngles;	}
+	mt::vec3&          GetScaling()           { return m_scaling;	}
 
-	const MT_Vector3&	 GetPosition()    const { return m_position; 	}
-	const MT_Vector3&    GetEulerAngles() const { return m_eulerAngles;	}
-	const MT_Vector3&    GetScaling()     const { return m_scaling;	}
+	const mt::vec3&	 GetPosition()    const { return m_position; 	}
+	const mt::vec3&    GetEulerAngles() const { return m_eulerAngles;	}
+	const mt::vec3&    GetScaling()     const { return m_scaling;	}
 	
-	MT_Vector3&          GetDeltaPosition()     { return m_deltaPosition; }
-	MT_Vector3&          GetDeltaEulerAngles()  { return m_deltaEulerAngles; }
-	MT_Vector3&          GetDeltaScaling()      { return m_deltaScaling; }
+	mt::vec3&          GetDeltaPosition()     { return m_deltaPosition; }
+	mt::vec3&          GetDeltaEulerAngles()  { return m_deltaEulerAngles; }
+	mt::vec3&          GetDeltaScaling()      { return m_deltaScaling; }
 	
-	void SetPosition(const MT_Vector3& pos)      { m_position = pos; 	}
-	void SetEulerAngles(const MT_Vector3& eul)  { m_eulerAngles = eul;	}
-	void SetScaling(const MT_Vector3& scaling)  { m_scaling = scaling;	}
+	void SetPosition(const mt::vec3& pos)      { m_position = pos; 	}
+	void SetEulerAngles(const mt::vec3& eul)  { m_eulerAngles = eul;	}
+	void SetScaling(const mt::vec3& scaling)  { m_scaling = scaling;	}
 	
 	void ClearDeltaStuff() { 
 		m_deltaPosition = MT_Zero3;
@@ -75,12 +75,12 @@ public:
 	}
 
 protected:
-	MT_Vector3              m_position;
-	MT_Vector3             m_eulerAngles;
-	MT_Vector3             m_scaling;
-	MT_Vector3             m_deltaPosition;
-	MT_Vector3             m_deltaEulerAngles;
-	MT_Vector3             m_deltaScaling;
+	mt::vec3              m_position;
+	mt::vec3             m_eulerAngles;
+	mt::vec3             m_scaling;
+	mt::vec3             m_deltaPosition;
+	mt::vec3             m_deltaEulerAngles;
+	mt::vec3             m_deltaScaling;
 };
 
 #endif

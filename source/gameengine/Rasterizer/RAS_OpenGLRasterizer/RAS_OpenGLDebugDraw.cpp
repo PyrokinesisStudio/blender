@@ -55,8 +55,8 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 	for (const RAS_DebugDraw::Aabb& aabb : debugDraw->m_aabbs) {
 		glColor4fv(aabb.m_color.Data());
 
-		const MT_Matrix3x3& rot = aabb.m_rot;
-		const MT_Vector3& pos = aabb.m_pos;
+		const mt::mat3& rot = aabb.m_rot;
+		const mt::vec3& pos = aabb.m_pos;
 		float mat[16] = {
 			rot(0, 0), rot(0, 1), rot(0, 2), 0.0f,
 			rot(1, 0), rot(1, 1), rot(1, 2), 0.0f,
@@ -66,8 +66,8 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		rasty->PushMatrix();
 		rasty->MultMatrix(mat);
 
-		const MT_Vector3& min = aabb.m_min;
-		const MT_Vector3& max = aabb.m_max;
+		const mt::vec3& min = aabb.m_min;
+		const mt::vec3& max = aabb.m_max;
 
 		float vertexes[24] = {
 			(float)min[0], (float)min[1], (float)min[2],
@@ -98,14 +98,14 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 	// Draw boxes.
 	static const GLubyte wireIndices[24] = {0, 1, 1, 2, 2, 3, 3, 0, 0, 4, 4, 5, 5, 6, 6, 7, 7, 4, 1, 5, 2, 6, 3, 7};
 	for (const RAS_DebugDraw::Box& box : debugDraw->m_boxes) {
-		glVertexPointer(3, GL_FLOAT, sizeof(MT_Vector3), box.m_vertices.data());
+		glVertexPointer(3, GL_FLOAT, sizeof(mt::vec3), box.m_vertices.data());
 		glColor4fv(box.m_color.Data());
 		glDrawRangeElements(GL_LINES, 0, 7, 24, GL_UNSIGNED_BYTE, wireIndices);
 	}
 
 	static const GLubyte solidIndices[24] = {0, 1, 2, 3, 7, 6, 5, 4, 4, 5, 1, 0, 3, 2, 6, 7, 3, 7, 4, 0, 1, 5, 6, 2};
 	for (const RAS_DebugDraw::SolidBox& box : debugDraw->m_solidBoxes) {
-		glVertexPointer(3, GL_FLOAT, sizeof(MT_Vector3), box.m_vertices.data());
+		glVertexPointer(3, GL_FLOAT, sizeof(mt::vec3), box.m_vertices.data());
 		glColor4fv(box.m_color.Data());
 		glDrawRangeElements(GL_LINES, 0, 7, 24, GL_UNSIGNED_BYTE, wireIndices);
 
@@ -124,16 +124,16 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		glBegin(GL_LINE_LOOP);
 		glColor4fv(circle.m_color.Data());
 
-		static const MT_Vector3 worldUp(0.0f, 0.0f, 1.0f);
-		const MT_Vector3& norm = circle.m_normal;
-		MT_Matrix3x3 tr;
+		static const mt::vec3 worldUp(0.0f, 0.0f, 1.0f);
+		const mt::vec3& norm = circle.m_normal;
+		mt::mat3 tr;
 		if (norm.fuzzyZero() || norm == worldUp) {
-			tr = MT_Matrix3x3::Identity();
+			tr = mt::mat3::Identity();
 		}
 		else {
-			const MT_Vector3 xaxis = MT_cross(norm, worldUp);
-			const MT_Vector3 yaxis = MT_cross(xaxis, norm);
-			tr = MT_Matrix3x3(xaxis.x, xaxis.y, xaxis.z,
+			const mt::vec3 xaxis = MT_cross(norm, worldUp);
+			const mt::vec3 yaxis = MT_cross(xaxis, norm);
+			tr = mt::mat3(xaxis.x, xaxis.y, xaxis.z,
 						yaxis.x, yaxis.y, yaxis.z,
 						norm.x, norm.y, norm.z);
 		}
@@ -141,7 +141,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		const int n = circle.m_sector;
 		for (int j = 0; j < n; ++j) {
 			const float theta = j * MT_2_PI / n;
-			MT_Vector3 pos(cosf(theta) * rad, sinf(theta) * rad, 0.0f);
+			mt::vec3 pos(cosf(theta) * rad, sinf(theta) * rad, 0.0f);
 			pos = pos * tr;
 			pos += circle.m_center;
 			glVertex3fv(pos.Data());

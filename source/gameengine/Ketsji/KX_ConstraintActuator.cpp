@@ -178,10 +178,10 @@ bool KX_ConstraintActuator::Update(double curtime)
 		/* Having to retrieve location/rotation and setting it afterwards may not */
 		/* be efficient enough... Something to look at later.                     */
 		KX_GameObject  *obj = (KX_GameObject*) GetParent();
-		MT_Vector3    position = obj->NodeGetWorldPosition();
-		MT_Vector3    newposition;
-		MT_Vector3   normal, direction, refDirection;
-		MT_Matrix3x3 rotation = obj->NodeGetWorldOrientation();
+		mt::vec3    position = obj->NodeGetWorldPosition();
+		mt::vec3    newposition;
+		mt::vec3   normal, direction, refDirection;
+		mt::mat3 rotation = obj->NodeGetWorldOrientation();
 		float    filter, newdistance, cosangle;
 		int axis, sign;
 
@@ -220,16 +220,16 @@ bool KX_ConstraintActuator::Update(double curtime)
 				// 2. define a new reference direction
 				//    compute local axis with reference direction as X and
 				//    Y in direction X refDirection plane
-				MT_Vector3 zaxis = m_refDirVector.cross(direction);
+				mt::vec3 zaxis = m_refDirVector.cross(direction);
 				if (MT_fuzzyZero2(zaxis.LengthSquared())) {
 					// direction and refDirection are identical,
 					// choose any other direction to define plane
 					if (direction[0] < 0.9999f)
-						zaxis = m_refDirVector.cross(MT_Vector3(1.0f,0.0f,0.0f));
+						zaxis = m_refDirVector.cross(mt::vec3(1.0f,0.0f,0.0f));
 					else
-						zaxis = m_refDirVector.cross(MT_Vector3(0.0f,1.0f,0.0f));
+						zaxis = m_refDirVector.cross(mt::vec3(0.0f,1.0f,0.0f));
 				}
-				MT_Vector3 yaxis = zaxis.cross(m_refDirVector);
+				mt::vec3 yaxis = zaxis.cross(m_refDirVector);
 				yaxis.Normalize();
 				if (cosangle > m_minimumBound) {
 					// angle is too close to reference direction,
@@ -292,27 +292,27 @@ bool KX_ConstraintActuator::Update(double curtime)
 			} else {
 				switch (m_locrot) {
 				case KX_ACT_CONSTRAINT_DIRPX:
-					direction = MT_Vector3(1.0f,0.0f,0.0f);
+					direction = mt::vec3(1.0f,0.0f,0.0f);
 					break;
 				case KX_ACT_CONSTRAINT_DIRPY:
-					direction = MT_Vector3(0.0f,1.0f,0.0f);
+					direction = mt::vec3(0.0f,1.0f,0.0f);
 					break;
 				case KX_ACT_CONSTRAINT_DIRPZ:
-					direction = MT_Vector3(0.0f,0.0f,1.0f);
+					direction = mt::vec3(0.0f,0.0f,1.0f);
 					break;
 				case KX_ACT_CONSTRAINT_DIRNX:
-					direction = MT_Vector3(-1.0f,0.0f,0.0f);
+					direction = mt::vec3(-1.0f,0.0f,0.0f);
 					break;
 				case KX_ACT_CONSTRAINT_DIRNY:
-					direction = MT_Vector3(0.0f,-1.0f,0.0f);
+					direction = mt::vec3(0.0f,-1.0f,0.0f);
 					break;
 				case KX_ACT_CONSTRAINT_DIRNZ:
-					direction = MT_Vector3(0.0f,0.0f,-1.0f);
+					direction = mt::vec3(0.0f,0.0f,-1.0f);
 					break;
 				}
 			}
 			{
-				MT_Vector3 topoint = position + (m_maximumBound) * direction;
+				mt::vec3 topoint = position + (m_maximumBound) * direction;
 				PHY_IPhysicsEnvironment* pe = KX_GetActiveScene()->GetPhysicsEnvironment();
 				PHY_IPhysicsController *spc = obj->GetPhysicsController();
 
@@ -330,7 +330,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 				KX_RayCast::Callback<KX_ConstraintActuator, void> callback(this,dynamic_cast<PHY_IPhysicsController*>(spc));
 				result = KX_RayCast::RayTest(pe, position, topoint, callback);
 				if (result)	{
-					MT_Vector3 newnormal = callback.m_hitNormal;
+					mt::vec3 newnormal = callback.m_hitNormal;
 					// compute new position & orientation
 					if ((m_option & (KX_ACT_CONSTRAINT_NORMAL|KX_ACT_CONSTRAINT_DISTANCE)) == 0) {
 						// if none option is set, the actuator does nothing but detect ray 
@@ -362,7 +362,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 						// position along that axis
 						spc = obj->GetPhysicsController();
 						if (spc && spc->IsDynamic()) {
-							MT_Vector3 linV = spc->GetLinearVelocity();
+							mt::vec3 linV = spc->GetLinearVelocity();
 							// cancel the projection along the ray direction
 							float fallspeed = linV.dot(direction);
 							if (!MT_fuzzyZero(fallspeed))
@@ -388,27 +388,27 @@ bool KX_ConstraintActuator::Update(double curtime)
 			switch (m_locrot) {
 			case KX_ACT_CONSTRAINT_FHPX:
 				normal = -rotation.GetColumn(0);
-				direction = MT_Vector3(1.0f,0.0f,0.0f);
+				direction = mt::vec3(1.0f,0.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHPY:
 				normal = -rotation.GetColumn(1);
-				direction = MT_Vector3(0.0f,1.0f,0.0f);
+				direction = mt::vec3(0.0f,1.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHPZ:
 				normal = -rotation.GetColumn(2);
-				direction = MT_Vector3(0.0f,0.0f,1.0f);
+				direction = mt::vec3(0.0f,0.0f,1.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHNX:
 				normal = rotation.GetColumn(0);
-				direction = MT_Vector3(-1.0f,0.0f,0.0f);
+				direction = mt::vec3(-1.0f,0.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHNY:
 				normal = rotation.GetColumn(1);
-				direction = MT_Vector3(0.0f,-1.0f,0.0f);
+				direction = mt::vec3(0.0f,-1.0f,0.0f);
 				break;
 			case KX_ACT_CONSTRAINT_FHNZ:
 				normal = rotation.GetColumn(2);
-				direction = MT_Vector3(0.0f,0.0f,-1.0f);
+				direction = mt::vec3(0.0f,0.0f,-1.0f);
 				break;
 			}
 			normal.Normalize();
@@ -426,7 +426,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 				}
 				m_hitObject = nullptr;
 				// distance of Fh area is stored in m_minimum
-				MT_Vector3 topoint = position + (m_minimumBound+spc->GetRadius()) * direction;
+				mt::vec3 topoint = position + (m_minimumBound+spc->GetRadius()) * direction;
 				KX_RayCast::Callback<KX_ConstraintActuator, void> callback(this, spc);
 				result = KX_RayCast::RayTest(pe, position, topoint, callback);
 				// we expect a hit object
@@ -434,21 +434,21 @@ bool KX_ConstraintActuator::Update(double curtime)
 					result = false;
 				if (result)
 				{
-					MT_Vector3 newnormal = callback.m_hitNormal;
+					mt::vec3 newnormal = callback.m_hitNormal;
 					// compute new position & orientation
 					float distance = (callback.m_hitPoint-position).Length()-spc->GetRadius(); 
 					// estimate the velocity of the hit point
-					MT_Vector3 relativeHitPoint;
+					mt::vec3 relativeHitPoint;
 					relativeHitPoint = (callback.m_hitPoint-m_hitObject->NodeGetWorldPosition());
-					MT_Vector3 velocityHitPoint = m_hitObject->GetVelocity(relativeHitPoint);
-					MT_Vector3 relativeVelocity = spc->GetLinearVelocity() - velocityHitPoint;
+					mt::vec3 velocityHitPoint = m_hitObject->GetVelocity(relativeHitPoint);
+					mt::vec3 relativeVelocity = spc->GetLinearVelocity() - velocityHitPoint;
 					float relativeVelocityRay = direction.dot(relativeVelocity);
 					float springExtent = 1.0f - distance/m_minimumBound;
 					// Fh force is stored in m_maximum
 					float springForce = springExtent * m_maximumBound;
 					// damping is stored in m_refDirection [0] = damping, [1] = rot damping
 					float springDamp = relativeVelocityRay * m_refDirVector[0];
-					MT_Vector3 newVelocity = spc->GetLinearVelocity()-(springForce+springDamp)*direction;
+					mt::vec3 newVelocity = spc->GetLinearVelocity()-(springForce+springDamp)*direction;
 					if (m_option & KX_ACT_CONSTRAINT_NORMAL)
 					{
 						newVelocity+=(springForce+springDamp)*(newnormal-newnormal.dot(direction)*direction);
@@ -456,11 +456,11 @@ bool KX_ConstraintActuator::Update(double curtime)
 					spc->SetLinearVelocity(newVelocity, false);
 					if (m_option & KX_ACT_CONSTRAINT_DOROTFH)
 					{
-						MT_Vector3 angSpring = (normal.cross(newnormal))*m_maximumBound;
-						MT_Vector3 angVelocity = spc->GetAngularVelocity();
+						mt::vec3 angSpring = (normal.cross(newnormal))*m_maximumBound;
+						mt::vec3 angVelocity = spc->GetAngularVelocity();
 						// remove component that is parallel to normal
 						angVelocity -= angVelocity.dot(newnormal)*newnormal;
-						MT_Vector3 angDamp = angVelocity * ((m_refDirVector[1]>MT_EPSILON)?m_refDirVector[1]:m_refDirVector[0]);
+						mt::vec3 angDamp = angVelocity * ((m_refDirVector[1]>MT_EPSILON)?m_refDirVector[1]:m_refDirVector[0]);
 						spc->SetAngularVelocity(spc->GetAngularVelocity()+(angSpring-angDamp), false);
 					}
 				} else if (m_option & KX_ACT_CONSTRAINT_PERMANENT) {
@@ -570,7 +570,7 @@ PyAttributeDef KX_ConstraintActuator::Attributes[] = {
 int KX_ConstraintActuator::pyattr_check_direction(PyObjectPlus *self_v, const struct KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_ConstraintActuator* act = static_cast<KX_ConstraintActuator*>(self_v);
-	MT_Vector3 dir(act->m_refDirection);
+	mt::vec3 dir(act->m_refDirection);
 	float len = dir.Length();
 	if (MT_fuzzyZero(len)) {
 		PyErr_SetString(PyExc_ValueError, "actuator.direction = vec: KX_ConstraintActuator, invalid direction");

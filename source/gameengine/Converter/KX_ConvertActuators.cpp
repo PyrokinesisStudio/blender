@@ -149,21 +149,21 @@ void BL_ConvertActuators(const char* maggiename,
 			{
 				bObjectActuator* obact = (bObjectActuator*) bact->data;
 				KX_GameObject* obref = nullptr;
-				MT_Vector3 forcevec(KX_flt_trunc(obact->forceloc[0]),
+				mt::vec3 forcevec(KX_flt_trunc(obact->forceloc[0]),
 				                    KX_flt_trunc(obact->forceloc[1]),
 				                    KX_flt_trunc(obact->forceloc[2]));
-				MT_Vector3 torquevec(obact->forcerot[0],
+				mt::vec3 torquevec(obact->forcerot[0],
 				                     obact->forcerot[1],
 				                     obact->forcerot[2]);
-				MT_Vector3 dlocvec(KX_flt_trunc(obact->dloc[0]),
+				mt::vec3 dlocvec(KX_flt_trunc(obact->dloc[0]),
 				                   KX_flt_trunc(obact->dloc[1]),
 				                   KX_flt_trunc(obact->dloc[2]));
-				MT_Vector3 drotvec(KX_flt_trunc(obact->drot[0]),
+				mt::vec3 drotvec(KX_flt_trunc(obact->drot[0]),
 				                   obact->drot[1],obact->drot[2]);
-				MT_Vector3 linvelvec(KX_flt_trunc(obact->linearvelocity[0]),
+				mt::vec3 linvelvec(KX_flt_trunc(obact->linearvelocity[0]),
 				                     KX_flt_trunc(obact->linearvelocity[1]),
 				                     KX_flt_trunc(obact->linearvelocity[2]));
-				MT_Vector3 angvelvec(KX_flt_trunc(obact->angularvelocity[0]),
+				mt::vec3 angvelvec(KX_flt_trunc(obact->angularvelocity[0]),
 				                     KX_flt_trunc(obact->angularvelocity[1]),
 				                     KX_flt_trunc(obact->angularvelocity[2]));
 				short damping = obact->damping;

@@ -496,8 +496,8 @@ KX_KetsjiEngine::CameraRenderData KX_KetsjiEngine::GetCameraRenderData(KX_Scene 
 	// Compute the area and the viewport based on the current display area and the optional camera viewport.
 	GetSceneViewport(scene, rendercam, displayArea, area, viewport);
 	// Compute the camera matrices: modelview and projection.
-	const MT_Matrix4x4 viewmat = m_rasterizer->GetViewMatrix(eye, rendercam->GetWorldToCamera(), rendercam->GetCameraData()->m_perspective);
-	const MT_Matrix4x4 projmat = GetCameraProjectionMatrix(scene, rendercam, eye, viewport, area);
+	const mt::mat4 viewmat = m_rasterizer->GetViewMatrix(eye, rendercam->GetWorldToCamera(), rendercam->GetCameraData()->m_perspective);
+	const mt::mat4 projmat = GetCameraProjectionMatrix(scene, rendercam, eye, viewport, area);
 	rendercam->SetModelviewMatrix(viewmat);
 	rendercam->SetProjectionMatrix(projmat);
 
@@ -546,9 +546,9 @@ bool KX_KetsjiEngine::GetFrameRenderData(std::vector<FrameRenderData>& frameData
 			// Compute the area and the viewport based on the current display area and the optional camera viewport.
 			GetSceneViewport(scene, overrideCullingCam, displayAreas[RAS_Rasterizer::RAS_STEREO_LEFTEYE], area, viewport);
 			// Compute the camera matrices: modelview and projection.
-			const MT_Matrix4x4 viewmat = m_rasterizer->GetViewMatrix(RAS_Rasterizer::RAS_STEREO_LEFTEYE, overrideCullingCam->GetWorldToCamera(),
+			const mt::mat4 viewmat = m_rasterizer->GetViewMatrix(RAS_Rasterizer::RAS_STEREO_LEFTEYE, overrideCullingCam->GetWorldToCamera(),
 																	 overrideCullingCam->GetCameraData()->m_perspective);
-			const MT_Matrix4x4 projmat = GetCameraProjectionMatrix(scene, overrideCullingCam, RAS_Rasterizer::RAS_STEREO_LEFTEYE, viewport, area);
+			const mt::mat4 projmat = GetCameraProjectionMatrix(scene, overrideCullingCam, RAS_Rasterizer::RAS_STEREO_LEFTEYE, viewport, area);
 			overrideCullingCam->SetModelviewMatrix(viewmat);
 			overrideCullingCam->SetProjectionMatrix(projmat);
 		}
@@ -840,7 +840,7 @@ void KX_KetsjiEngine::RenderShadowBuffers(KX_Scene *scene)
 			KX_Camera *cam = new KX_Camera(scene, scene->m_callbacks, camdata, true, true);
 			cam->SetName("__shadow__cam__");
 
-			MT_Transform camtrans;
+			mt::trans camtrans;
 
 			/* switch drawmode for speed */
 			RAS_Rasterizer::DrawType drawmode = m_rasterizer->GetDrawingMode();
@@ -870,7 +870,7 @@ void KX_KetsjiEngine::RenderShadowBuffers(KX_Scene *scene)
 	}
 }
 
-MT_Matrix4x4 KX_KetsjiEngine::GetCameraProjectionMatrix(KX_Scene *scene, KX_Camera *cam, RAS_Rasterizer::StereoEye eye,
+mt::mat4 KX_KetsjiEngine::GetCameraProjectionMatrix(KX_Scene *scene, KX_Camera *cam, RAS_Rasterizer::StereoEye eye,
 											const RAS_Rect& viewport, const RAS_Rect& area) const
 {
 	if (cam->hasValidProjectionMatrix()) {
@@ -880,7 +880,7 @@ MT_Matrix4x4 KX_KetsjiEngine::GetCameraProjectionMatrix(KX_Scene *scene, KX_Came
 	const bool override_camera = (m_flags & CAMERA_OVERRIDE) && (scene->GetName() == m_overrideSceneName) &&
 		(cam->GetName() == "__default__cam__");
 
-	MT_Matrix4x4 projmat;
+	mt::mat4 projmat;
 	if (override_camera && !m_overrideCamData.m_perspective) {
 		// needed to get frustum planes for culling
 		projmat = m_overrideCamProjMat;
@@ -1099,8 +1099,8 @@ void KX_KetsjiEngine::PostProcessScene(KX_Scene *scene)
 
 		// set transformation
 		if (override_camera) {
-			MT_Transform trans = m_overrideCamViewMat.toTransform();
-			MT_Transform camtrans;
+			mt::trans trans = m_overrideCamViewMat.toTransform();
+			mt::trans camtrans;
 			camtrans.invert(trans);
 
 			activecam->NodeSetLocalPosition(camtrans.getOrigin());
@@ -1108,8 +1108,8 @@ void KX_KetsjiEngine::PostProcessScene(KX_Scene *scene)
 			activecam->NodeUpdateGS(0.0f);
 		}
 		else {
-			activecam->NodeSetLocalPosition(MT_Vector3(0.0f, 0.0f, 0.0f));
-			activecam->NodeSetLocalOrientation(MT_Matrix3x3(MT_Vector3(0.0f, 0.0f, 0.0f)));
+			activecam->NodeSetLocalPosition(mt::vec3(0.0f, 0.0f, 0.0f));
+			activecam->NodeSetLocalOrientation(mt::mat3(mt::vec3(0.0f, 0.0f, 0.0f)));
 			activecam->NodeUpdateGS(0.0f);
 		}
 
@@ -1144,7 +1144,7 @@ void KX_KetsjiEngine::RenderDebugProperties()
 		tottime = 1e-6f;
 	}
 
-	static const MT_Vector4 white(1.0f, 1.0f, 1.0f, 1.0f);
+	static const mt::vec4 white(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// Use nullptrfor no scene.
 	RAS_DebugDraw& debugDraw = m_rasterizer->GetDebugDraw(nullptr);
@@ -1152,7 +1152,7 @@ void KX_KetsjiEngine::RenderDebugProperties()
 	if (m_flags & (SHOW_FRAMERATE | SHOW_PROFILE)) {
 		// Title for profiling("Profile")
 		// Adds the constant x indent (0 for now) to the title x margin
-		debugDraw.RenderText2D("Profile", MT_Vector2(xcoord + const_xindent + title_xmargin, ycoord), white);
+		debugDraw.RenderText2D("Profile", mt::vec2(xcoord + const_xindent + title_xmargin, ycoord), white);
 
 		// Increase the indent by default increase
 		ycoord += const_ysize;
@@ -1163,11 +1163,11 @@ void KX_KetsjiEngine::RenderDebugProperties()
 	// Framerate display
 	if (m_flags & SHOW_FRAMERATE) {
 		debugDraw.RenderText2D("Frametime :",
-		                           MT_Vector2(xcoord + const_xindent,
+		                           mt::vec2(xcoord + const_xindent,
 		                           ycoord), white);
 
 		debugtxt = (boost::format("%5.2fms (%.1ffps)") %  (tottime * 1000.0f) % (1.0f / tottime)).str();
-		debugDraw.RenderText2D(debugtxt, MT_Vector2(xcoord + const_xindent + profile_indent, ycoord), white);
+		debugDraw.RenderText2D(debugtxt, mt::vec2(xcoord + const_xindent + profile_indent, ycoord), white);
 		// Increase the indent by default increase
 		ycoord += const_ysize;
 	}
@@ -1175,15 +1175,15 @@ void KX_KetsjiEngine::RenderDebugProperties()
 	// Profile display
 	if (m_flags & SHOW_PROFILE) {
 		for (int j = tc_first; j < tc_numCategories; j++) {
-			debugDraw.RenderText2D(m_profileLabels[j], MT_Vector2(xcoord + const_xindent, ycoord), white);
+			debugDraw.RenderText2D(m_profileLabels[j], mt::vec2(xcoord + const_xindent, ycoord), white);
 
 			double time = m_logger.GetAverage((KX_TimeCategory)j);
 
 			debugtxt = (boost::format("%5.2fms | %d%%") % (time*1000.f) % (int)(time/tottime * 100.f)).str();
-			debugDraw.RenderText2D(debugtxt, MT_Vector2(xcoord + const_xindent + profile_indent, ycoord), white);
+			debugDraw.RenderText2D(debugtxt, mt::vec2(xcoord + const_xindent + profile_indent, ycoord), white);
 
-			const MT_Vector2 boxSize(50 * (time / tottime), 10);
-			debugDraw.RenderBox2D(MT_Vector2(xcoord + (int)(2.2 * profile_indent), ycoord), boxSize, white);
+			const mt::vec2 boxSize(50 * (time / tottime), 10);
+			debugDraw.RenderBox2D(mt::vec2(xcoord + (int)(2.2 * profile_indent), ycoord), boxSize, white);
 			ycoord += const_ysize;
 		}
 	}
@@ -1194,7 +1194,7 @@ void KX_KetsjiEngine::RenderDebugProperties()
 	if (m_flags & SHOW_DEBUG_PROPERTIES) {
 		// Title for debugging("Debug properties")
 		// Adds the constant x indent (0 for now) to the title x margin
-		debugDraw.RenderText2D("Debug Properties", MT_Vector2(xcoord + const_xindent + title_xmargin, ycoord), white);
+		debugDraw.RenderText2D("Debug Properties", mt::vec2(xcoord + const_xindent + title_xmargin, ycoord), white);
 
 		// Increase the indent by default increase
 		ycoord += const_ysize;
@@ -1220,8 +1220,8 @@ void KX_KetsjiEngine::DrawDebugCameraFrustum(KX_Scene *scene, RAS_DebugDraw& deb
 
 	for (KX_Camera *cam : scene->GetCameraList()) {
 		if (cam != cameraFrameData.m_renderCamera && (m_showCameraFrustum == KX_DebugOption::FORCE || cam->GetShowCameraFrustum())) {
-			const MT_Matrix4x4 viewmat = m_rasterizer->GetViewMatrix(cameraFrameData.m_eye, cam->GetWorldToCamera(), cam->GetCameraData()->m_perspective);
-			const MT_Matrix4x4 projmat = GetCameraProjectionMatrix(scene, cam, cameraFrameData.m_eye, cameraFrameData.m_viewport, cameraFrameData.m_area);
+			const mt::mat4 viewmat = m_rasterizer->GetViewMatrix(cameraFrameData.m_eye, cam->GetWorldToCamera(), cam->GetCameraData()->m_perspective);
+			const mt::mat4 projmat = GetCameraProjectionMatrix(scene, cam, cameraFrameData.m_eye, cameraFrameData.m_viewport, cameraFrameData.m_area);
 			debugDraw.DrawCameraFrustum(projmat, viewmat);
 		}
 	}
@@ -1236,8 +1236,8 @@ void KX_KetsjiEngine::DrawDebugShadowFrustum(KX_Scene *scene, RAS_DebugDraw& deb
 	for (KX_LightObject *light : scene->GetLightList()) {
 		RAS_ILightObject *raslight = light->GetLightData();
 		if (m_showShadowFrustum == KX_DebugOption::FORCE || light->GetShowShadowFrustum()) {
-			const MT_Matrix4x4 projmat(raslight->GetWinMat());
-			const MT_Matrix4x4 viewmat(raslight->GetViewMat());
+			const mt::mat4 projmat(raslight->GetWinMat());
+			const mt::mat4 viewmat(raslight->GetViewMat());
 
 			debugDraw.DrawCameraFrustum(projmat, viewmat);
 		}

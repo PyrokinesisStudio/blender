@@ -58,7 +58,7 @@ private:
 	/// The axis to detect mouvement, can be all axis.
 	int m_axis;
 	/// The previous object position.
-	MT_Vector3 m_previousPosition;
+	mt::vec3 m_previousPosition;
 	/** True if the position is not the same (depends of a treshold value)
 	 * between two logic frame.
 	 */
@@ -74,7 +74,7 @@ public:
 					  float threshold);
 	virtual ~KX_MovementSensor();
 	virtual CValue *GetReplica();
-	MT_Vector3 GetOwnerPosition(bool local);
+	mt::vec3 GetOwnerPosition(bool local);
 
 	virtual bool Evaluate();
 	virtual bool IsPositiveTrigger();

@@ -66,7 +66,7 @@ KX_MovementSensor::~KX_MovementSensor()
 {
 }
 
-MT_Vector3 KX_MovementSensor::GetOwnerPosition(bool local)
+mt::vec3 KX_MovementSensor::GetOwnerPosition(bool local)
 {
 	KX_GameObject *owner = (KX_GameObject *)GetParent();
 	if (!local) {
@@ -97,7 +97,7 @@ bool KX_MovementSensor::IsPositiveTrigger()
 
 bool KX_MovementSensor::Evaluate()
 {
-	MT_Vector3 currentposition;
+	mt::vec3 currentposition;
 
 	bool result = false;
 	bool reset = m_reset && m_level;

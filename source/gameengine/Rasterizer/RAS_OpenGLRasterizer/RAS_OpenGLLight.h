@@ -52,11 +52,11 @@ public:
 	bool HasShadowBuffer();
 	bool NeedShadowUpdate();
 	int GetShadowBindCode();
-	MT_Matrix4x4 GetViewMat();
-	MT_Matrix4x4 GetWinMat();
-	MT_Matrix4x4 GetShadowMatrix();
+	mt::mat4 GetViewMat();
+	mt::mat4 GetWinMat();
+	mt::mat4 GetShadowMatrix();
 	int GetShadowLayer();
-	void BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, MT_Transform& camtrans);
+	void BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::trans& camtrans);
 	void UnbindShadowBuffer();
 	Image *GetTextureImage(short texslot);
 	void Update();

@@ -45,11 +45,11 @@ extern "C" {
 }
 #endif
 
-inline unsigned int Size(const MT_Matrix4x4&)          { return 4; }
-inline unsigned int Size(const MT_Matrix3x3&)          { return 3; }
-inline unsigned int Size(const MT_Vector2&)                { return 2; }
-inline unsigned int Size(const MT_Vector3&)                { return 3; }
-inline unsigned int Size(const MT_Vector4&)                { return 4; }
+inline unsigned int Size(const mt::mat4&)          { return 4; }
+inline unsigned int Size(const mt::mat3&)          { return 3; }
+inline unsigned int Size(const mt::vec2&)                { return 2; }
+inline unsigned int Size(const mt::vec3&)                { return 3; }
+inline unsigned int Size(const mt::vec4&)                { return 4; }
 
 /**
  *  Converts the given python matrix (column-major) to an MT class (row-major).
@@ -227,46 +227,46 @@ bool PyVecTo(PyObject *pyval, T& vec)
 }
 
 
-bool PyQuatTo(PyObject *pyval, MT_Quaternion &qrot);
+bool PyQuatTo(PyObject *pyval, mt::quat &qrot);
 
-bool PyOrientationTo(PyObject *pyval, MT_Matrix3x3 &mat, const char *error_prefix);
-
-/**
- * Converts an MT_Matrix4x4 to a python object.
- */
-PyObject *PyObjectFrom(const MT_Matrix4x4 &mat);
+bool PyOrientationTo(PyObject *pyval, mt::mat3 &mat, const char *error_prefix);
 
 /**
- * Converts an MT_Matrix3x3 to a python object.
+ * Converts an mt::mat4 to a python object.
  */
-PyObject *PyObjectFrom(const MT_Matrix3x3 &mat);
+PyObject *PyObjectFrom(const mt::mat4 &mat);
 
 /**
- * Converts an MT_Vector2 to a python object.
+ * Converts an mt::mat3 to a python object.
  */
-PyObject *PyObjectFrom(const MT_Vector2 &vec);
+PyObject *PyObjectFrom(const mt::mat3 &mat);
 
 /**
- * Converts an MT_Vector3 to a python object
+ * Converts an mt::vec2 to a python object.
  */
-PyObject *PyObjectFrom(const MT_Vector3 &vec);
+PyObject *PyObjectFrom(const mt::vec2 &vec);
+
+/**
+ * Converts an mt::vec3 to a python object
+ */
+PyObject *PyObjectFrom(const mt::vec3 &vec);
 
 #ifdef USE_MATHUTILS
 /**
- * Converts an MT_Quaternion to a python object.
+ * Converts an mt::quat to a python object.
  */
-PyObject *PyObjectFrom(const MT_Quaternion &qrot);
+PyObject *PyObjectFrom(const mt::quat &qrot);
 #endif
 
 /**
- * Converts an MT_Vector4 to a python object.
+ * Converts an mt::vec4 to a python object.
  */
-PyObject *PyObjectFrom(const MT_Vector4 &pos);
+PyObject *PyObjectFrom(const mt::vec4 &pos);
 
 /**
- * Converts an MT_Vector3 to a python color object.
+ * Converts an mt::vec3 to a python color object.
  */
-PyObject *PyColorFromVector(const MT_Vector3 &vec);
+PyObject *PyColorFromVector(const mt::vec3 &vec);
 
 #endif  // WITH_PYTHON
 

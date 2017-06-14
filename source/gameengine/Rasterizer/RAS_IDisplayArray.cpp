@@ -95,25 +95,25 @@ void RAS_IDisplayArray::UpdateFrom(RAS_IDisplayArray *other, int flag)
 {
 	if (flag & TANGENT_MODIFIED) {
 		for (unsigned int i = 0, size = other->GetVertexCount(); i < size; ++i) {
-			GetVertex(i)->SetTangent(MT_Vector4(other->GetVertex(i)->getTangent()));
+			GetVertex(i)->SetTangent(mt::vec4(other->GetVertex(i)->getTangent()));
 		}
 	}
 	if (flag & UVS_MODIFIED) {
 		const unsigned short uvSize = min_ii(GetVertexUvSize(), other->GetVertexUvSize());
 		for (unsigned int i = 0, size = other->GetVertexCount(); i < size; ++i) {
 			for (unsigned int uv = 0; uv < uvSize; ++uv) {
-				GetVertex(i)->SetUV(uv, MT_Vector2(other->GetVertex(i)->getUV(uv)));
+				GetVertex(i)->SetUV(uv, mt::vec2(other->GetVertex(i)->getUV(uv)));
 			}
 		}
 	}
 	if (flag & POSITION_MODIFIED) {
 		for (unsigned int i = 0, size = other->GetVertexCount(); i < size; ++i) {
-			GetVertex(i)->SetXYZ(MT_Vector3(other->GetVertex(i)->getXYZ()));
+			GetVertex(i)->SetXYZ(mt::vec3(other->GetVertex(i)->getXYZ()));
 		}
 	}
 	if (flag & NORMAL_MODIFIED) {
 		for (unsigned int i = 0, size = other->GetVertexCount(); i < size; ++i) {
-			GetVertex(i)->SetNormal(MT_Vector3(other->GetVertex(i)->getNormal()));
+			GetVertex(i)->SetNormal(mt::vec3(other->GetVertex(i)->getNormal()));
 		}
 	}
 	if (flag & COLORS_MODIFIED) {

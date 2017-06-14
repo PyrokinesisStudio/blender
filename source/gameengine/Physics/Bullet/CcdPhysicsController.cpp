@@ -151,7 +151,7 @@ void BlenderBulletCharacterController::SetVelocity(const btVector3& vel, float t
 	setVelocityForTimeInterval(v, time);
 }
 
-void BlenderBulletCharacterController::SetVelocity(const MT_Vector3& vel, float time, bool local)
+void BlenderBulletCharacterController::SetVelocity(const mt::vec3& vel, float time, bool local)
 {
 	SetVelocity(ToBullet(vel), time, local);
 }
@@ -234,8 +234,8 @@ int CcdPhysicsController::getNumCcdConstraintRefs() const
 
 btTransform CcdPhysicsController::GetTransformFromMotionState(PHY_IMotionState *motionState)
 {
-	const MT_Vector3 pos = motionState->GetWorldPosition();
-	const MT_Matrix3x3 mat = motionState->GetWorldOrientation();
+	const mt::vec3 pos = motionState->GetWorldPosition();
+	const mt::mat3 mat = motionState->GetWorldOrientation();
 
 	return btTransform(ToBullet(mat), ToBullet(pos));
 }
@@ -252,8 +252,8 @@ public:
 
 	void getWorldTransform(btTransform& worldTrans) const
 	{
-		const MT_Vector3 pos = m_blenderMotionState->GetWorldPosition();
-		const MT_Matrix3x3 mat = m_blenderMotionState->GetWorldOrientation();
+		const mt::vec3 pos = m_blenderMotionState->GetWorldPosition();
+		const mt::mat3 mat = m_blenderMotionState->GetWorldOrientation();
 		worldTrans.setOrigin(ToBullet(pos));
 		worldTrans.setBasis(ToBullet(mat));
 	}
@@ -521,7 +521,7 @@ bool CcdPhysicsController::CreateSoftbody()
 	rbci.m_motionState->getWorldTransform(startTrans);
 
 	m_MotionState->SetWorldPosition(ToMoto(startTrans.getOrigin()));
-	m_MotionState->SetWorldOrientation(MT_Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+	m_MotionState->SetWorldOrientation(mt::quat(0.0f, 0.0f, 0.0f, 1.0f));
 
 	if (!m_prototypeTransformInitialized) {
 		m_prototypeTransformInitialized = true;
@@ -775,7 +775,7 @@ bool CcdPhysicsController::SynchronizeMotionStates(float time)
 		m_MotionState->CalculateWorldTransformations();
 	}
 
-	const MT_Vector3& scale = m_MotionState->GetWorldScaling();
+	const mt::vec3& scale = m_MotionState->GetWorldScaling();
 	GetCollisionShape()->setLocalScaling(ToBullet(scale));
 
 	return true;
@@ -888,7 +888,7 @@ void CcdPhysicsController::SetCenterOfMassTransform(btTransform& xform)
 }
 
 // kinematic methods
-void CcdPhysicsController::RelativeTranslate(const MT_Vector3& dlocin, bool local)
+void CcdPhysicsController::RelativeTranslate(const mt::vec3& dlocin, bool local)
 {
 	if (m_object) {
 		m_object->activate(true);
@@ -910,7 +910,7 @@ void CcdPhysicsController::RelativeTranslate(const MT_Vector3& dlocin, bool loca
 	}
 }
 
-void CcdPhysicsController::RelativeRotate(const MT_Matrix3x3& rotval, bool local)
+void CcdPhysicsController::RelativeRotate(const mt::mat3& rotval, bool local)
 {
 	if (m_object) {
 		m_object->activate(true);
@@ -936,17 +936,17 @@ void CcdPhysicsController::RelativeRotate(const MT_Matrix3x3& rotval, bool local
 
 void CcdPhysicsController::GetWorldOrientation(btMatrix3x3& mat)
 {
-	const MT_Matrix3x3 ori = m_MotionState->GetWorldOrientation();
+	const mt::mat3 ori = m_MotionState->GetWorldOrientation();
 	mat = ToBullet(ori);
 }
 
-MT_Matrix3x3 CcdPhysicsController::GetOrientation()
+mt::mat3 CcdPhysicsController::GetOrientation()
 {
 	const btMatrix3x3 orn = m_object->getWorldTransform().getBasis();
 	return ToMoto(orn);
 }
 
-void CcdPhysicsController::SetOrientation(const MT_Matrix3x3& orn)
+void CcdPhysicsController::SetOrientation(const mt::mat3& orn)
 {
 	SetWorldOrientation(ToBullet(orn));
 }
@@ -972,7 +972,7 @@ void CcdPhysicsController::SetWorldOrientation(const btMatrix3x3& orn)
 	}
 }
 
-void CcdPhysicsController::SetPosition(const MT_Vector3& pos)
+void CcdPhysicsController::SetPosition(const mt::vec3& pos)
 {
 	if (m_object) {
 		m_object->activate(true);
@@ -1074,13 +1074,13 @@ void CcdPhysicsController::RestoreDynamics()
 	}
 }
 
-void CcdPhysicsController::GetPosition(MT_Vector3& pos) const
+void CcdPhysicsController::GetPosition(mt::vec3& pos) const
 {
 	const btTransform& xform = m_object->getWorldTransform();
 	pos = ToMoto(xform.getOrigin());
 }
 
-void CcdPhysicsController::SetScaling(const MT_Vector3& scale)
+void CcdPhysicsController::SetScaling(const mt::vec3& scale)
 {
 	if (!btFuzzyZero(m_cci.m_scaling.x() - scale.x()) ||
 	    !btFuzzyZero(m_cci.m_scaling.y() - scale.y()) ||
@@ -1103,8 +1103,8 @@ void CcdPhysicsController::SetScaling(const MT_Vector3& scale)
 
 void CcdPhysicsController::SetTransform()
 {
-	const MT_Vector3 pos = m_MotionState->GetWorldPosition();
-	const MT_Matrix3x3 rot = m_MotionState->GetWorldOrientation();
+	const mt::vec3 pos = m_MotionState->GetWorldPosition();
+	const mt::mat3 rot = m_MotionState->GetWorldOrientation();
 	ForceWorldTransform(ToBullet(rot), ToBullet(pos));
 
 	if (!IsDynamic() && !GetConstructionInfo().m_bSensor && !GetCharacterController()) {
@@ -1141,7 +1141,7 @@ void CcdPhysicsController::SetMass(float newmass)
 }
 
 // physics methods
-void CcdPhysicsController::ApplyTorque(const MT_Vector3&  torquein, bool local)
+void CcdPhysicsController::ApplyTorque(const mt::vec3&  torquein, bool local)
 {
 	btVector3 torque = ToBullet(torquein);
 	btTransform xform = m_object->getWorldTransform();
@@ -1175,7 +1175,7 @@ void CcdPhysicsController::ApplyTorque(const MT_Vector3&  torquein, bool local)
 	}
 }
 
-void CcdPhysicsController::ApplyForce(const MT_Vector3& forcein, bool local)
+void CcdPhysicsController::ApplyForce(const mt::vec3& forcein, bool local)
 {
 	btVector3 force = ToBullet(forcein);
 
@@ -1203,7 +1203,7 @@ void CcdPhysicsController::ApplyForce(const MT_Vector3& forcein, bool local)
 		}
 	}
 }
-void CcdPhysicsController::SetAngularVelocity(const MT_Vector3& ang_vel, bool local)
+void CcdPhysicsController::SetAngularVelocity(const mt::vec3& ang_vel, bool local)
 {
 	btVector3 angvel = ToBullet(ang_vel);
 
@@ -1228,7 +1228,7 @@ void CcdPhysicsController::SetAngularVelocity(const MT_Vector3& ang_vel, bool lo
 			body->setAngularVelocity(angvel);
 	}
 }
-void CcdPhysicsController::SetLinearVelocity(const MT_Vector3& lin_vel, bool local)
+void CcdPhysicsController::SetLinearVelocity(const mt::vec3& lin_vel, bool local)
 {
 	btVector3 linVel = ToBullet(lin_vel);
 
@@ -1263,7 +1263,7 @@ void CcdPhysicsController::SetLinearVelocity(const MT_Vector3& lin_vel, bool loc
 		}
 	}
 }
-void CcdPhysicsController::ApplyImpulse(const MT_Vector3& attach, const MT_Vector3& impulsein, bool local)
+void CcdPhysicsController::ApplyImpulse(const mt::vec3& attach, const mt::vec3& impulsein, bool local)
 {
 	btVector3 pos;
 	btVector3 impulse = ToBullet(impulsein);
@@ -1341,7 +1341,7 @@ void CcdPhysicsController::SetDamping(float linear, float angular)
 }
 
 // reading out information from physics
-MT_Vector3 CcdPhysicsController::GetLinearVelocity()
+mt::vec3 CcdPhysicsController::GetLinearVelocity()
 {
 	btRigidBody *body = GetRigidBody();
 	if (body) {
@@ -1349,10 +1349,10 @@ MT_Vector3 CcdPhysicsController::GetLinearVelocity()
 		return ToMoto(linvel);
 	}
 
-	return MT_Vector3(0.0f, 0.0f, 0.0f);
+	return mt::vec3(0.0f, 0.0f, 0.0f);
 }
 
-MT_Vector3 CcdPhysicsController::GetAngularVelocity()
+mt::vec3 CcdPhysicsController::GetAngularVelocity()
 {
 	btRigidBody *body = GetRigidBody();
 	if (body) {
@@ -1360,10 +1360,10 @@ MT_Vector3 CcdPhysicsController::GetAngularVelocity()
 		return ToMoto(angvel);
 	}
 
-	return MT_Vector3(0.0f, 0.0f, 0.0f);
+	return mt::vec3(0.0f, 0.0f, 0.0f);
 }
 
-MT_Vector3 CcdPhysicsController::GetVelocity(const MT_Vector3 &posin)
+mt::vec3 CcdPhysicsController::GetVelocity(const mt::vec3 &posin)
 {
 	btRigidBody *body = GetRigidBody();
 	if (body) {
@@ -1371,12 +1371,12 @@ MT_Vector3 CcdPhysicsController::GetVelocity(const MT_Vector3 &posin)
 		return ToMoto(linvel);
 	}
 
-	return MT_Vector3(0.0f, 0.0f, 0.0f);
+	return mt::vec3(0.0f, 0.0f, 0.0f);
 }
 
-MT_Vector3 CcdPhysicsController::GetLocalInertia()
+mt::vec3 CcdPhysicsController::GetLocalInertia()
 {
-	MT_Vector3 inertia(0.0f, 0.0f, 0.0f);
+	mt::vec3 inertia(0.0f, 0.0f, 0.0f);
 	btVector3 inv_inertia;
 	if (GetRigidBody()) {
 		inv_inertia = GetRigidBody()->getInvInertiaDiagLocal();
@@ -1384,7 +1384,7 @@ MT_Vector3 CcdPhysicsController::GetLocalInertia()
 		    !btFuzzyZero(inv_inertia.getY()) &&
 		    !btFuzzyZero(inv_inertia.getZ()))
 		{
-			inertia = MT_Vector3(1.0f / inv_inertia.getX(), 1.0f / inv_inertia.getY(), 1.0f / inv_inertia.getZ());
+			inertia = mt::vec3(1.0f / inv_inertia.getX(), 1.0f / inv_inertia.getY(), 1.0f / inv_inertia.getZ());
 		}
 	}
 	return inertia;
@@ -1704,31 +1704,31 @@ DefaultMotionState::~DefaultMotionState()
 {
 }
 
-MT_Vector3 DefaultMotionState::GetWorldPosition() const
+mt::vec3 DefaultMotionState::GetWorldPosition() const
 {
 	return ToMoto(m_worldTransform.getOrigin());
 }
 
-MT_Vector3 DefaultMotionState::GetWorldScaling() const
+mt::vec3 DefaultMotionState::GetWorldScaling() const
 {
 	return ToMoto(m_localScaling);
 }
 
-MT_Matrix3x3 DefaultMotionState::GetWorldOrientation() const
+mt::mat3 DefaultMotionState::GetWorldOrientation() const
 {
 	return ToMoto(m_worldTransform.getBasis());
 }
 
-void DefaultMotionState::SetWorldOrientation(const MT_Matrix3x3& ori)
+void DefaultMotionState::SetWorldOrientation(const mt::mat3& ori)
 {
 	m_worldTransform.setBasis(ToBullet(ori));
 }
-void DefaultMotionState::SetWorldPosition(const MT_Vector3& pos)
+void DefaultMotionState::SetWorldPosition(const mt::vec3& pos)
 {
 	m_worldTransform.setOrigin(ToBullet(pos));
 }
 
-void DefaultMotionState::SetWorldOrientation(const MT_Quaternion& quat)
+void DefaultMotionState::SetWorldOrientation(const mt::quat& quat)
 {
 	m_worldTransform.setRotation(ToBullet(quat));
 }

@@ -373,7 +373,7 @@ typedef struct KX_PYATTRIBUTE_DEF {
 		int *m_intPtr;
 		float *m_floatPtr;
 		std::string *m_stringPtr;
-		MT_Vector3 *m_vectorPtr;
+		mt::vec3 *m_vectorPtr;
 		char *m_charPtr;
 	} m_typeCheck;
 } PyAttributeDef;
@@ -499,7 +499,7 @@ typedef struct KX_PYATTRIBUTE_DEF {
 #define KX_PYATTRIBUTE_CHAR_RO(name, object, field) \
 	{ name, KX_PYATTRIBUTE_TYPE_CHAR, KX_PYATTRIBUTE_RO, 0, 0, 0.f, 0.f, false, false, offsetof(object, field), sizeof(((object *)0)->field), 1, nullptr, nullptr, nullptr, {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, ((object *)0)->field} }
 
-/// For MT_Vector3 member.
+/// For mt::vec3 member.
 #define KX_PYATTRIBUTE_VECTOR_RW(name, min, max, object, field) \
 	{ name, KX_PYATTRIBUTE_TYPE_VECTOR, KX_PYATTRIBUTE_RW, 0, 0, min, max, true, false, offsetof(object, field), 0, 1, nullptr, nullptr, nullptr, {nullptr, nullptr, nullptr, nullptr, nullptr, &((object *)0)->field, nullptr} }
 #define KX_PYATTRIBUTE_VECTOR_RW_CHECK(name, min, max, clamp, object, field, function) \

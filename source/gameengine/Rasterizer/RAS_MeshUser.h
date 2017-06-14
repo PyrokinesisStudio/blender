@@ -40,7 +40,7 @@ private:
 	/// OpenGL face wise.
 	bool m_frontFace;
 	/// Object color.
-	MT_Vector4 m_color;
+	mt::vec4 m_color;
 	/// Object transformation matrix.
 	float m_matrix[16];
 	/// Bounding box corresponding to a mesh or deformer.
@@ -58,7 +58,7 @@ public:
 
 	void AddMeshSlot(RAS_MeshSlot *meshSlot);
 	bool GetFrontFace() const;
-	const MT_Vector4& GetColor() const;
+	const mt::vec4& GetColor() const;
 	float *GetMatrix();
 	RAS_BoundingBox *GetBoundingBox() const;
 	void *GetClientObject() const;
@@ -66,7 +66,7 @@ public:
 	RAS_BatchGroup *GetBatchGroup() const;
 
 	void SetFrontFace(bool frontFace);
-	void SetColor(const MT_Vector4& color);
+	void SetColor(const mt::vec4& color);
 	void SetBatchGroup(RAS_BatchGroup *batchGroup);
 
 	void ActivateMeshSlots();

@@ -519,10 +519,10 @@ static PyObject *gPyCreateConstraint(PyObject *self,
 
 			//we need to pass a full constraint frame, not just axis
 			//localConstraintFrameBasis
-			MT_Matrix3x3 localCFrame(MT_Vector3(deg2rad*axisX, deg2rad*axisY, deg2rad*axisZ));
-			MT_Vector3 axis0 = localCFrame.GetColumn(0);
-			MT_Vector3 axis1 = localCFrame.GetColumn(1);
-			MT_Vector3 axis2 = localCFrame.GetColumn(2);
+			mt::mat3 localCFrame(mt::vec3(deg2rad*axisX, deg2rad*axisY, deg2rad*axisZ));
+			mt::vec3 axis0 = localCFrame.GetColumn(0);
+			mt::vec3 axis1 = localCFrame.GetColumn(1);
+			mt::vec3 axis2 = localCFrame.GetColumn(2);
 
 			int constraintid = PHY_GetActiveEnvironment()->CreateConstraint(
 			        physctrl, physctrl2, (enum PHY_ConstraintType)constrainttype, pivotX, pivotY, pivotZ,
