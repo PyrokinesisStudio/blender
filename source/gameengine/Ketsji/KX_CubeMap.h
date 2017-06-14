@@ -29,8 +29,6 @@
 
 #include "KX_TextureRenderer.h"
 
-#include "MT_Matrix3x3.h"
-
 class KX_CubeMap : public KX_TextureRenderer
 {
 	Py_Header

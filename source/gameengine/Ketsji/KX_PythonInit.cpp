@@ -109,8 +109,6 @@ extern "C" {
 #include "RAS_ICanvas.h"
 #include "RAS_BucketManager.h"
 #include "RAS_2DFilterManager.h"
-#include "MT_Vector3.h"
-#include "MT_Vector4.h"
 #include "EXP_ListValue.h"
 #include "EXP_InputParser.h"
 #include "KX_Scene.h"

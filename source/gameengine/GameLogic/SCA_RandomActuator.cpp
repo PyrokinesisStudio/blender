@@ -40,7 +40,6 @@
 #include "EXP_FloatValue.h"
 #include "SCA_IActuator.h"
 #include "SCA_RandomActuator.h"
-#include "MT_Transform.h"
 
 #include "CM_Message.h"
 

@@ -52,8 +52,6 @@
 #include "RAS_ICanvas.h"
 #include "RAS_OffScreen.h"
 #include "RAS_ILightObject.h"
-#include "MT_Vector3.h"
-#include "MT_Transform.h"
 #include "SCA_IInputDevice.h"
 #include "KX_Camera.h"
 #include "KX_Light.h"

@@ -1,6 +1,6 @@
 #include "SG_Frustum.h"
 
-#include "MT_Frustum.h"
+#include "MT_Frustum.h" // TODO replace in mathfu
 
 SG_Frustum::SG_Frustum(const MT_Matrix4x4& matrix)
 	:m_matrix(matrix)

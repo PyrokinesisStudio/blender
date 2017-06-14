@@ -29,9 +29,6 @@
 
 #include "KX_TextureRenderer.h"
 
-#include "MT_Vector4.h"
-#include "MT_Matrix3x3.h"
-
 #include <unordered_map>
 
 class KX_PlanarMap : public KX_TextureRenderer

@@ -34,7 +34,7 @@
 
 #include "SCA_IActuator.h"
 #include "SCA_IObject.h"
-#include "MT_Matrix3x3.h"
+#include "mathfu.h"
 #include "KX_GameObject.h"
 
 

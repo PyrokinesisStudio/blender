@@ -30,7 +30,6 @@
 #define __RAS_MESH_USER_H__
 
 #include "RAS_MeshSlot.h"
-#include "MT_Vector4.h"
 
 class RAS_BoundingBox;
 class RAS_BatchGroup;

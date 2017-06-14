@@ -37,14 +37,8 @@
 
 #ifdef WITH_PYTHON
 
-#include "MT_Vector3.h"
-#include "MT_Vector4.h"
-#include "MT_Matrix4x4.h"
-#include "MT_Vector2.h"
-
 #include "EXP_ListValue.h"
 
-#include "EXP_Python.h"
 #include "KX_PyMath.h"
 
 bool PyOrientationTo(PyObject *pyval, MT_Matrix3x3 &rot, const char *error_prefix)

@@ -43,7 +43,7 @@
 #include "EXP_ListValue.h"
 #include "SCA_IObject.h"
 #include "SG_Node.h"
-#include "MT_Transform.h"
+#include "mathfu.h"
 #include "KX_Scene.h"
 #include "KX_KetsjiEngine.h" /* for m_anim_framerate */
 #include "DNA_constraint_types.h" /* for constraint replication */

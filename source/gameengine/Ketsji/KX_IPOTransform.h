@@ -33,7 +33,7 @@
 #ifndef __KX_IPOTRANSFORM_H__
 #define __KX_IPOTRANSFORM_H__
 
-#include "MT_Transform.h"
+#include "mathfu.h"
 
 class KX_IPOTransform {
 public:

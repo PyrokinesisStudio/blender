@@ -39,13 +39,11 @@
 
 #include <vector>
 #include <list>
+#include <string>
 
 #include "RAS_MaterialBucket.h"
 #include "RAS_MeshMaterial.h"
 #include "RAS_Texture.h"
-#include "MT_Transform.h"
-#include "MT_Vector2.h"
-#include <string>
 
 class RAS_MeshUser;
 class RAS_Deformer;

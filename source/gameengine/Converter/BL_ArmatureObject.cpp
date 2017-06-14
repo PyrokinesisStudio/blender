@@ -57,8 +57,6 @@ extern "C" {
 
 #include "EXP_ListWrapper.h"
 
-#include "MT_Matrix4x4.h"
-
 #include "CM_Message.h"
 
 /**

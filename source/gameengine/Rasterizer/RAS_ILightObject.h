@@ -32,8 +32,7 @@
 #ifndef __RAS_LIGHTOBJECT_H__
 #define __RAS_LIGHTOBJECT_H__
 
-#include "MT_Matrix4x4.h"
-#include "MT_Transform.h"
+#include "mathfu.h"
 
 class RAS_ICanvas;
 

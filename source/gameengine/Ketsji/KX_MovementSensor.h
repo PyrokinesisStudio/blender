@@ -34,7 +34,7 @@
 #define __KX_MOVEMENT_H__
 
 #include "SCA_ISensor.h"
-#include "MT_Vector3.h"
+#include "mathfu.h"
 
 
 class KX_MovementSensor : public SCA_ISensor

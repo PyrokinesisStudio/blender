@@ -33,7 +33,7 @@
 #define __KX_CONSTRAINTACTUATOR_H__
 
 #include "SCA_IActuator.h"
-#include "MT_Vector3.h"
+#include "mathfu.h"
 #include "KX_ClientObjectInfo.h"
 
 #include "BLI_utildefines.h"

@@ -32,6 +32,7 @@ set(INC_SYS
 )
 
 set(SRC
+	mathfu.h
 	mathfu/constants.h
 	mathfu/glsl_mapping.h
 	mathfu/hlsl_mapping.h

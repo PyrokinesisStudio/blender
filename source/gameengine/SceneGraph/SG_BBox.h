@@ -33,7 +33,7 @@
 #ifndef __SG_BBOX_H__
 #define __SG_BBOX_H__
 
-#include "MT_Vector3.h"
+#include "mathfu.h"
 
 /**
  * Bounding box class.

@@ -33,7 +33,7 @@
 #define __KX_ORIENTATIONINTERPOLATOR_H__
 
 #include "KX_IInterpolator.h"
-#include "MT_Matrix3x3.h"
+#include "mathfu.h"
 
 class KX_IScalarInterpolator;
 

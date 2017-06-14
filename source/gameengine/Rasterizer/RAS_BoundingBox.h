@@ -28,7 +28,6 @@
 #define __RAS_BOUNDING_BOX_H__
 
 #include "RAS_IDisplayArray.h"
-#include "MT_Vector3.h"
 
 class RAS_BoundingBoxManager;
 

@@ -27,7 +27,6 @@
 #include "SCA_IInputDevice.h"
 #include "RAS_ICanvas.h"
 #include "KX_GameObject.h"
-#include "MT_Vector3.h"
 #include "BLI_utildefines.h"
 #include "limits.h"
 

@@ -36,8 +36,7 @@
 #  pragma warning (disable:4786)
 #endif
 
-#include "MT_Matrix4x4.h"
-#include "MT_Transform.h"
+#include "mathfu.h"
 
 #include "RAS_DebugDraw.h"
 #include "RAS_Rect.h"
@@ -560,6 +559,8 @@ public:
 	/// Render text mesh slot using BLF functions.
 	void IndexPrimitivesText(RAS_MeshSlot *ms);
  
+	void SetProjectionMatrix(MT_CmMatrix4x4 &mat);
+
 	/* This one should become our final version, methinks. */
 	/**
 	 * Set the projection matrix for the rasterizer. This projects

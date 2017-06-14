@@ -37,9 +37,6 @@
 #include "RAS_Rasterizer.h"
 
 #include <string>
-
-#include "MT_Vector4.h"
-
 #include <map>
 
 struct Material;

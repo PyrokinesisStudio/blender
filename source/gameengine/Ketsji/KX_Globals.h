@@ -27,8 +27,7 @@
 #ifndef __KX_GLOBALS_H__
 #define __KX_GLOBALS_H__
 
-#include "MT_Vector3.h"
-#include "MT_Vector4.h"
+#include "mathfu.h"
 #include <string>
 
 class KX_KetsjiEngine;

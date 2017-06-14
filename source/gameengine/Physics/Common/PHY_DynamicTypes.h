@@ -20,7 +20,7 @@
 #ifndef __PHY_DYNAMICTYPES_H__
 #define __PHY_DYNAMICTYPES_H__
 
-#include "MT_Vector3.h"
+#include "mathfu.h"
 
 struct KX_ClientObjectInfo;
 

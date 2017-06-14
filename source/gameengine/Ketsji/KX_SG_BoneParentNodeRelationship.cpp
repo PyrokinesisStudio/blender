@@ -36,7 +36,7 @@
 
 #include "KX_SG_BoneParentNodeRelationship.h"
 
-#include "MT_Matrix4x4.h"
+#include "mathfu.h"
 #include "BL_ArmatureObject.h"
 
 

@@ -26,7 +26,7 @@
 #ifdef WITH_PYTHON
 
 #include "EXP_PyObjectPlus.h"
-#include "MT_Vector3.h"
+#include "mathfu.h"
 
 class KX_GameObject;
 

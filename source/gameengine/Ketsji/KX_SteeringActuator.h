@@ -29,7 +29,7 @@
 
 #include "SCA_IActuator.h"
 #include "SCA_LogicManager.h"
-#include "MT_Matrix3x3.h"
+#include "mathfu.h"
 
 class KX_GameObject;
 class KX_NavMeshObject;

@@ -31,7 +31,6 @@
 
 
 #include "KX_PositionInterpolator.h"
-#include "MT_Vector3.h"
 #include "KX_IScalarInterpolator.h"
 
 void KX_PositionInterpolator::Execute(float currentTime) const

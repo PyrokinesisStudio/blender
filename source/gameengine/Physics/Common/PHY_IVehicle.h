@@ -10,8 +10,6 @@
 
 #include "PHY_DynamicTypes.h"
 
-#include "MT_Quaternion.h"
-
 class PHY_IMotionState;
 
 class PHY_IVehicle

@@ -36,9 +36,7 @@
 
 #include "PHY_IPhysicsEnvironment.h"
 #include "PHY_IPhysicsController.h"
-#include "MT_Vector2.h"
-#include "MT_Vector3.h"
-#include "MT_Vector3.h"
+#include "mathfu.h"
 
 class RAS_MeshObject; 
 struct KX_ClientObjectInfo;

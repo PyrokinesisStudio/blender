@@ -9,8 +9,6 @@
 #include "RAS_Texture.h" // For RAS_Texture::MaxUnits.
 #include "RAS_Rasterizer.h" // For RAS_Rasterizer::TexCoGenList.
 
-#include "MT_Matrix4x4.h"
-
 #include <string>
 #include <vector>
 

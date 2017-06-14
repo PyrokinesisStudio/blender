@@ -19,8 +19,6 @@
 #include "CcdPhysicsEnvironment.h"
 #include "CcdGraphicController.h"
 #include "btBulletDynamicsCommon.h"
-#include "MT_Vector3.h"
-
 
 CcdGraphicController::CcdGraphicController(CcdPhysicsEnvironment *phyEnv, PHY_IMotionState *motionState)
 	:m_localAabbMin(0.0f, 0.0f, 0.0f),

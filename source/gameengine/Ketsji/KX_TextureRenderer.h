@@ -30,7 +30,7 @@
 #include "EXP_Value.h"
 #include "RAS_TextureRenderer.h"
 
-#include "MT_Matrix4x4.h"
+#include "mathfu.h"
 
 class KX_GameObject;
 class KX_Camera;

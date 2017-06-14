@@ -32,7 +32,6 @@
 #ifndef __PHY_IPHYSICSCONTROLLER_H__
 #define __PHY_IPHYSICSCONTROLLER_H__
 
-#include "MT_Matrix3x3.h"
 #include <vector>
 
 #include "PHY_IController.h"

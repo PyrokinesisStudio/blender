@@ -53,8 +53,7 @@
 
 #include "BL_BlenderDataConversion.h"
 
-#include "MT_Transform.h"
-#include "MT_Utilities.h"
+#include "mathfu.h"
 
 #include "GPU_texture.h"
 

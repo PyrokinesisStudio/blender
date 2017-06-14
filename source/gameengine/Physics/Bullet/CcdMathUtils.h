@@ -1,10 +1,7 @@
 #ifndef __CCD_MATH_UTILS__
 #define __CCD_MATH_UTILS__
 
-#include "MT_Vector3.h"
-#include "MT_Vector4.h"
-#include "MT_Quaternion.h"
-#include "MT_Matrix3x3.h"
+#include "mathfu.h"
 
 #include "LinearMath/btVector3.h"
 #include "LinearMath/btQuaternion.h"

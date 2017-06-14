@@ -35,9 +35,7 @@
 #include "SG_QList.h"
 #include "SG_ParentRelation.h"
 
-#include "MT_Vector3.h"
-#include "MT_Matrix3x3.h"
-#include "MT_Transform.h"
+#include "mathfu.h"
 
 #include "CM_Thread.h"
 

@@ -54,7 +54,6 @@
 #include "BKE_action.h"
 #include "BKE_key.h"
 #include "BKE_ipo.h"
-#include "MT_Vector3.h"
 
 extern "C" {
 	#include "BKE_customdata.h"

@@ -36,7 +36,6 @@
 #  pragma warning(disable:4786)
 #endif
 
-#include "MT_Vector3.h"
 #include "RAS_FramingManager.h"
 #include "RAS_ICanvas.h"
 #include "RAS_Rasterizer.h"

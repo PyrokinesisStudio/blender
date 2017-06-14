@@ -38,7 +38,7 @@
 #include "SCA_LogicManager.h"
 #include "EXP_BoolValue.h"
 #include "EXP_InputParser.h"
-#include "MT_Utilities.h" // for FuzzyZero
+#include "mathfu.h" // for FuzzyZero
 
 #include "CM_Message.h"
 

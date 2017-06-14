@@ -42,8 +42,6 @@
 
 #include "SCA_IScene.h"
 
-#include "MT_Vector3.h"
-
 #include "CM_Message.h"
 
 #include <algorithm>

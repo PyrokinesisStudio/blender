@@ -37,8 +37,6 @@
 #include "RAS_MeshSlot.h"
 #include "RAS_Rasterizer.h" // needed for RAS_Rasterizer::StorageType and RAS_Rasterizer::AttribLayerList
 
-#include "MT_Transform.h"
-
 #include <vector>
 
 class RAS_MaterialBucket;

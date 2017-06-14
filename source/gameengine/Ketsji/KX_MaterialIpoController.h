@@ -11,7 +11,7 @@
 #include "SG_Controller.h"
 #include "SG_Node.h"
 #include "KX_IInterpolator.h"
-#include "MT_Vector4.h"
+#include "mathfu.h"
 
 class RAS_IPolyMaterial;
 

@@ -1,7 +1,7 @@
 #ifndef __SG_FRUSTUM_H__
 #define __SG_FRUSTUM_H__
 
-#include "MT_Matrix4x4.h"
+#include "mathfu.h"
 
 #include <array>
 

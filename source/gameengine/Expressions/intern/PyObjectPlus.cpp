@@ -46,8 +46,6 @@
  * ----------------------------- */
 
 #include "EXP_PyObjectPlus.h"
-#include <string>
-#include "MT_Vector3.h"
 #include "MEM_guardedalloc.h"
 
 #include "CM_Message.h"

@@ -34,10 +34,9 @@
 #include "KX_Camera.h"
 #include "KX_Scene.h"
 #include "KX_Globals.h"
-#include "EXP_Python.h"
 #include "KX_PyMath.h"
 
-#include "MT_Frustum.h"
+#include "MT_Frustum.h"  // TODO
 
 #include "RAS_ICanvas.h"
 

@@ -43,7 +43,6 @@
 
 #include "SG_Node.h"
 #include "SCA_IScene.h"
-#include "MT_Transform.h"
 
 #include "RAS_FramingManager.h"
 #include "RAS_Rect.h"

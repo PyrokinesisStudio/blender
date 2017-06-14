@@ -33,9 +33,6 @@
 #define __PHY_IPHYSICSENVIRONMENT_H__
 
 #include "PHY_DynamicTypes.h"
-#include "MT_Vector2.h"
-#include "MT_Vector3.h"
-#include "MT_Vector4.h"
 
 class PHY_IVehicle;
 class PHY_ICharacter;

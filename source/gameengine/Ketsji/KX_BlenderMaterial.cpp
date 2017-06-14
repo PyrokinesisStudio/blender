@@ -31,8 +31,6 @@
 
 #include "EXP_ListWrapper.h"
 
-#include "MT_Matrix4x4.h"
-
 #include "RAS_BucketManager.h"
 #include "RAS_Rasterizer.h"
 #include "RAS_MeshUser.h"

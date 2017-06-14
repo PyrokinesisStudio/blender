@@ -34,7 +34,7 @@
 #define __KX_OBJECTACTUATOR_H__
 
 #include "SCA_IActuator.h"
-#include "MT_Vector3.h"
+#include "mathfu.h"
 
 #ifdef USE_MATHUTILS
 void KX_ObjectActuator_Mathutils_Callback_Init(void);
