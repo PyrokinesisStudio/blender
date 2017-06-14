@@ -81,16 +81,16 @@ bool RAS_OpenGLLight::ApplyFixedFunctionLighting(KX_Scene *kxscene, int oblayer,
 
 	const MT_Matrix4x4 worldmatrix = kxlight->NodeGetWorldTransform().toMatrix();
 
-	vec[0] = worldmatrix[0][3];
-	vec[1] = worldmatrix[1][3];
-	vec[2] = worldmatrix[2][3];
+	vec[0] = worldmatrix(3, 0);
+	vec[1] = worldmatrix(3, 1);
+	vec[2] = worldmatrix(3, 2);
 	vec[3] = 1.0f;
 
 	if (m_type == RAS_ILightObject::LIGHT_SUN) {
 
-		vec[0] = worldmatrix[0][2];
-		vec[1] = worldmatrix[1][2];
-		vec[2] = worldmatrix[2][2];
+		vec[0] = worldmatrix(2, 0);
+		vec[1] = worldmatrix(2, 1);
+		vec[2] = worldmatrix(2, 2);
 		//vec[0] = base->object->obmat[2][0];
 		//vec[1] = base->object->obmat[2][1];
 		//vec[2] = base->object->obmat[2][2];
@@ -107,9 +107,9 @@ bool RAS_OpenGLLight::ApplyFixedFunctionLighting(KX_Scene *kxscene, int oblayer,
 		glLightf((GLenum)(GL_LIGHT0 + slot), GL_QUADRATIC_ATTENUATION, m_att2 / (m_distance * m_distance));
 
 		if (m_type == RAS_ILightObject::LIGHT_SPOT) {
-			vec[0] = -worldmatrix[0][2];
-			vec[1] = -worldmatrix[1][2];
-			vec[2] = -worldmatrix[2][2];
+			vec[0] = -worldmatrix(2, 0);
+			vec[1] = -worldmatrix(2, 1);
+			vec[2] = -worldmatrix(2, 2);
 			//vec[0] = -base->object->obmat[2][0];
 			//vec[1] = -base->object->obmat[2][1];
 			//vec[2] = -base->object->obmat[2][2];
