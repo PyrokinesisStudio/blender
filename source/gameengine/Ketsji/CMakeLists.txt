@@ -243,6 +243,7 @@ set(SRC
 	KX_CollisionContactPoints.h
 
 	# orphan headers (not apart of a library)
+	../Physics/Common/PHY_IConstraint.h
 	../Physics/Common/PHY_DynamicTypes.h
 	../Physics/Common/PHY_ICharacter.h
 	../Physics/Common/PHY_IController.h

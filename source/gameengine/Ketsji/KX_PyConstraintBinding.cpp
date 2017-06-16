@@ -515,6 +515,14 @@ static PyObject *gPyCreateConstraint(PyObject *self,
 		PHY_IPhysicsController *physctrl = (PHY_IPhysicsController*)physicsid;
 		PHY_IPhysicsController *physctrl2 = (PHY_IPhysicsController*)physicsid2;
 		if (physctrl) { //TODO:check for existence of this pointer!
+			if (constrainttype == PHY_VEHICLE_CONSTRAINT) {
+				// TODO deprecation
+				PHY_IVehicle *vehicle = PHY_GetActiveEnvironment()->CreateVehicle(physctrl);
+
+				KX_VehicleWrapper *wrap = new KX_VehicleWrapper(vehicle);
+	
+				return wrap->NewProxy(true);
+			}
 			//convert from euler angle into axis
 			const float deg2rad = 0.017453292f;
 
@@ -525,14 +533,17 @@ static PyObject *gPyCreateConstraint(PyObject *self,
 			MT_Vector3 axis1 = localCFrame.getColumn(1);
 			MT_Vector3 axis2 = localCFrame.getColumn(2);
 
-			int constraintid = PHY_GetActiveEnvironment()->CreateConstraint(
+			PHY_IConstraint *constraint = PHY_GetActiveEnvironment()->CreateConstraint(
 			        physctrl, physctrl2, (enum PHY_ConstraintType)constrainttype, pivotX, pivotY, pivotZ,
 			        (float)axis0.x(), (float)axis0.y(), (float)axis0.z(),
 			        (float)axis1.x(), (float)axis1.y(), (float)axis1.z(),
 			        (float)axis2.x(), (float)axis2.y(), (float)axis2.z(), flag);
 
-			KX_ConstraintWrapper *wrap = new KX_ConstraintWrapper(
-			        (enum PHY_ConstraintType)constrainttype, constraintid, PHY_GetActiveEnvironment());
+			if (!constraint) {
+				return nullptr;
+			}
+
+			KX_ConstraintWrapper *wrap = new KX_ConstraintWrapper(constraint);
 
 			return wrap->NewProxy(true);
 		}
@@ -540,8 +551,33 @@ static PyObject *gPyCreateConstraint(PyObject *self,
 	Py_RETURN_NONE;
 }
 
+static PyObject *gPyCreateVehicle(PyObject *self, PyObject *args)
+{
+	/* FIXME - physicsid is a long being cast to a pointer, should at least use PyCapsule */
+	unsigned long long physicsid = 0;
 
+	if (!PyArg_ParseTuple(args, "K:createVehicle", &physicsid)) {
+		return nullptr;
+	}
 
+	if (!PHY_GetActiveEnvironment()) {
+		Py_RETURN_NONE;
+	}
+
+	PHY_IPhysicsController *physctrl = (PHY_IPhysicsController*)physicsid;
+	if (!physctrl) { //TODO:check for existence of this pointer!
+		return nullptr;
+	}
+
+	PHY_IVehicle *vehicle = PHY_GetActiveEnvironment()->CreateVehicle(physctrl);
+	if (!vehicle) {
+		return nullptr;
+	}
+
+	KX_VehicleWrapper *wrap = new KX_VehicleWrapper(vehicle);
+
+	return wrap->NewProxy(true);
+}
 
 static PyObject *gPyGetAppliedImpulse(PyObject *self,
                                       PyObject *args,
@@ -650,6 +686,8 @@ static struct PyMethodDef physicsconstraints_methods[] = {
 
 	{"createConstraint",(PyCFunction) gPyCreateConstraint,
 	 METH_VARARGS|METH_KEYWORDS, (const char *)gPyCreateConstraint__doc__},
+	{"createVehicle",(PyCFunction) gPyCreateVehicle,
+	 METH_VARARGS, (const char *)gPyCreateVehicle__doc__},
 	{"getVehicleConstraint",(PyCFunction) gPyGetVehicleConstraint,
 	 METH_VARARGS, (const char *)gPyGetVehicleConstraint__doc__},
 

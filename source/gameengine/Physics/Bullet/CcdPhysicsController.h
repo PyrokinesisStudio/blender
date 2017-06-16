@@ -532,9 +532,9 @@ class CcdPhysicsController : public PHY_IPhysicsController
 {
 public:
 	/// Constraint user data.
-	struct CcdConstraint
+	struct CcdConstraintInfo
 	{
-		CcdConstraint(bool m_disableCollision);
+		CcdConstraintInfo(bool m_disableCollision);
 		/// Disable collision between constrained objects?
 		bool m_disableCollision;
 		/// The constraint is added in dynamic world?
@@ -595,10 +595,10 @@ protected:
 		return (m_registerCount != 0);
 	}
 
-	void addCcdConstraintRef(btTypedConstraint *c);
-	void removeCcdConstraintRef(btTypedConstraint *c);
-	btTypedConstraint *getCcdConstraintRef(int index);
-	int getNumCcdConstraintRefs() const;
+	void addCcdConstraintInfoRef(btTypedConstraint *c);
+	void removeCcdConstraintInfoRef(btTypedConstraint *c);
+	btTypedConstraint *getCcdConstraintInfoRef(int index);
+	int getNumCcdConstraintInfoRefs() const;
 
 	void SetWorldOrientation(const btMatrix3x3& mat);
 	void ForceWorldTransform(const btMatrix3x3& mat, const btVector3& pos);

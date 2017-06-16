@@ -23,53 +23,20 @@
 #
 # ***** END GPL LICENSE BLOCK *****
 
-# since this includes bullet we get errors from the headers too
-remove_strict_flags()
-
 set(INC
 	.
 	../Common
-	../../Common
-	../../Converter
-	../../Expressions
-	../../GameLogic
-	../../Ketsji
-	../../Rasterizer
-	../../Rasterizer/Node
-	../../SceneGraph
-	../../../blender/blenkernel
 	../../../blender/blenlib
-	../../../blender/gpu
-	../../../blender/makesdna
-	../../../../intern/guardedalloc
 )
 
 set(INC_SYS
 	../../../../intern/moto/include
-	${PYTHON_INCLUDE_DIRS}
-	${BOOST_INCLUDE_DIR}
 )
 
 set(SRC
-	CcdConstraint.cpp
-	CcdPhysicsEnvironment.cpp
-	CcdPhysicsController.cpp
-	CcdGraphicController.cpp
+	DummyPhysicsEnvironment.cpp
 
-	CcdConstraint.h
-	CcdMathUtils.h
-	CcdGraphicController.h
-	CcdPhysicsController.h
-	CcdPhysicsEnvironment.h
+	DummyPhysicsEnvironment.h
 )
 
-if(WITH_BULLET)
-	list(APPEND INC_SYS
-		${BULLET_INCLUDE_DIRS}
-	)
-	add_definitions(-DWITH_BULLET)
-endif()
-
-add_definitions(${GL_DEFINITIONS})
-
-blender_add_lib(ge_phys_bullet "${SRC}" "${INC}" "${INC_SYS}")
+blender_add_lib(ge_phys_dummy "${SRC}" "${INC}" "${INC_SYS}")

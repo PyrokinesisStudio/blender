@@ -210,24 +210,24 @@ CcdPhysicsController::CcdPhysicsController(const CcdConstructionInfo& ci)
 	CreateRigidbody();
 }
 
-void CcdPhysicsController::addCcdConstraintRef(btTypedConstraint *c)
+void CcdPhysicsController::addCcdConstraintInfoRef(btTypedConstraint *c)
 {
 	int index = m_ccdConstraintRefs.findLinearSearch(c);
 	if (index == m_ccdConstraintRefs.size())
 		m_ccdConstraintRefs.push_back(c);
 }
 
-void CcdPhysicsController::removeCcdConstraintRef(btTypedConstraint *c)
+void CcdPhysicsController::removeCcdConstraintInfoRef(btTypedConstraint *c)
 {
 	m_ccdConstraintRefs.remove(c);
 }
 
-btTypedConstraint *CcdPhysicsController::getCcdConstraintRef(int index)
+btTypedConstraint *CcdPhysicsController::getCcdConstraintInfoRef(int index)
 {
 	return m_ccdConstraintRefs[index];
 }
 
-int CcdPhysicsController::getNumCcdConstraintRefs() const
+int CcdPhysicsController::getNumCcdConstraintInfoRefs() const
 {
 	return m_ccdConstraintRefs.size();
 }
@@ -266,7 +266,7 @@ public:
 	}
 };
 
-CcdPhysicsController::CcdConstraint::CcdConstraint(bool disableCollision)
+CcdPhysicsController::CcdConstraintInfo::CcdConstraintInfo(bool disableCollision)
 	:m_disableCollision(disableCollision),
 	m_active(false)
 {
