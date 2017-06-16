@@ -5,16 +5,25 @@
 
 class btTypedConstraint;
 
-class CcdConstraint : public PHY_Constraint
+class CcdConstraint : public PHY_IConstraint
 {
 private:
 	btTypedConstraint *m_constraint;
 
+	/// Disable collision between constrained objects?
+	bool m_disableCollision;
+	/// The constraint is added in dynamic world?
+	bool m_enabled;
+
 public:
-	CcdConstraint(btTypedConstraint *constraint, int id, PHY_ConstraintType type);
+	CcdConstraint(btTypedConstraint *constraint, bool disableCollision);
 	virtual ~CcdConstraint();
 
-	virtual void SetParam(int param, float value, float value1);
+	bool GetDisableCollision() const;
+	bool GetEnabled() const;
+	void SetEnabled(bool enabled);
+
+	virtual void SetParam(int param, float value0, float value1);
 	virtual float GetParam(int param);
 
 	virtual int GetIdentifier() const;

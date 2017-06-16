@@ -130,6 +130,10 @@ PyDoc_STRVAR(gPyCreateConstraint__doc__,
 "createConstraint(ob1,ob2,float restLength,float restitution,float damping)\n"
 ""
 );
+PyDoc_STRVAR(gPyCreateVehicle__doc__,
+"createVehicle(chassis)\n"
+""
+);
 PyDoc_STRVAR(gPyGetVehicleConstraint__doc__,
 "getVehicleConstraint(int constraintId)\n"
 ""
@@ -450,7 +454,7 @@ static PyObject *gPyGetVehicleConstraint(PyObject *self,
 			PHY_IVehicle* vehicle = PHY_GetActiveEnvironment()->GetVehicleConstraint(constraintid);
 			if (vehicle)
 			{
-				KX_VehicleWrapper* pyWrapper = new KX_VehicleWrapper(vehicle,PHY_GetActiveEnvironment());
+				KX_VehicleWrapper* pyWrapper = new KX_VehicleWrapper(vehicle);
 				return pyWrapper->NewProxy(true);
 			}
 

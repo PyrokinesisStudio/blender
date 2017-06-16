@@ -19,6 +19,7 @@
 #include "CcdPhysicsEnvironment.h"
 #include "CcdPhysicsController.h"
 #include "CcdGraphicController.h"
+#include "CcdConstraint.h"
 #include "CcdMathUtils.h"
 
 #include <algorithm>
@@ -497,8 +498,8 @@ void CcdPhysicsEnvironment::AddCcdPhysicsController(CcdPhysicsController *ctrl)
 
 void CcdPhysicsEnvironment::RemoveConstraint(btTypedConstraint *con, bool free)
 {
-	CcdPhysicsController::CcdConstraint *userData = (CcdPhysicsController::CcdConstraint *)con->getUserConstraintPtr();
-	if (!userData->m_active) {
+	CcdConstraint *userData = (CcdConstraint *)con->getUserConstraintPtr();
+	if (!userData->GetEnabled()) {
 		return;
 	}
 
@@ -507,7 +508,7 @@ void CcdPhysicsEnvironment::RemoveConstraint(btTypedConstraint *con, bool free)
 	rbA.activate();
 	rbB.activate();
 
-	userData->m_active = false;
+	userData->SetEnabled(false);
 	m_dynamicsWorld->removeConstraint(con);
 
 	if (free) {
@@ -526,7 +527,7 @@ void CcdPhysicsEnvironment::RemoveConstraint(btTypedConstraint *con, bool free)
 	}
 }
 
-void CcdPhysicsController::RemoveVehicle(WrapperVehicle *vehicle, bool free)
+void CcdPhysicsEnvironment::RemoveVehicle(WrapperVehicle *vehicle, bool free)
 {
 	m_dynamicsWorld->removeVehicle(vehicle->GetVehicle());
 	if (free) {
@@ -537,8 +538,8 @@ void CcdPhysicsController::RemoveVehicle(WrapperVehicle *vehicle, bool free)
 
 void CcdPhysicsEnvironment::RestoreConstraint(CcdPhysicsController *ctrl, btTypedConstraint *con)
 {
-	CcdPhysicsController::CcdConstraint *userData = (CcdPhysicsController::CcdConstraint *)con->getUserConstraintPtr();
-	if (userData->m_active) {
+	CcdConstraint *userData = (CcdConstraint *)con->getUserConstraintPtr();
+	if (userData->GetEnabled()) {
 		return;
 	}
 
@@ -557,8 +558,8 @@ void CcdPhysicsEnvironment::RestoreConstraint(CcdPhysicsController *ctrl, btType
 
 	// Avoid add constraint if one of the objects are not available.
 	if (IsActiveCcdPhysicsController(other)) {
-		userData->m_active = true;
-		m_dynamicsWorld->addConstraint(con, userData->m_disableCollision);
+		userData->SetEnabled(true);
+		m_dynamicsWorld->addConstraint(con, userData->GetDisableCollision());
 	}
 }
 
@@ -588,7 +589,7 @@ bool CcdPhysicsEnvironment::RemoveCcdPhysicsController(CcdPhysicsController *ctr
 		// Handle potential vehicle constraints
 		for (WrapperVehicle *vehicle : m_wrapperVehicles) {
 			if (vehicle->GetChassis() == ctrl) {
-				RemoveVehicle(vehicle);
+				RemoveVehicle(vehicle, freeConstraints);
 			}
 		}
 	}
@@ -1047,9 +1048,9 @@ void CcdPhysicsEnvironment::RemoveConstraintById(int constraintId, bool free)
 		}
 	}
 
-	WrapperVehicle *vehicle = GetVehicleConstraint(constraintId);
+	WrapperVehicle *vehicle = static_cast<WrapperVehicle *>(GetVehicleConstraint(constraintId));
 	if (vehicle) {
-		RemoveVehicle(vehicle);
+		RemoveVehicle(vehicle, free);
 	}
 }
 
@@ -2253,7 +2254,7 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 
 	btCollisionObject *colObj0 = c0->GetCollisionObject();
 	if (!colObj0) {
-		return 0;
+		return nullptr;
 	}
 
 	btVector3 pivotInA(pivotX, pivotY, pivotZ);
@@ -2264,7 +2265,7 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 	if (sb0 && sb1)
 	{
 		//not between two soft bodies?
-		return 0;
+		return nullptr;
 	}
 
 	if (sb0) {
@@ -2280,7 +2281,7 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 				sb0->setMass(node, 0.0f);
 			}
 		}
-		return 0;//can't remove soft body anchors yet
+		return nullptr;//can't remove soft body anchors yet
 	}
 
 	if (sb1) {
@@ -2294,16 +2295,21 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 				sb1->setMass(node, 0.0f);
 			}
 		}
-		return 0;//can't remove soft body anchors yet
+		return nullptr;//can't remove soft body anchors yet
 	}
 
 	if (rb0static && rb1static) {
-		return 0;
+		return nullptr;
 	}
 
 
 	if (!rb0)
-		return 0;
+		return nullptr;
+
+	// If either of the controllers is missing, we can't do anything.
+	if (!c0 || !c1) {
+		return nullptr;
+	}
 
 	btTypedConstraint *con = nullptr;
 
@@ -2318,11 +2324,6 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 	{
 		case PHY_POINT2POINT_CONSTRAINT:
 		{
-			// If either of the controllers is missing, we can't do anything.
-			if (!c0 || !c1) {
-				return 0;
-			}
-
 			btPoint2PointConstraint *p2p = nullptr;
 
 			if (rb1) {
@@ -2339,11 +2340,6 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 
 		case PHY_GENERIC_6DOF_CONSTRAINT:
 		{
-			// If either of the controllers is missing, we can't do anything.
-			if (!c0 || !c1) {
-				return 0;
-			}
-
 			btGeneric6DofConstraint *genericConstraint = nullptr;
 
 			if (rb1) {
@@ -2401,11 +2397,6 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 		}
 		case PHY_CONE_TWIST_CONSTRAINT:
 		{
-			// If either of the controllers is missing, we can't do anything.
-			if (!c0 || !c1) {
-				return 0;
-			}
-
 			btConeTwistConstraint *coneTwistContraint = nullptr;
 
 			if (rb1) {
@@ -2463,11 +2454,6 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 
 		case PHY_LINEHINGE_CONSTRAINT:
 		{
-			// If either of the controllers is missing, we can't do anything.
-			if (!c0 || !c1) {
-				return 0;
-			}
-
 			btHingeConstraint *hinge = nullptr;
 
 			if (rb1) {
@@ -2527,18 +2513,19 @@ PHY_IConstraint *CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsContr
 		}
 	};
 
-	if (con) {
-		c0->addCcdConstraintRef(con);
-		c1->addCcdConstraintRef(con);
-		con->setUserConstraintId(gConstraintUid++);
-		con->setUserConstraintType(type);
-		CcdPhysicsController::CcdConstraint *userData = new CcdPhysicsController::CcdConstraint(disableCollisionBetweenLinkedBodies);
-		con->setUserConstraintPtr(userData);
-		userData->m_active = true;
-		m_dynamicsWorld->addConstraint(con, disableCollisionBetweenLinkedBodies);
-
-		return con->getUserConstraintId();
+	if (!con) {
+		return nullptr;
 	}
+
+	c0->addCcdConstraintRef(con);
+	c1->addCcdConstraintRef(con);
+	con->setUserConstraintId(gConstraintUid++);
+	con->setUserConstraintType(type);
+	CcdConstraint *constraintData = new CcdConstraint(con, disableCollisionBetweenLinkedBodies);
+	con->setUserConstraintPtr(constraintData);
+	m_dynamicsWorld->addConstraint(con, disableCollisionBetweenLinkedBodies);
+
+	return constraintData;
 }
 
 PHY_IVehicle *CcdPhysicsEnvironment::CreateVehicle(PHY_IPhysicsController *ctrl)
@@ -2552,7 +2539,7 @@ PHY_IVehicle *CcdPhysicsEnvironment::CreateVehicle(PHY_IPhysicsController *ctrl)
 	m_dynamicsWorld->addVehicle(vehicle);
 
 	vehicle->setUserConstraintId(gConstraintUid++);
-	vehicle->setUserConstraintType(type);
+	vehicle->setUserConstraintType(PHY_VEHICLE_CONSTRAINT);
 
 	return wrapperVehicle;
 }
@@ -3133,7 +3120,7 @@ void CcdPhysicsEnvironment::SetupObjectConstraints(KX_GameObject *obj_src, KX_Ga
 	/* Apply not only the pivot and axis values, but also take scale into count
 	 * this is not working well, if only one or two axis are scaled, but works ok on
 	 * homogeneous scaling. */
-	int constraintId = phys_env->CreateConstraint(
+	PHY_IConstraint *constraint = phys_env->CreateConstraint(
 	    phy_src, phy_dest, (PHY_ConstraintType)dat->type,
 	    (float)(dat->pivX * scale.x()), (float)(dat->pivY * scale.y()), (float)(dat->pivZ * scale.z()),
 	    (float)(axis0.x() * scale.x()), (float)(axis0.y() * scale.y()), (float)(axis0.z() * scale.z()),
@@ -3148,7 +3135,7 @@ void CcdPhysicsEnvironment::SetupObjectConstraints(KX_GameObject *obj_src, KX_Ga
 	 * PHY_VEHICLE_CONSTRAINT = 11,
 	 * PHY_GENERIC_6DOF_CONSTRAINT = 12 */
 
-	if (!constraintId)
+	if (!constraint)
 		return;
 
 	int dof = 0;
@@ -3180,11 +3167,11 @@ void CcdPhysicsEnvironment::SetupObjectConstraints(KX_GameObject *obj_src, KX_Ga
 
 	for (; dof < dof_max; dof++) {
 		if (dat->flag & dofbit) {
-			phys_env->SetConstraintParam(constraintId, dof, dat->minLimit[dof], dat->maxLimit[dof]);
+			constraint->SetParam(dof, dat->minLimit[dof], dat->maxLimit[dof]);
 		}
 		else {
 			/* minLimit > maxLimit means free (no limit) for this degree of freedom. */
-			phys_env->SetConstraintParam(constraintId, dof, 1.0f, -1.0f);
+			constraint->SetParam(dof, 1.0f, -1.0f);
 		}
 		dofbit <<= 1;
 	}

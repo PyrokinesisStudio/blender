@@ -221,9 +221,6 @@ public:
 	virtual PHY_IPhysicsController *CreateSphereController(float radius, const MT_Vector3& position) = 0;
 	virtual PHY_IPhysicsController *CreateConeController(float coneradius, float coneheight) = 0;
 
-	virtual void SetConstraintParam(int constraintId, int param, float value, float value1) = 0;
-	virtual float GetConstraintParam(int constraintId, int param) = 0;
-
 	virtual void ExportFile(const std::string& filename)
 	{
 	};

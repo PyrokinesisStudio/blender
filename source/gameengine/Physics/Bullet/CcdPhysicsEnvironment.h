@@ -38,10 +38,6 @@ class btTypedConstraint;
 class btSimulationIslandManager;
 class btCollisionDispatcher;
 class btDispatcher;
-//#include "btBroadphaseInterface.h"
-
-//switch on/off new vehicle support
-#define NEW_BULLET_VEHICLE_SUPPORT 1
 
 #include "BulletDynamics/ConstraintSolver/btContactSolverInfo.h"
 
@@ -177,25 +173,14 @@ public:
 								 float axis2X = 0, float axis2Y = 0, float axis2Z = 0, int flag = 0);
 	virtual PHY_IVehicle *CreateVehicle(PHY_IPhysicsController *ctrl);
 
-	virtual void SetConstraintParam(int constraintId, int param, float value, float value1);
-
-	virtual float GetConstraintParam(int constraintId, int param);
-
 	virtual void RemoveConstraintById(int constraintid, bool free);
 
 	virtual float getAppliedImpulse(int constraintid);
 
 	virtual void CallbackTriggers();
 
-#ifdef NEW_BULLET_VEHICLE_SUPPORT
 	//complex constraint for vehicles
 	virtual PHY_IVehicle *GetVehicleConstraint(int constraintId);
-#else
-	virtual class PHY_IVehicle *GetVehicleConstraint(int constraintId)
-	{
-		return nullptr;
-	}
-#endif  /* NEW_BULLET_VEHICLE_SUPPORT */
 	    // Character physics wrapper
 	virtual PHY_ICharacter *GetCharacterController(class KX_GameObject *ob);
 

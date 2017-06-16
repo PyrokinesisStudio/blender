@@ -530,17 +530,6 @@ public:
 /// CcdPhysicsController is a physics object that supports continuous collision detection and time of impact based physics resolution.
 class CcdPhysicsController : public PHY_IPhysicsController
 {
-public:
-	/// Constraint user data.
-	struct CcdConstraintInfo
-	{
-		CcdConstraintInfo(bool m_disableCollision);
-		/// Disable collision between constrained objects?
-		bool m_disableCollision;
-		/// The constraint is added in dynamic world?
-		bool m_active;
-	};
-
 protected:
 	btCollisionObject *m_object;
 	BlenderBulletCharacterController *m_characterController;
@@ -595,10 +584,10 @@ protected:
 		return (m_registerCount != 0);
 	}
 
-	void addCcdConstraintInfoRef(btTypedConstraint *c);
-	void removeCcdConstraintInfoRef(btTypedConstraint *c);
-	btTypedConstraint *getCcdConstraintInfoRef(int index);
-	int getNumCcdConstraintInfoRefs() const;
+	void addCcdConstraintRef(btTypedConstraint *c);
+	void removeCcdConstraintRef(btTypedConstraint *c);
+	btTypedConstraint *getCcdConstraintRef(int index);
+	int getNumCcdConstraintRefs() const;
 
 	void SetWorldOrientation(const btMatrix3x3& mat);
 	void ForceWorldTransform(const btMatrix3x3& mat, const btVector3& pos);

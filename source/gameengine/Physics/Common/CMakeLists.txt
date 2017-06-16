@@ -25,8 +25,6 @@
 
 set(INC
 	.
-	../Common
-	../../../blender/blenlib
 )
 
 set(INC_SYS
@@ -34,9 +32,16 @@ set(INC_SYS
 )
 
 set(SRC
-	DummyPhysicsEnvironment.cpp
-
-	DummyPhysicsEnvironment.h
+	PHY_IConstraint.h
+	PHY_DynamicTypes.h
+	PHY_ICharacter.h
+	PHY_IController.h
+	PHY_IGraphicController.h
+	PHY_IMotionState.h
+	PHY_IPhysicsController.h
+	PHY_IPhysicsEnvironment.h
+	PHY_IVehicle.h
+	PHY_Pro.h
 )
 
 blender_add_lib(ge_phys_dummy "${SRC}" "${INC}" "${INC_SYS}")

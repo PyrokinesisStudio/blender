@@ -1,7 +1,7 @@
 #ifndef __PHY_ICONSTRAINT_H__
 #define __PHY_ICONSTRAINT_H__
 
-#include "PHY_DynamicsTypes.h" // For PHY_ConstraintType.
+#include "PHY_DynamicTypes.h" // For PHY_ConstraintType.
 
 class PHY_IConstraint
 {

@@ -15,7 +15,7 @@ class	KX_VehicleWrapper : public CValue
 	Py_Header
 
 public:
-	KX_VehicleWrapper(PHY_IVehicle* vehicle,class PHY_IPhysicsEnvironment* physenv);
+	KX_VehicleWrapper(PHY_IVehicle* vehicle);
 	virtual ~KX_VehicleWrapper ();
 
 	virtual std::string GetName();

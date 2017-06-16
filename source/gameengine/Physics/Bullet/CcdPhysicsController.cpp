@@ -210,24 +210,24 @@ CcdPhysicsController::CcdPhysicsController(const CcdConstructionInfo& ci)
 	CreateRigidbody();
 }
 
-void CcdPhysicsController::addCcdConstraintInfoRef(btTypedConstraint *c)
+void CcdPhysicsController::addCcdConstraintRef(btTypedConstraint *c)
 {
 	int index = m_ccdConstraintRefs.findLinearSearch(c);
 	if (index == m_ccdConstraintRefs.size())
 		m_ccdConstraintRefs.push_back(c);
 }
 
-void CcdPhysicsController::removeCcdConstraintInfoRef(btTypedConstraint *c)
+void CcdPhysicsController::removeCcdConstraintRef(btTypedConstraint *c)
 {
 	m_ccdConstraintRefs.remove(c);
 }
 
-btTypedConstraint *CcdPhysicsController::getCcdConstraintInfoRef(int index)
+btTypedConstraint *CcdPhysicsController::getCcdConstraintRef(int index)
 {
 	return m_ccdConstraintRefs[index];
 }
 
-int CcdPhysicsController::getNumCcdConstraintInfoRefs() const
+int CcdPhysicsController::getNumCcdConstraintRefs() const
 {
 	return m_ccdConstraintRefs.size();
 }
@@ -265,13 +265,6 @@ public:
 		m_blenderMotionState->CalculateWorldTransformations();
 	}
 };
-
-CcdPhysicsController::CcdConstraintInfo::CcdConstraintInfo(bool disableCollision)
-	:m_disableCollision(disableCollision),
-	m_active(false)
-{
-}
-
 
 btRigidBody *CcdPhysicsController::GetRigidBody()
 {

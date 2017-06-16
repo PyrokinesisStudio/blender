@@ -32,7 +32,7 @@
 #include "DNA_object_types.h" // for OB_MAX_COL_MASKS
 
 KX_VehicleWrapper::KX_VehicleWrapper(PHY_IVehicle *vehicle)
-	:m_vehicle(vehicle),
+	:m_vehicle(vehicle)
 {
 }
 
@@ -371,13 +371,13 @@ PyAttributeDef KX_VehicleWrapper::Attributes[] = {
 PyObject *KX_VehicleWrapper::pyattr_get_constraintId(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_VehicleWrapper* self = static_cast<KX_VehicleWrapper*>(self_v);
-	return PyLong_FromLong(m_constraintId);
+	return PyLong_FromLong(self->m_vehicle->GetUserConstraintId());
 }
 
 PyObject *KX_VehicleWrapper::pyattr_get_constraintType(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_VehicleWrapper* self = static_cast<KX_VehicleWrapper*>(self_v);
-	return PyLong_FromLong(self->m_constraintType);
+	return PyLong_FromLong(PHY_VEHICLE_CONSTRAINT);
 }
 
 PyObject *KX_VehicleWrapper::pyattr_get_ray_mask(PyObjectPlus *self, const struct KX_PYATTRIBUTE_DEF *attrdef)

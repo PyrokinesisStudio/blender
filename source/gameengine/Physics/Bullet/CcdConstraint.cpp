@@ -2,8 +2,10 @@
 
 #include "btBulletDynamicsCommon.h"
 
-CcdConstraint::CcdConstraint(btTypedConstraint *constraint)
+CcdConstraint::CcdConstraint(btTypedConstraint *constraint, bool disableCollision)
 	:m_constraint(constraint),
+	m_disableCollision(disableCollision),
+	m_enabled(true)
 {
 }
 
@@ -11,7 +13,22 @@ CcdConstraint::~CcdConstraint()
 {
 }
 
-void CcdConstraint::SetParam(int param, float value, float value1)
+bool CcdConstraint::GetDisableCollision() const
+{
+	return m_disableCollision;
+}
+
+bool CcdConstraint::GetEnabled() const
+{
+	return m_enabled;
+}
+
+void CcdConstraint::SetEnabled(bool enabled)
+{
+	m_enabled = enabled;
+}
+
+void CcdConstraint::SetParam(int param, float value0, float value1)
 {
 	if (!m_constraint)
 		return;
@@ -163,7 +180,7 @@ float CcdConstraint::GetParam(int param)
 
 int CcdConstraint::GetIdentifier() const
 {
-	return m_constraint->getUserConstraintIndex();
+	return m_constraint->getUserConstraintId();
 }
 
 PHY_ConstraintType CcdConstraint::GetType() const
