@@ -297,7 +297,7 @@ void RAS_OpenGLLight::Update()
 
 	if ((lamp = GetGPULamp()) != nullptr && kxlight->GetSGNode()) {
 		float obmat[4][4];
-		const MT_Transform trans = kxlight->NodeGetWorldTransform();
+		const mt::mat4x3 trans = kxlight->NodeGetWorldTransform();
 		trans.getValue(&obmat[0][0]);
 
 		int hide = kxlight->GetVisible() ? 0 : 1;

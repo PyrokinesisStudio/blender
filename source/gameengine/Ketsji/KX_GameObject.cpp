@@ -1346,12 +1346,12 @@ const mt::vec3& KX_GameObject::NodeGetLocalPosition() const
 	return m_pSGNode->GetLocalPosition();
 }
 
-MT_Transform KX_GameObject::NodeGetWorldTransform() const
+mt::mat4x3 KX_GameObject::NodeGetWorldTransform() const
 {
 	return m_pSGNode->GetWorldTransform();
 }
 
-MT_Transform KX_GameObject::NodeGetLocalTransform() const
+mt::mat4x3 KX_GameObject::NodeGetLocalTransform() const
 {
 	return m_pSGNode->GetLocalTransform();
 }

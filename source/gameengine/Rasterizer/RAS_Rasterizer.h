@@ -558,8 +558,6 @@ public:
 	void IndexPrimitivesDerivedMesh(RAS_MeshSlot *ms);
 	/// Render text mesh slot using BLF functions.
 	void IndexPrimitivesText(RAS_MeshSlot *ms);
- 
-	void SetProjectionMatrix(MT_CmMatrix4x4 &mat);
 
 	/* This one should become our final version, methinks. */
 	/**

@@ -558,9 +558,9 @@ mt::mat4x3 SG_Node::GetWorldTransform() const
 							m_worldScaling[0], m_worldScaling[1], m_worldScaling[2]));
 }
 
-MT_Transform SG_Node::GetLocalTransform() const
+mt::mat4x3 SG_Node::GetLocalTransform() const
 {
-	return MT_Transform(m_localPosition,
+	return mt::mat4x3(m_localPosition,
 	                    m_localRotation.scaled(
 							m_localScaling[0], m_localScaling[1], m_localScaling[2]));
 }
