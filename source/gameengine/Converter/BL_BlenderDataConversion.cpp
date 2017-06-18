@@ -1369,9 +1369,9 @@ static void bl_ConvertBlenderObject_Single(
 			y /= parscale[1];
 		if (!mt::FuzzyZero(parscale[2]))
 			z /= parscale[2];
-		ori.setColumn(0, x);
-		ori.setColumn(1, y);
-		ori.setColumn(2, z);
+		ori.GetColumn(0) = x;
+		ori.GetColumn(1) = y;
+		ori.GetColumn(2) = z;
 		parentinversenode->SetLocalOrientation(ori);
 		parentinversenode->SetLocalScale(parscale);
 
