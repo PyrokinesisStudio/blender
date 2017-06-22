@@ -1314,10 +1314,9 @@ static void bl_ConvertBlenderObject_Single(
 		blenderobject->loc[2]+blenderobject->dloc[2]
 	);
 
-	mt::mat3 rotation;
 	float rotmat[3][3];
 	BKE_object_rot_to_mat3(blenderobject, rotmat, false);
-	rotation.setValue3x3((float*)rotmat);
+	mt::mat3 rotation(rotmat);
 
 	mt::vec3 scale(blenderobject->size);
 
