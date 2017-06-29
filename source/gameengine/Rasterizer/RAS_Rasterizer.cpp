@@ -896,7 +896,7 @@ mt::mat4 RAS_Rasterizer::GetViewMatrix(StereoEye eye, const mt::mat4x3 &camtrans
 		static const mt::vec3 unitViewDir(0.0f, -1.0f, 0.0f);  // minus y direction, Blender convention
 		static const mt::vec3 unitViewupVec(0.0f, 0.0f, 1.0f);
 
-		const mt::mat3& camOrientMat3x3 = camtrans.getBasis().transposed();
+		const mt::mat3& camOrientMat3x3 = camtrans.RotationMatrix().transposed();
 		// actual viewDir
 		const mt::vec3 viewDir = camOrientMat3x3 * unitViewDir;  // this is the moto convention, vector on right hand side
 		// actual viewup vec

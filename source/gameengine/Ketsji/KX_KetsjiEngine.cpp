@@ -1103,8 +1103,8 @@ void KX_KetsjiEngine::PostProcessScene(KX_Scene *scene)
 			mt::mat4x3 camtrans;
 			camtrans.invert(trans);
 
-			activecam->NodeSetLocalPosition(camtrans.getOrigin());
-			activecam->NodeSetLocalOrientation(camtrans.getBasis());
+			activecam->NodeSetLocalPosition(camtrans.TranslationVector3D());
+			activecam->NodeSetLocalOrientation(camtrans.RotationMatrix());
 			activecam->NodeUpdateGS(0.0f);
 		}
 		else {

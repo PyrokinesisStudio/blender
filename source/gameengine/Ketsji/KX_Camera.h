@@ -62,7 +62,7 @@ protected:
 #if 0
 		mt::mat4x3 camtrans;
 		camtrans.invert(m_trans1);
-		mt::mat3 camorient = camtrans.getBasis();
+		mt::mat3 camorient = camtrans.RotationMatrix();
 		camtrans.translate(camorient.inverse()*movevec);
 		m_trans1.invert(camtrans);
 #endif

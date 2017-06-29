@@ -116,7 +116,7 @@ void RAS_BucketManager::RenderSortedBuckets(RAS_Rasterizer *rasty, RAS_BucketMan
 	if (leafs.size() > 0) {
 		/* Camera's near plane equation: pnorm.dot(point) + pval,
 		 * but we leave out pval since it's constant anyway */
-		const mt::vec3 pnorm(m_nodeData.m_trans.getBasis()[2]);
+		const mt::vec3 pnorm(m_nodeData.m_trans.RotationMatrix()[2]);
 		std::vector<SortedMeshSlot> sortedSlots(leafs.size());
 		// Generate all SortedMeshSlot corresponding to all the leafs nodes.
 		std::transform(leafs.begin(), leafs.end(), sortedSlots.begin(),

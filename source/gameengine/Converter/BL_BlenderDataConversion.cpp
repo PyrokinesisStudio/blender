@@ -1349,15 +1349,15 @@ static void bl_ConvertBlenderObject_Single(
 
 		float* fl = (float*) blenderobject->parentinv;
 		mt::mat4x3 parinvtrans(fl);
-		parentinversenode->SetLocalPosition(parinvtrans.getOrigin());
+		parentinversenode->SetLocalPosition(parinvtrans.TranslationVector3D());
 		// problem here: the parent inverse transform combines scaling and rotation
 		// in the basis but the scenegraph needs separate rotation and scaling.
 		// This is not important for OpenGL (it uses 4x4 matrix) but it is important
 		// for the physic engine that needs a separate scaling
-		//parentinversenode->SetLocalOrientation(parinvtrans.getBasis());
+		//parentinversenode->SetLocalOrientation(parinvtrans.RotationMatrix());
 
 		// Extract the rotation and the scaling from the basis
-		mt::mat3 ori(parinvtrans.getBasis());
+		mt::mat3 ori(parinvtrans.RotationMatrix());
 		mt::vec3 x(ori.GetColumn(0));
 		mt::vec3 y(ori.GetColumn(1));
 		mt::vec3 z(ori.GetColumn(2));

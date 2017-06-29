@@ -639,6 +639,11 @@ class Matrix {
     return Vector<T, 3>(data_[3][0], data_[3][1], data_[3][2]);
   }
 
+  inline Matrix<T, 3> RotationMatrix() const {
+    MATHFU_STATIC_ASSERT(rows >= 3 && columns >= 3);
+    return ToRotationMatrix(*this);
+  }
+
   /// @brief Load from any byte-wise compatible external matrix.
   ///
   /// Format should be `columns` vectors, each holding `rows` values of type T.
@@ -762,6 +767,18 @@ class Matrix {
     return Matrix<T, 3>(m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9],
                         m[10]);
   }
+
+  /// @brief Extracts the 3x3 rotation Matrix from a 4x3 Matrix.
+  ///
+  /// This resulting Matrix will contain the upper-left 3x3 sub-matrix of the
+  /// input Matrix.
+  ///
+  /// @param m 4x3 Matrix.
+  /// @return rotation Matrix containing the result.
+  static inline Matrix<T, 3> ToRotationMatrix(const Matrix<T, 4, 3>& m) {
+    return Matrix<T, 3>(m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9],
+                        m[10]);
+  } 
 
   /// @brief Constructs a Matrix<float, 4> from an AffineTransform.
   ///
