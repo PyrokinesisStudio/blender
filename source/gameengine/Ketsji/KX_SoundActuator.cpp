@@ -271,7 +271,7 @@ bool KX_SoundActuator::Update(double curtime)
 				p = Mo * p;
 				p.Pack(data);
 				AUD_Handle_setVelocity(m_handle, data);
-				(Mo * obj->NodeGetWorldOrientation()).getRotation().Pack(data);
+				(Mo * mt::quat::FromMatrix(obj->NodeGetWorldOrientation())).Pack(data);
 				AUD_Handle_setOrientation(m_handle, data);
 			}
 		}

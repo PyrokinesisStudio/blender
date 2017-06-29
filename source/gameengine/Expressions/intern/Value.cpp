@@ -25,6 +25,8 @@
 #include "EXP_ErrorValue.h"
 #include "EXP_ListValue.h"
 
+#include <float.h>
+
 #ifdef WITH_PYTHON
 
 PyTypeObject CValue::Type = {

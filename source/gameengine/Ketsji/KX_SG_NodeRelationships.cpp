@@ -241,8 +241,9 @@ UpdateChildCoordinates(
 			child_w_scale = (m_relax * child_w_scale + child_n_scale) * weight;
 			child_w_pos = (m_relax * child_w_pos + child_n_pos) * weight;
 			// for rotation we must go through quaternion
-			mt::quat child_w_quat = child_w_rotation.getRotation().slerp(child_n_rotation.getRotation(), weight);
-			child_w_rotation.setRotation(child_w_quat);
+			const mt::quat child_w_quat = mt::quat::FromMatrix(child_w_rotation);
+			const mt::quat child_n_quat = mt::quat::FromMatrix(child_n_rotation);
+			child_w_rotation = mt::quat::Slerp(child_w_quat, child_n_quat, weight).ToMatrix();
 			//FIXME: update physics controller.
 		} else {
 			child_w_scale = child_n_scale;

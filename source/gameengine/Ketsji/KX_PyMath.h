@@ -75,7 +75,7 @@ bool PyMatTo(PyObject *pymat, T& mat)
 		{
 			for (unsigned int col = 0; col < Size(mat); col++)
 			{
-				mat[row][col] = *(pymatrix->matrix + col * pymatrix->num_row + row);
+				mat(col, row) = *(pymatrix->matrix + col * pymatrix->num_row + row);
 			}
 		}
 	}
@@ -102,7 +102,7 @@ bool PyMatTo(PyObject *pymat, T& mat)
 				else {
 					for (unsigned int col = 0; col < cols; col++) {
 						PyObject *item = PySequence_GetItem(pyrow, col); /* new ref */
-						mat[row][col] = PyFloat_AsDouble(item);
+						mat(col, row) = PyFloat_AsDouble(item);
 						Py_DECREF(item);
 					}
 				}

@@ -34,6 +34,7 @@
 
 
 #include <math.h>
+#include <float.h>
 
 #include "EXP_BoolValue.h"
 #include "EXP_IntValue.h"

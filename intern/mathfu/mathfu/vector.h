@@ -376,7 +376,7 @@ class Vector {
 
   /// @brief Pack a Vector to a array "d" element.
   ///
-  /// @param vector array "d" element to write to.
+  /// @param a array "d" element to write to.
   inline void Pack(T *a) const {
     MATHFU_VECTOR_OPERATION(a[i] = data_[i]);
   }

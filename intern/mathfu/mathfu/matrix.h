@@ -158,7 +158,7 @@ class Matrix {
 
   /// @brief Construct a Matrix from a single float.
   ///
-  /// @param s Scalar value used to initialize each element of the matrix.
+  /// @param s Scalar valu<e used to initialize each element of the matrix.
   explicit inline Matrix(const T& s) {
     MATHFU_MAT_OPERATION((data_[i] = Vector<T, rows>(s)));
   }
@@ -223,6 +223,14 @@ class Matrix {
     data_[0] = Vector<T, rows>(s00, s10, s20, s30);
     data_[1] = Vector<T, rows>(s01, s11, s21, s31);
     data_[2] = Vector<T, rows>(s02, s12, s22, s32);
+  }
+
+  inline Matrix(const Matrix<T, 3>& m, const Vector<T, 3>& v) {
+    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
+    data_[0] = m.GetColumn(0);
+	data_[1] = m.GetColumn(1);
+	data_[2] = m.GetColumn(2);
+	data_[3] = v;
   }
 
   /// @brief Create a Matrix from sixteen floats.
@@ -635,12 +643,12 @@ class Matrix {
   /// @note 3-dimensional affine transforms are represented by 4x4 matrices.
   /// @return Vector with the first three components of column 3.
   inline Vector<T, 3> TranslationVector3D() const {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns == 4);
+    MATHFU_STATIC_ASSERT(rows == 4 && columns >= 3);
     return Vector<T, 3>(data_[3][0], data_[3][1], data_[3][2]);
   }
 
   inline Matrix<T, 3> RotationMatrix() const {
-    MATHFU_STATIC_ASSERT(rows >= 3 && columns >= 3);
+    MATHFU_STATIC_ASSERT(rows == 4 && columns >= 3);
     return ToRotationMatrix(*this);
   }
 

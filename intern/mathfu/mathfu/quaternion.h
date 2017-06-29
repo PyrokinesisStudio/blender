@@ -367,6 +367,23 @@ class Quaternion {
     return const_cast<Quaternion<T>*>(this)->operator[](i);
   }
 
+  /// @brief Pack a quaterion to a array "d" element.
+  ///
+  /// @param a array "d" element to write to.
+  inline void Pack(T *a) const {
+    a[0] = x;
+	a[1] = y;
+	a[2] = z;
+	a[3] = w;
+  }
+
+  /// @brief Return the array of this vector.
+  ///
+  /// @return The array of this vector.
+  inline const T* const Data() const {
+    return data_;
+  }
+
   /// @brief Returns a vector that is perpendicular to the supplied vector.
   ///
   /// @param v1 An arbitrary vector
@@ -536,6 +553,7 @@ class Quaternion {
       float z;
       float w;
     };
+	T data_;
   };
 };
 

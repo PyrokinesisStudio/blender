@@ -50,7 +50,7 @@ bool PyOrientationTo(PyObject *pyval, mt::mat3 &rot, const char *error_prefix)
 		mt::quat qrot;
 		if (PyQuatTo(pyval, qrot))
 		{
-			rot.setRotation(qrot);
+			rot = qrot.ToMatrix();
 			return true;
 		}
 	}
@@ -59,7 +59,7 @@ bool PyOrientationTo(PyObject *pyval, mt::mat3 &rot, const char *error_prefix)
 		mt::vec3 erot;
 		if (PyVecTo(pyval, erot))
 		{
-			rot.setEuler(erot);
+			rot = mt::mat3(erot);
 			return true;
 		}
 		PyErr_Clear();
