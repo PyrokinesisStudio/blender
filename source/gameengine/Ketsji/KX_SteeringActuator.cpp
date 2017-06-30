@@ -297,7 +297,7 @@ bool KX_SteeringActuator::Update(double curtime)
 		}
 		else
 		{
-			mt::vec3 movement = delta*newvel;
+			mt::vec3 movement = ((float)delta) * newvel;
 			obj->ApplyMovement(movement, false);
 		}
 	}
@@ -408,7 +408,7 @@ static bool getNavmeshNormal(dtStatNavMesh* navmesh, const mt::vec3& pos, mt::ve
 		mt::vec3 a,b;
 		a = tri[1]-tri[0];
 		b = tri[2]-tri[0];
-		normal = b.cross(a).safe_normalized();
+		normal = mt::cross(b, a).safe_normalized();
 		return true;
 	}
 
@@ -436,8 +436,8 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 		if (getNavmeshNormal(navmesh, trpos, normal))
 		{
 
-			left = (dir.cross(up)).safe_normalized();
-			dir = (-left.cross(normal)).safe_normalized();
+			left = (mt::cross(dir, up)).safe_normalized();
+			dir = (-mt::cross(left, normal)).safe_normalized();
 			up = normal;
 		}
 	}
@@ -447,12 +447,12 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 	case 1: // TRACK X
 		{
 			left  = dir.safe_normalized();
-			dir = -(left.cross(up)).safe_normalized();
+			dir = -(mt::cross(left, up)).safe_normalized();
 			break;
 		};
 	case 2:	// TRACK Y
 		{
-			left  = (dir.cross(up)).safe_normalized();
+			left  = (mt::cross(dir, up)).safe_normalized();
 			break;
 		}
 
@@ -461,19 +461,19 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 			left = up.safe_normalized();
 			up = dir.safe_normalized();
 			dir = left;
-			left  = (dir.cross(up)).safe_normalized();
+			left  = (mt::cross(dir, up)).safe_normalized();
 			break;
 		}
 
 	case 4: // TRACK -X
 		{
 			left  = -dir.safe_normalized();
-			dir = -(left.cross(up)).safe_normalized();
+			dir = -(mt::cross(left, up)).safe_normalized();
 			break;
 		};
 	case 5: // TRACK -Y
 		{
-			left  = (-dir.cross(up)).safe_normalized();
+			left  = (-mt::cross(dir, up)).safe_normalized();
 			dir = -dir;
 			break;
 		}
@@ -482,7 +482,7 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 			left = up.safe_normalized();
 			up = -dir.safe_normalized();
 			dir = left;
-			left  = (dir.cross(up)).safe_normalized();
+			left  = (mt::cross(dir, up)).safe_normalized();
 			break;
 		}
 	}
@@ -495,7 +495,7 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 		mt::vec3 localpos;
 		localpos = curobj->GetSGNode()->GetLocalPosition();
 		mt::mat3 parentmatinv;
-		parentmatinv = parentObject->NodeGetWorldOrientation ().inverse ();
+		parentmatinv = parentObject->NodeGetWorldOrientation ().Inverse ();
 		mat = parentmatinv * mat;
 		mat = m_parentlocalmat * mat;
 		curobj->NodeSetLocalOrientation(mat);

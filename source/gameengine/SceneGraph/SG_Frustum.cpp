@@ -6,17 +6,17 @@ SG_Frustum::SG_Frustum(const mt::mat4& matrix)
 	:m_matrix(matrix)
 {
 	// Left clip plane
-	m_planes[0] = m_matrix[3] + m_matrix[0];
+	m_planes[0] = m_matrix.GetColumn(3) + m_matrix.GetColumn(0);
 	// Right clip plane
-	m_planes[1] = m_matrix[3] - m_matrix[0];
+	m_planes[1] = m_matrix.GetColumn(3) - m_matrix.GetColumn(0);
 	// Top clip plane
-	m_planes[2] = m_matrix[3] - m_matrix[1];
+	m_planes[2] = m_matrix.GetColumn(3) - m_matrix.GetColumn(1);
 	// Bottom clip plane
-	m_planes[3] = m_matrix[3] + m_matrix[1];
+	m_planes[3] = m_matrix.GetColumn(3) + m_matrix.GetColumn(1);
 	// Near clip plane
-	m_planes[4] = m_matrix[3] + m_matrix[2];
+	m_planes[4] = m_matrix.GetColumn(3) + m_matrix.GetColumn(2);
 	// Far clip plane
-	m_planes[5] = m_matrix[3] - m_matrix[2];
+	m_planes[5] = m_matrix.GetColumn(3) - m_matrix.GetColumn(2);
 
 	// Normalize clip planes.
 	for (mt::vec4& plane : m_planes) {
@@ -32,10 +32,15 @@ const std::array<mt::vec4, 6>& SG_Frustum::GetPlanes() const
 	return m_planes;
 }
 
+static inline float planeSide(const mt::vec4& plane, const mt::vec3& point)
+{
+	return (plane.x * point.x + plane.y * point.y + plane.z * point.z + plane.w);
+}
+
 SG_Frustum::TestType SG_Frustum::PointInsideFrustum(const mt::vec3& point) const
 {
 	for (const mt::vec4& plane : m_planes) {
-		if (plane.dot(point) < 0.0f) {
+		if (planeSide(plane, point) < 0.0f) {
 			return OUTSIDE;
 		}
 	}
@@ -46,7 +51,7 @@ SG_Frustum::TestType SG_Frustum::PointInsideFrustum(const mt::vec3& point) const
 SG_Frustum::TestType SG_Frustum::SphereInsideFrustum(const mt::vec3& center, float radius) const
 {
 	for (const mt::vec4& plane : m_planes) {
-		const float distance = plane.dot(center);
+		const float distance = planeSide(plane, center);
 		if (distance < -radius) {
 			return OUTSIDE;
 		}
@@ -64,7 +69,7 @@ SG_Frustum::TestType SG_Frustum::BoxInsideFrustum(const std::array<mt::vec3, 8>&
 	for (const mt::vec4& plane : m_planes) {
 		unsigned short insidePoint = 0;
 		for (const mt::vec3& point : box) {
-			insidePoint += (plane.dot(point) < 0.0f) ? 0 : 1;
+			insidePoint += (planeSide(plane, point) < 0.0f) ? 0 : 1;
 		}
 
 		if (insidePoint == 0) {
@@ -122,11 +127,11 @@ SG_Frustum::TestType SG_Frustum::AabbInsideFrustum(const mt::vec3& min, const mt
 		getNearFarAabbPoint(oplane, min, max, near, far);
 
 		// If the near point to the plane is out, all the other points are out.
-		if (oplane.dot(far) < 0.0f) {
+		if (planeSide(oplane, far) < 0.0f) {
 			return OUTSIDE;
 		}
 		// If the far plane is out, the AABB is intersecting this plane.
-		else if (result != INTERSECT && oplane.dot(near) < 0.0f) {
+		else if (result != INTERSECT && planeSide(oplane, near) < 0.0f) {
 			result = INTERSECT;
 		}
 	}

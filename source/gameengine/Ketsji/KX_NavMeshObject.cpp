@@ -560,22 +560,19 @@ void KX_NavMeshObject::DrawNavMesh(NavMeshRenderMode renderMode)
 mt::vec3 KX_NavMeshObject::TransformToLocalCoords(const mt::vec3& wpos)
 {
 	mt::mat3 orientation = NodeGetWorldOrientation();
-	const mt::vec3& scaling = NodeGetWorldScaling();
-	orientation.scale(scaling[0], scaling[1], scaling[2]);
-	mt::mat4x3 worldtr(NodeGetWorldPosition(), orientation); 
-	mt::mat4x3 invworldtr;
-	invworldtr.invert(worldtr);
-	mt::vec3 lpos = invworldtr(wpos);
+	orientation.Scale(NodeGetWorldScaling());
+	mt::mat4x3 worldtr(orientation, NodeGetWorldPosition()); 
+	mt::mat4x3 invworldtr = worldtr.Inverse();
+	mt::vec3 lpos = invworldtr * wpos;
 	return lpos;
 }
 
 mt::vec3 KX_NavMeshObject::TransformToWorldCoords(const mt::vec3& lpos)
 {
 	mt::mat3 orientation = NodeGetWorldOrientation();
-	const mt::vec3& scaling = NodeGetWorldScaling();
-	orientation.scale(scaling[0], scaling[1], scaling[2]);
-	mt::mat4x3 worldtr(NodeGetWorldPosition(), orientation); 
-	mt::vec3 wpos = worldtr(lpos);
+	orientation.Scale(NodeGetWorldScaling());
+	mt::mat4x3 worldtr(orientation, NodeGetWorldPosition()); 
+	mt::vec3 wpos = worldtr * lpos;
 	return wpos;
 }
 

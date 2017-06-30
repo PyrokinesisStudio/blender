@@ -149,7 +149,7 @@ void KX_PlanarMap::BeginRenderFace(RAS_Rasterizer *rasty)
 	KX_TextureRenderer::BeginRenderFace(rasty);
 
 	if (m_type == REFLECTION) {
-		rasty->SetInvertFrontFace(true);
+		rasty->SetFrontFace(true);
 		rasty->EnableClipPlane(0, m_clipPlane);
 	}
 	else {
@@ -200,7 +200,7 @@ bool KX_PlanarMap::SetupCamera(KX_Camera *sceneCamera, KX_Camera *camera)
 		return false;
 	}
 
-	const mt::mat3 mirrorObjWorldOriInverse = mirrorObjWorldOri.inverse();
+	const mt::mat3 mirrorObjWorldOriInverse = mirrorObjWorldOri.Inverse();
 	mt::mat3 cameraWorldOri = sceneCamera->NodeGetWorldOrientation();
 
 	static const mt::mat3 unmir(1.0f, 0.0f, 0.0f,
@@ -212,9 +212,8 @@ bool KX_PlanarMap::SetupCamera(KX_Camera *sceneCamera, KX_Camera *camera)
 		cameraWorldPos = (cameraWorldPos - mirrorObjWorldPos) * mirrorObjWorldOri;
 
 		cameraWorldPos = mirrorObjWorldPos + cameraWorldPos * unmir * mirrorObjWorldOriInverse;
-		cameraWorldOri.transpose();
-		cameraWorldOri = cameraWorldOri * mirrorObjWorldOri * unmir * mirrorObjWorldOriInverse;
-		cameraWorldOri.transpose();
+		cameraWorldOri = cameraWorldOri.Transpose() * mirrorObjWorldOri * unmir * mirrorObjWorldOriInverse;
+		cameraWorldOri = cameraWorldOri.Transpose();
 	}
 
 	// Set render camera position and orientation.

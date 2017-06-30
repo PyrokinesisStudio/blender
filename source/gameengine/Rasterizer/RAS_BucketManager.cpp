@@ -53,7 +53,7 @@ RAS_BucketManager::SortedMeshSlot::SortedMeshSlot(RAS_MeshSlot *ms, const mt::ve
 	float *matrix = m_ms->m_meshUser->GetMatrix();
 	const mt::vec3 pos(matrix[12], matrix[13], matrix[14]);
 
-	m_z = MT_dot(pnorm, pos);
+	m_z = mt::dot(pnorm, pos);
 }
 
 RAS_BucketManager::SortedMeshSlot::SortedMeshSlot(RAS_MeshSlotUpwardNode *node, const mt::vec3& pnorm)
@@ -64,7 +64,7 @@ RAS_BucketManager::SortedMeshSlot::SortedMeshSlot(RAS_MeshSlotUpwardNode *node, 
 	float *matrix = ms->m_meshUser->GetMatrix();
 	const mt::vec3 pos(matrix[12], matrix[13], matrix[14]);
 
-	m_z = MT_dot(pnorm, pos);
+	m_z = mt::dot(pnorm, pos);
 }
 
 bool RAS_BucketManager::backtofront::operator()(const SortedMeshSlot &a, const SortedMeshSlot &b)

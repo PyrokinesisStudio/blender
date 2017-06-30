@@ -56,23 +56,10 @@ protected:
 	 * here? It doesn't really have a function here. */
 	RAS_CameraData	m_camdata;
 
-	// Never used, I think...
-//	void MoveTo(const mt::vec3& movevec)
-//	{
-#if 0
-		mt::mat4x3 camtrans;
-		camtrans.invert(m_trans1);
-		mt::mat3 camorient = camtrans.RotationMatrix();
-		camtrans.translate(camorient.inverse()*movevec);
-		m_trans1.invert(camtrans);
-#endif
-//	}
-
 	/**
 	 * Storage for the projection matrix that is passed to the
 	 * rasterizer. */
 	mt::mat4 m_projection_matrix;
-	//mt::mat4 m_projection_matrix1;
 
 	/**
 	 * Storage for the modelview matrix that is passed to the

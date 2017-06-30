@@ -172,7 +172,7 @@ bool KX_ObjectActuator::Update()
 				mt::vec3 vel= m_reference->GetVelocity(relpos);
 				if (m_bitLocalFlag.LinearVelocity)
 					// must convert in local space
-					vel = parent->NodeGetWorldOrientation().transposed()*vel;
+					vel = parent->NodeGetWorldOrientation().Transpose()*vel;
 				v -= vel;
 			}
 			mt::vec3 e = m_linear_velocity - v;
@@ -289,7 +289,7 @@ bool KX_ObjectActuator::Update()
 							// delta and the start speed (depends on the existing speed in that direction)
 							linV = parent->GetLinearVelocity(m_bitLocalFlag.LinearVelocity);
 							// keep only the projection along the desired direction
-							m_current_linear_factor = linV.dot(m_linear_velocity) / m_linear_length2;
+							m_current_linear_factor = mt::dot(linV, m_linear_velocity) / m_linear_length2;
 							m_linear_damping_active = true;
 						}
 						if (m_current_linear_factor < 1.0f)
@@ -313,7 +313,7 @@ bool KX_ObjectActuator::Update()
 						// delta and the start speed (depends on the existing speed in that direction)
 						angV = parent->GetAngularVelocity(m_bitLocalFlag.AngularVelocity);
 						// keep only the projection along the desired direction
-						m_current_angular_factor = angV.dot(m_angular_velocity)/m_angular_length2;
+						m_current_angular_factor = mt::dot(angV, m_angular_velocity)/m_angular_length2;
 						m_angular_damping_active = true;
 					}
 					if (m_current_angular_factor < 1.0)

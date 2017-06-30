@@ -79,7 +79,7 @@ bool RAS_OpenGLLight::ApplyFixedFunctionLighting(KX_Scene *kxscene, int oblayer,
 	if (kxscene != lightscene || !(m_layer & scenelayer))
 		return false;
 
-	const MT_Matrix4x4 worldmatrix = kxlight->NodeGetWorldTransform().toMatrix();
+	const mt::mat4 worldmatrix = mt::mat4::FromAffineTransform(kxlight->NodeGetWorldTransform());
 
 	vec[0] = worldmatrix(3, 0);
 	vec[1] = worldmatrix(3, 1);
@@ -245,8 +245,8 @@ void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::
 	mt::mat4 modelviewmat((float *)viewmat);
 	mt::mat4 projectionmat((float *)winmat);
 
-	mt::mat4x3 trans = mt::mat4x3((float *)viewmat);
-	camtrans.invert(trans);
+	const mt::mat4x3 trans = mt::mat4x3((float *)viewmat);
+	camtrans = trans.Inverse();
 
 	cam->SetModelviewMatrix(modelviewmat);
 	cam->SetProjectionMatrix(projectionmat);
@@ -298,7 +298,7 @@ void RAS_OpenGLLight::Update()
 	if ((lamp = GetGPULamp()) != nullptr && kxlight->GetSGNode()) {
 		float obmat[4][4];
 		const mt::mat4x3 trans = kxlight->NodeGetWorldTransform();
-		trans.getValue(&obmat[0][0]);
+		trans.Pack(obmat);
 
 		int hide = kxlight->GetVisible() ? 0 : 1;
 		GPU_lamp_update(lamp, m_layer, hide, obmat);

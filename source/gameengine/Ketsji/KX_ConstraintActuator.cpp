@@ -211,7 +211,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 			if ((m_maximumBound < (1.0f-FLT_EPSILON)) || (m_minimumBound < (1.0f-FLT_EPSILON))) {
 				// reference direction needs to be evaluated
 				// 1. get the cosine between current direction and target
-				cosangle = direction.dot(m_refDirVector);
+				cosangle = mt::dot(direction, m_refDirVector);
 				if (cosangle >= (m_maximumBound-FLT_EPSILON) && cosangle <= (m_minimumBound+FLT_EPSILON)) {
 					// no change to do
 					result = true;
@@ -220,16 +220,16 @@ bool KX_ConstraintActuator::Update(double curtime)
 				// 2. define a new reference direction
 				//    compute local axis with reference direction as X and
 				//    Y in direction X refDirection plane
-				mt::vec3 zaxis = m_refDirVector.cross(direction);
+				mt::vec3 zaxis = mt::cross(m_refDirVector, direction);
 				if (MT_fuzzyZero2(zaxis.LengthSquared())) {
 					// direction and refDirection are identical,
 					// choose any other direction to define plane
 					if (direction[0] < 0.9999f)
-						zaxis = m_refDirVector.cross(mt::vec3(1.0f,0.0f,0.0f));
+						zaxis = mt::cross(m_refDirVector, mt::vec3(1.0f,0.0f,0.0f));
 					else
-						zaxis = m_refDirVector.cross(mt::vec3(0.0f,1.0f,0.0f));
+						zaxis = mt::cross(m_refDirVector, mt::vec3(0.0f,1.0f,0.0f));
 				}
-				mt::vec3 yaxis = zaxis.cross(m_refDirVector);
+				mt::vec3 yaxis = mt::cross(zaxis, m_refDirVector);
 				yaxis.Normalize();
 				if (cosangle > m_minimumBound) {
 					// angle is too close to reference direction,
@@ -364,7 +364,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 						if (spc && spc->IsDynamic()) {
 							mt::vec3 linV = spc->GetLinearVelocity();
 							// cancel the projection along the ray direction
-							float fallspeed = linV.dot(direction);
+							float fallspeed = mt::dot(linV, direction);
 							if (!MT_fuzzyZero(fallspeed))
 								spc->SetLinearVelocity(linV-fallspeed*direction,false);
 						}
@@ -442,7 +442,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 					relativeHitPoint = (callback.m_hitPoint-m_hitObject->NodeGetWorldPosition());
 					mt::vec3 velocityHitPoint = m_hitObject->GetVelocity(relativeHitPoint);
 					mt::vec3 relativeVelocity = spc->GetLinearVelocity() - velocityHitPoint;
-					float relativeVelocityRay = direction.dot(relativeVelocity);
+					float relativeVelocityRay = mt::dot(direction, relativeVelocity);
 					float springExtent = 1.0f - distance/m_minimumBound;
 					// Fh force is stored in m_maximum
 					float springForce = springExtent * m_maximumBound;
@@ -451,15 +451,15 @@ bool KX_ConstraintActuator::Update(double curtime)
 					mt::vec3 newVelocity = spc->GetLinearVelocity()-(springForce+springDamp)*direction;
 					if (m_option & KX_ACT_CONSTRAINT_NORMAL)
 					{
-						newVelocity+=(springForce+springDamp)*(newnormal-newnormal.dot(direction)*direction);
+						newVelocity+=(springForce+springDamp)*(newnormal-mt::dot(newnormal, direction)*direction);
 					}
 					spc->SetLinearVelocity(newVelocity, false);
 					if (m_option & KX_ACT_CONSTRAINT_DOROTFH)
 					{
-						mt::vec3 angSpring = (normal.cross(newnormal))*m_maximumBound;
+						mt::vec3 angSpring = (mt::cross(normal, newnormal))*m_maximumBound;
 						mt::vec3 angVelocity = spc->GetAngularVelocity();
 						// remove component that is parallel to normal
-						angVelocity -= angVelocity.dot(newnormal)*newnormal;
+						angVelocity -= mt::dot(angVelocity, newnormal)*newnormal;
 						mt::vec3 angDamp = angVelocity * ((m_refDirVector[1]>MT_EPSILON)?m_refDirVector[1]:m_refDirVector[0]);
 						spc->SetAngularVelocity(spc->GetAngularVelocity()+(angSpring-angDamp), false);
 					}

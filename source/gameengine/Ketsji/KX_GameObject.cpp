@@ -352,7 +352,7 @@ void KX_GameObject::SetParent(KX_GameObject* obj, bool addToCompound, bool ghost
 		scale2[1] = 1.0f/scale2[1];
 		scale2[2] = 1.0f/scale2[2];
 		scale1 = scale1 * scale2;
-		mt::mat3 invori = obj->NodeGetWorldOrientation().inverse();
+		mt::mat3 invori = obj->NodeGetWorldOrientation().Inverse();
 		mt::vec3 newpos = invori*(NodeGetWorldPosition()-obj->NodeGetWorldPosition())*scale2;
 
 		NodeSetLocalScale(scale1);
@@ -720,7 +720,7 @@ void KX_GameObject::AddMeshUser()
 	}
 
 	if (m_meshUser) {
-		NodeGetWorldTransform().getValue(m_meshUser->GetMatrix());
+		NodeGetWorldTransform().Pack(m_meshUser->GetMatrix());
 	}
 }
 
@@ -728,7 +728,7 @@ void KX_GameObject::UpdateBuckets()
 {
 	// Update datas and add mesh slot to be rendered only if the object is not culled.
 	if (m_pSGNode->IsDirty(SG_Node::DIRTY_RENDER)) {
-		NodeGetWorldTransform().getValue(m_meshUser->GetMatrix());
+		NodeGetWorldTransform().Pack(m_meshUser->GetMatrix());
 		m_pSGNode->ClearDirty(SG_Node::DIRTY_RENDER);
 	}
 
@@ -795,7 +795,7 @@ void KX_GameObject::UpdateLod(const mt::vec3& cam_pos, float lodfactor)
 	}
 
 	KX_Scene *scene = GetScene();
-	const float distance2 = NodeGetWorldPosition().distance2(cam_pos) * (lodfactor * lodfactor);
+	const float distance2 = (NodeGetWorldPosition() - cam_pos).LengthSquared() * (lodfactor * lodfactor);
 	KX_LodLevel *lodLevel = m_lodManager->GetLevel(scene, m_currentLodLevel, distance2);
 
 	if (lodLevel) {
@@ -1060,8 +1060,8 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 	{
 		case 0: // align x axis of new coord system to vect
 			ori = orimat.GetColumn(2); // pivot axis
-			if (1.0f - MT_abs(vect.dot(ori)) < eps)  { // vect parallel to pivot?
-				ori = orimat.GetColumn(1) // change the pivot!
+			if (1.0f - MT_abs(mt::dot(vect, ori)) < eps)  { // vect parallel to pivot?
+				ori = orimat.GetColumn(1); // change the pivot!
 			}
 
 			if (fac == 1.0f) {
@@ -1072,12 +1072,12 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 				if (MT_fuzzyZero(len)) x = vect;
 				else x /= len;
 			}
-			y = ori.cross(x);
-			z = x.cross(y);
+			y = mt::cross(ori, x);
+			z = mt::cross(x, y);
 			break;
 		case 1: // y axis
 			ori = orimat.GetColumn(0);
-			if (1.0f - MT_abs(vect.dot(ori)) < eps) {
+			if (1.0f - MT_abs(mt::dot(vect, ori)) < eps) {
 				ori = orimat.GetColumn(2);
 			}
 
@@ -1089,12 +1089,12 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 				if (MT_fuzzyZero(len)) y = vect;
 				else y /= len;
 			}
-			z = ori.cross(y);
-			x = y.cross(z);
+			z = mt::cross(ori, y);
+			x = mt::cross(y, z);
 			break;
 		case 2: // z axis
 			ori = orimat.GetColumn(1);
-			if (1.0f - MT_abs(vect.dot(ori)) < eps) {
+			if (1.0f - MT_abs(mt::dot(vect, ori)) < eps) {
 				ori = orimat.GetColumn(0);
 			}
 
@@ -1106,8 +1106,8 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 				if (MT_fuzzyZero(len)) z = vect;
 				else z /= len;
 			}
-			x = ori.cross(z);
-			y = z.cross(x);
+			x = mt::cross(ori, z);
+			y = mt::cross(z, x);
 			break;
 		default: // invalid axis specified
 			CM_FunctionWarning("invalid axis '" << axis <<"'");
@@ -1122,7 +1122,7 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 	{
 		// the object is a child, adapt its local orientation so that 
 		// the global orientation is aligned as we want (cancelling out the parent orientation)
-		mt::mat3 invori = GetSGNode()->GetSGParent()->GetWorldOrientation().inverse();
+		mt::mat3 invori = GetSGNode()->GetSGParent()->GetWorldOrientation().Inverse();
 		NodeSetLocalOrientation(invori*orimat);
 	}
 	else {
@@ -1228,7 +1228,7 @@ void KX_GameObject::NodeSetLocalOrientation(const mt::mat3& rot)
 void KX_GameObject::NodeSetGlobalOrientation(const mt::mat3& rot)
 {
 	if (GetSGNode()->GetSGParent())
-		GetSGNode()->SetLocalOrientation(GetSGNode()->GetSGParent()->GetWorldOrientation().inverse()*rot);
+		GetSGNode()->SetLocalOrientation(GetSGNode()->GetSGParent()->GetWorldOrientation().Inverse()*rot);
 	else
 		NodeSetLocalOrientation(rot);
 }
@@ -1300,7 +1300,7 @@ void KX_GameObject::NodeSetWorldPosition(const mt::vec3& trans)
 		scale[0] = 1.0f/scale[0];
 		scale[1] = 1.0f/scale[1];
 		scale[2] = 1.0f/scale[2];
-		mt::mat3 invori = parent->GetWorldOrientation().inverse();
+		mt::mat3 invori = parent->GetWorldOrientation().Inverse();
 		mt::vec3 newpos = invori*(trans-parent->GetWorldPosition())*scale;
 		NodeSetLocalPosition(mt::vec3(newpos[0],newpos[1],newpos[2]));
 	}
@@ -2729,7 +2729,7 @@ PyObject *KX_GameObject::pyattr_get_localTransform(PyObjectPlus *self_v, const K
 {
 	KX_GameObject* self = static_cast<KX_GameObject*>(self_v);
 
-	return PyObjectFrom(self->NodeGetLocalTransform().toMatrix());
+	return PyObjectFrom(mt::mat4::FromAffineTransform(self->NodeGetLocalTransform()));
 }
 
 int KX_GameObject::pyattr_set_localTransform(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef, PyObject *value)
@@ -2761,7 +2761,7 @@ PyObject *KX_GameObject::pyattr_get_worldTransform(PyObjectPlus *self_v, const K
 {
 	KX_GameObject* self = static_cast<KX_GameObject*>(self_v);
 
-	return PyObjectFrom(MT_Matrix4x4(self->NodeGetWorldTransform()));
+	return PyObjectFrom(mt::mat4::FromAffineTransform(self->NodeGetWorldTransform()));
 }
 
 int KX_GameObject::pyattr_set_worldTransform(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef, PyObject *value)
@@ -2776,7 +2776,7 @@ int KX_GameObject::pyattr_set_worldTransform(PyObjectPlus *self_v, const KX_PYAT
 	float rot[3][3];
 	mt::mat3 orientation;
 
-	temp.pack(transform);
+	temp.Pack(transform);
 	mat4_to_loc_rot_size(loc, rot, size, transform);
 
 	self->NodeSetWorldPosition(mt::vec3(loc));
@@ -3570,7 +3570,7 @@ KX_PYMETHODDEF_DOC_O(KX_GameObject, getDistanceTo,
 	mt::vec3 b;
 	if (PyVecTo(value, b))
 	{
-		return PyFloat_FromDouble(NodeGetWorldPosition().distance(b));
+		return PyFloat_FromDouble((NodeGetWorldPosition() - b).Length());
 	}
 	PyErr_Clear();
 
@@ -3578,7 +3578,7 @@ KX_PYMETHODDEF_DOC_O(KX_GameObject, getDistanceTo,
 	KX_GameObject *other;
 	if (ConvertPythonToGameObject(logicmgr, value, &other, false, "gameOb.getDistanceTo(value): KX_GameObject"))
 	{
-		return PyFloat_FromDouble(NodeGetWorldPosition().distance(other->NodeGetWorldPosition()));
+		return PyFloat_FromDouble((NodeGetWorldPosition() - other->NodeGetWorldPosition()).Length());
 	}
 	
 	return nullptr;

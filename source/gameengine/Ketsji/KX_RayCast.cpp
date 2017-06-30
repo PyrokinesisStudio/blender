@@ -101,14 +101,14 @@ bool KX_RayCast::RayTest(PHY_IPhysicsEnvironment* physics_environment, const mt:
 		float marg = 0.001f + hit_controller->GetMargin();
 		marg *= 2.f;
 		/* Calculate the other side of this object */
-		float h = MT_abs(todir.dot(callback.m_hitNormal));
+		float h = MT_abs(mt::dot(todir, callback.m_hitNormal));
 		if (h <= 0.01f)
 			// the normal is almost orthogonal to the ray direction, cannot compute the other side
 			break;
 		marg /= h; 
 		frompoint = callback.m_hitPoint + marg * todir;
 		// verify that we are not passed the to point
-		if ((topoint - frompoint).dot(todir) < 0.f)
+		if (mt::dot((topoint - frompoint), todir) < 0.f)
 			break;
 	}
 	return false;

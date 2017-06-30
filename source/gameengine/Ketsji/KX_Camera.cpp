@@ -95,17 +95,14 @@ void KX_Camera::ProcessReplica()
 
 mt::mat4x3 KX_Camera::GetWorldToCamera() const
 { 
-	mt::mat4x3 camtrans;
-	camtrans.invert(mt::mat4x3(NodeGetWorldPosition(), NodeGetWorldOrientation()));
-	
-	return camtrans;
+	return GetCameraToWorld().Inverse();
 }
 
 
 	 
 mt::mat4x3 KX_Camera::GetCameraToWorld() const
 {
-	return mt::mat4x3(NodeGetWorldPosition(), NodeGetWorldOrientation());
+	return mt::mat4x3(NodeGetWorldOrientation(), NodeGetWorldPosition());
 }
 
 /**
@@ -500,7 +497,7 @@ KX_PYMETHODDEF_DOC_NOARGS(KX_Camera, getCameraToWorld,
 "\tie: [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])\n"
 )
 {
-	return PyObjectFrom(mt::mat4(GetCameraToWorld())); /* new ref */
+	return PyObjectFrom(mt::mat4::FromAffineTransform(GetCameraToWorld())); /* new ref */
 }
 
 KX_PYMETHODDEF_DOC_NOARGS(KX_Camera, getWorldToCamera,
@@ -509,7 +506,7 @@ KX_PYMETHODDEF_DOC_NOARGS(KX_Camera, getWorldToCamera,
 "\tie: [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]])\n"
 )
 {
-	return PyObjectFrom(mt::mat4(GetWorldToCamera())); /* new ref */
+	return PyObjectFrom(mt::mat4::FromAffineTransform(GetWorldToCamera())); /* new ref */
 }
 
 KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, setViewport,
@@ -739,19 +736,19 @@ int KX_Camera::pyattr_set_projection_matrix(PyObjectPlus *self_v, const KX_PYATT
 PyObject *KX_Camera::pyattr_get_modelview_matrix(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_Camera* self = static_cast<KX_Camera*>(self_v);
-	return PyObjectFrom(mt::mat4(self->GetWorldToCamera()));
+	return PyObjectFrom(mt::mat4::FromAffineTransform(self->GetWorldToCamera()));
 }
 
 PyObject *KX_Camera::pyattr_get_camera_to_world(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_Camera* self = static_cast<KX_Camera*>(self_v);
-	return PyObjectFrom(mt::mat4(self->GetCameraToWorld()));
+	return PyObjectFrom(mt::mat4::FromAffineTransform(self->GetCameraToWorld()));
 }
 
 PyObject *KX_Camera::pyattr_get_world_to_camera(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef)
 {
 	KX_Camera* self = static_cast<KX_Camera*>(self_v);
-	return PyObjectFrom(mt::mat4(self->GetWorldToCamera())); 
+	return PyObjectFrom(mt::mat4::FromAffineTransform(self->GetWorldToCamera())); 
 }
 
 
@@ -848,7 +845,7 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, getScreenPosition,
 	GLdouble modelmatrix[16];
 	GLdouble projmatrix[16];
 
-	mt::mat4 m_modelmatrix = mt::mat4(GetWorldToCamera());
+	mt::mat4 m_modelmatrix = mt::mat4::FromAffineTransform(GetWorldToCamera());
 	mt::mat4 m_projmatrix = this->GetProjectionMatrix();
 
 	m_modelmatrix.Pack(modelmatrix);
@@ -891,7 +888,7 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, getScreenVect,
 	GLdouble modelmatrix[16];
 	GLdouble projmatrix[16];
 
-	mt::mat4 m_modelmatrix = mt::mat4(GetWorldToCamera());
+	mt::mat4 m_modelmatrix = mt::mat4::FromAffineTransform(GetWorldToCamera());
 	mt::mat4 m_projmatrix = this->GetProjectionMatrix();
 
 	m_modelmatrix.Pack(modelmatrix);

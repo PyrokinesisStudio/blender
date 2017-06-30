@@ -72,7 +72,7 @@ mt::vec3 KX_MovementSensor::GetOwnerPosition(bool local)
 	if (!local) {
 		return owner->NodeGetWorldPosition();
 	}
-	return owner->NodeGetLocalOrientation().inverse() * owner->NodeGetLocalPosition();
+	return owner->NodeGetLocalOrientation().Inverse() * owner->NodeGetLocalPosition();
 }
 
 CValue *KX_MovementSensor::GetReplica()

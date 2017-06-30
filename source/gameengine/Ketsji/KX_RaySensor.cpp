@@ -215,7 +215,7 @@ bool KX_RaySensor::Evaluate()
 	KX_GameObject* obj = (KX_GameObject*)GetParent();
 	mt::vec3 frompoint = obj->NodeGetWorldPosition();
 	mt::mat3 matje = obj->NodeGetWorldOrientation();
-	mt::mat3 invmat = matje.inverse();
+	mt::mat3 invmat = matje.Inverse();
 	
 	mt::vec3 todir;
 	m_reset = false;

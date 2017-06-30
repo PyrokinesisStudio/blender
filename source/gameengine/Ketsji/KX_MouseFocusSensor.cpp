@@ -332,12 +332,11 @@ bool KX_MouseFocusSensor::ParentObjectHasFocusCamera(KX_Camera *cam)
 						1.0f );
 	
 	/* camera to world  */
-	mt::mat4 camcs_wcs_matrix = mt::mat4(cam->GetCameraToWorld());
+	mt::mat4 camcs_wcs_matrix = mt::mat4::FromAffineTransform(cam->GetCameraToWorld());
 
 	/* badly defined, the first time round.... I wonder why... I might
 	 * want to guard against floating point errors here.*/
-	mt::mat4 clip_camcs_matrix = mt::mat4(cam->GetProjectionMatrix());
-	clip_camcs_matrix.invert();
+	mt::mat4 clip_camcs_matrix = cam->GetProjectionMatrix().Inverse();
 
 	/* shoot-points: clip to cam to wcs . win to clip was already done.*/
 	frompoint = clip_camcs_matrix * frompoint;

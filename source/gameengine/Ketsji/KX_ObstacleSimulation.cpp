@@ -57,7 +57,7 @@ static int sweepCircleCircle(
 	if (a < EPS) return 0;	// not moving
 
 	// Overlap, calc time to exit.
-	float b = MT_dot(v,s);
+	float b = mt::dot(v,s);
 	float d = b*b - a*c;
 	if (d < 0.0f) return 0; // no intersection.
 	tmin = (b - sqrtf(d)) / a;
@@ -102,10 +102,10 @@ static int sweepCircleSegment(
 	mt::vec2 Pedge;
 	Pedge = c0+v*tmin;
 	H = Pedge - sa;
-	float e0 = MT_dot(H, L) / l2;
+	float e0 = mt::dot(H, L) / l2;
 	Pedge = c0 + v*tmax;
 	H = Pedge - sa;
-	float e1 = MT_dot(H, L) / l2;
+	float e1 = mt::dot(H, L) / l2;
 
 	if (e0 < 0.0f || e1 < 0.0f)
 	{
@@ -335,7 +335,7 @@ static mt::vec3 nearestPointToObstacle(mt::vec3& pos ,KX_Obstacle* obstacle)
 			const float dist = ab.Length();
 			mt::vec3 abdir = ab.Normalized();
 			mt::vec3  v = pos - obstacle->m_pos;
-			float proj = abdir.dot(v);
+			float proj = mt::dot(abdir, v);
 			CLAMP(proj, 0, dist);
 			mt::vec3 res = obstacle->m_pos + abdir*proj;
 			return res;
@@ -482,7 +482,7 @@ void KX_ObstacleSimulationTOI_rays::sampleRVO(KX_Obstacle* activeObst, KX_NavMes
 				else
 				{
 					// Moving, use RVO
-					vab = 2*svel - vel - mt::vec2(ob->vel);
+					vab = (2.0f * svel) - vel - mt::vec2(ob->vel);
 				}
 
 				if (!sweepCircleCircle(activeObst->m_pos.xy(), activeObst->m_rad,

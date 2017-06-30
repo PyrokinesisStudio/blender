@@ -418,12 +418,12 @@ void RAS_Shader::Update(RAS_Rasterizer *rasty, const mt::mat4 model)
 			}
 			case MODELMATRIX_INVERSE:
 			{
-				SetUniform(uni->m_loc, model.inverse());
+				SetUniform(uni->m_loc, model.Inverse());
 				break;
 			}
 			case MODELMATRIX_INVERSETRANSPOSE:
 			{
-				SetUniform(uni->m_loc, model.inverse(), true);
+				SetUniform(uni->m_loc, model.Inverse(), true);
 				break;
 			}
 			case MODELVIEWMATRIX:
@@ -440,13 +440,13 @@ void RAS_Shader::Update(RAS_Rasterizer *rasty, const mt::mat4 model)
 			case MODELVIEWMATRIX_INVERSE:
 			{
 				mt::mat4 mat(view * model);
-				SetUniform(uni->m_loc, mat.inverse());
+				SetUniform(uni->m_loc, mat.Inverse());
 				break;
 			}
 			case MODELVIEWMATRIX_INVERSETRANSPOSE:
 			{
 				mt::mat4 mat(view * model);
-				SetUniform(uni->m_loc, mat.inverse(), true);
+				SetUniform(uni->m_loc, mat.Inverse(), true);
 				break;
 			}
 			case CAM_POS:
@@ -467,12 +467,12 @@ void RAS_Shader::Update(RAS_Rasterizer *rasty, const mt::mat4 model)
 			}
 			case VIEWMATRIX_INVERSE:
 			{
-				SetUniform(uni->m_loc, view.inverse());
+				SetUniform(uni->m_loc, view.Inverse());
 				break;
 			}
 			case VIEWMATRIX_INVERSETRANSPOSE:
 			{
-				SetUniform(uni->m_loc, view.inverse(), true);
+				SetUniform(uni->m_loc, view.Inverse(), true);
 				break;
 			}
 			case CONSTANT_TIMER:

@@ -262,7 +262,7 @@ bool KX_SoundActuator::Update(double curtime)
 				mt::mat3 Mo;
 				float data[4];
 
-				Mo = cam->NodeGetWorldOrientation().inverse();
+				Mo = cam->NodeGetWorldOrientation().Inverse();
 				p = (obj->NodeGetWorldPosition() - cam->NodeGetWorldPosition());
 				p = Mo * p;
 				p.Pack(data);

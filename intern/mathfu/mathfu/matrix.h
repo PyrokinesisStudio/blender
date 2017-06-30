@@ -227,10 +227,12 @@ class Matrix {
 
   inline Matrix(const Matrix<T, 3>& m, const Vector<T, 3>& v) {
     MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
-    data_[0] = m.GetColumn(0);
-	data_[1] = m.GetColumn(1);
-	data_[2] = m.GetColumn(2);
-	data_[3] = v;
+	MATHFU_MAT_OPERATION((data_[i] = Vector<T, rows>(m.GetColumn(i), v[i])));
+  }
+  
+  inline Matrix(const Matrix<T, 3>& m, const Vector<T, 3>& v, const Vector<T, 3>& s) {
+    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
+	MATHFU_MAT_OPERATION((data_[i] = Vector<T, rows>(m.GetColumn(i) * s[i], v[i])));
   }
 
   /// @brief Create a Matrix from sixteen floats.
@@ -625,6 +627,10 @@ class Matrix {
         i, columns, MATHFU_UNROLLED_LOOP(
                         j, rows, transpose.GetColumn(j)[i] = GetColumn(i)[j]))
     return transpose;
+  }
+
+  inline Matrix<T, rows, columns> Scale(const Vector<T, columns>& v) {
+    return ScaleHelper(*this, v);
   }
 
   /// @brief Get the 2-dimensional translation of a 2-dimensional affine
@@ -1038,6 +1044,26 @@ inline Vector<T, 4> operator*(const Matrix<T, 4, 4>& m, const Vector<T, 4>& v) {
 }
 /// @endcond
 
+/// @cond MATHFU_INTERNAL
+template <class T>
+inline Vector<T, 3> operator*(const Matrix<T, 4, 3>& m, const Vector<T, 3>& v) {
+  return Vector<T, 3>(
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, 3) + m(0, 3),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, 3) + m(1, 3),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, 3) + m(2, 3));
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+template <>
+inline Vector<float, 3> operator*(const Matrix<float, 4, 3>& m, const Vector<float, 3>& v) {
+  return Vector<float, 3>(
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(0, 3),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(1, 3),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(2, 3));
+}
+/// @endcond
+
 /// @brief Multiply a 4x4 Matrix by a 3-dimensional Vector.
 ///
 /// This is provided as a convenience and assumes the vector has a fourth
@@ -1197,6 +1223,13 @@ inline Matrix<T, 3, 3> IdentityHelper() {
 template <class T>
 inline Matrix<T, 4, 4> IdentityHelper() {
   return Matrix<T, 4, 4>(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+template <class T>
+inline Matrix<T, 4, 3> IdentityHelper() {
+  return Matrix<T, 4, 3>(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
 }
 /// @endcond
 
@@ -1481,6 +1514,18 @@ bool InverseHelper(const Matrix<T, 4, 4>& m, Matrix<T, 4, 4>* const inverse) {
         pivot_inverse, col_inverse[0], col_inverse[1], col_inverse[2]);
   }
   return true;
+}
+/// @endcond
+
+
+/// @cond MATHFU_INTERNAL
+template <class T, int rows, int columns>
+inline Matrix<T, rows, columns> ScaleHelper(const Matrix<T, rows, columns>& m, const Vector<T, columns>& v) {
+  Matrix<T, rows, columns> ret = m;
+  for (int i = 0; i < rows; ++i) {
+    ret.GetColumn(i) *= v[i];
+  }
+  return ret;
 }
 /// @endcond
 

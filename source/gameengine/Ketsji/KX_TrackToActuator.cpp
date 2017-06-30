@@ -208,7 +208,7 @@ static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimu
 	/* if 2D doesn't move the up vector */
 	if (!threedimup) {
 		vec.z = 0.0f;
-		vec = (vec - z.dot(vec)*z).safe_normalized_vec(z);
+		vec = (vec - mt::dot(z, vec)*z).safe_normalized_vec(z);
 	}
 
 	if (axis > 2)
@@ -218,7 +218,7 @@ static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimu
 
 	/* project the up vector onto the plane specified by vec */
 	/* first z onto vec... */
-	mul = z.dot(vec) / vec.dot(vec);
+	mul = mt::dot(z, vec) / mt::dot(vec, vec);
 	proj = vec * mul;
 	/* then onto the plane */
 	proj = z - proj;
@@ -226,7 +226,7 @@ static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimu
 	proj = proj.safe_normalized_vec(y);
 
 	/* Normalized cross product of vec and proj specifies transformation of the right axis */
-	right = proj.cross(vec);
+	right = mt::cross(proj, vec);
 	right.Normalize();
 
 	if (axis != upflag) {
@@ -237,7 +237,7 @@ static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimu
 		mat.setRow(right_index, right);
 		mat.setRow(upflag, proj);
 		mat.setRow(axis, vec);
-		mat = mat.inverse();
+		mat = mat.Inverse();
 	}
 	/* identity matrix - don't do anything if the two axes are the same */
 	else {
@@ -332,7 +332,7 @@ bool KX_TrackToActuator::Update(double curtime)
 			localpos = curobj->GetSGNode()->GetLocalPosition();
 			// Get the inverse of the parent matrix
 			mt::mat3 parentmatinv;
-			parentmatinv = m_parentobj->NodeGetWorldOrientation().inverse();
+			parentmatinv = m_parentobj->NodeGetWorldOrientation().Inverse();
 			// transform the local coordinate system into the parents system
 			mat = parentmatinv * mat;
 			// append the initial parent local rotation matrix

@@ -896,39 +896,37 @@ mt::mat4 RAS_Rasterizer::GetViewMatrix(StereoEye eye, const mt::mat4x3 &camtrans
 		static const mt::vec3 unitViewDir(0.0f, -1.0f, 0.0f);  // minus y direction, Blender convention
 		static const mt::vec3 unitViewupVec(0.0f, 0.0f, 1.0f);
 
-		const mt::mat3& camOrientMat3x3 = camtrans.RotationMatrix().transposed();
+		const mt::mat3& camOrientMat3x3 = camtrans.RotationMatrix().Transpose();
 		// actual viewDir
 		const mt::vec3 viewDir = camOrientMat3x3 * unitViewDir;  // this is the moto convention, vector on right hand side
 		// actual viewup vec
 		const mt::vec3 viewupVec = camOrientMat3x3 * unitViewupVec;
 
 		// vector between eyes
-		const mt::vec3 eyeline = viewDir.cross(viewupVec);
+		const mt::vec3 eyeline = mt::cross(viewDir, viewupVec);
 
 		mt::mat4x3 trans = camtrans;
 		switch (eye) {
 			case RAS_STEREO_LEFTEYE:
 			{
 				// translate to left by half the eye distance
-				mt::mat4x3 transform = mt::mat4x3::Identity();
-				transform.translate(-(eyeline * m_eyeseparation / 2.0f));
+				const mt::mat4x3 transform(mt::mat3::Identity(), -eyeline * m_eyeseparation / 2.0f);
 				trans *= transform;
 				break;
 			}
 			case RAS_STEREO_RIGHTEYE:
 			{
 				// translate to right by half the eye distance
-				mt::mat4x3 transform = mt::mat4x3::Identity();
-				transform.translate(eyeline * m_eyeseparation / 2.0f);
+				const mt::mat4x3 transform(mt::mat3::Identity(), eyeline * m_eyeseparation / 2.0f);
 				trans *= transform;
 				break;
 			}
 		}
 
-		return trans.toMatrix();
+		return mt::mat4::FromAffineTransform(trans);
 	}
 
-	return camtrans.toMatrix();
+	return mt::mat4::FromAffineTransform(camtrans);
 }
 
 void RAS_Rasterizer::SetViewMatrix(const mt::mat4& viewmat, const mt::vec3& pos, const mt::vec3& scale)
@@ -947,7 +945,7 @@ void RAS_Rasterizer::SetViewMatrix(const mt::mat4& viewmat, const mt::vec3& pos,
 		m_camnegscale = false;
 	}
 
-	m_viewinvmatrix = m_viewmatrix.inverse();
+	m_viewinvmatrix = m_viewmatrix.Inverse();
 	m_campos = pos;
 
 	// note: Pack gives back column major as needed by OpenGL
@@ -1382,8 +1380,8 @@ bool RAS_Rasterizer::RayHit(struct KX_ClientObjectInfo *client, KX_RayCast *resu
 		const mt::vec3& point = result->m_hitPoint;
 		mt::vec3 resultnormal(result->m_hitNormal);
 		mt::vec3 left(&origmat[0]);
-		mt::vec3 dir = -(left.cross(resultnormal)).safe_normalized();
-		left = (dir.cross(resultnormal)).safe_normalized();
+		mt::vec3 dir = -(mt::cross(left, resultnormal)).safe_normalized();
+		left = (mt::cross(dir, resultnormal)).safe_normalized();
 		// for the up vector, we take the 'resultnormal' returned by the physics
 
 		// we found the "ground", but the cast matrix doesn't take
@@ -1427,7 +1425,7 @@ void RAS_Rasterizer::GetTransform(float *origmat, int objectdrawmode, float mat[
 
 		mt::vec3 left;
 		if (m_camortho) {
-			left = m_viewmatrix[2].xyz().safe_normalized();
+			left = m_viewmatrix.GetColumn(2).xyz().safe_normalized();
 		}
 		else {
 			const mt::vec3 objpos(&origmat[12]);
@@ -1441,13 +1439,13 @@ void RAS_Rasterizer::GetTransform(float *origmat, int objectdrawmode, float mat[
 		const mt::vec3& scale = mt::vec3(len_v3(&origmat[0]), len_v3(&origmat[4]), len_v3(&origmat[8]));
 
 		if (objectdrawmode & RAS_IPolyMaterial::BILLBOARD_SCREENALIGNED) {
-			up = (up - up.dot(left) * left).safe_normalized();
+			up = (up - mt::dot(up, left) * left).safe_normalized();
 		}
 		else {
-			left = (left - up.dot(left) * up).safe_normalized();
+			left = (left - mt::dot(up, left) * up).safe_normalized();
 		}
 
-		mt::vec3 dir = (up.cross(left)).Normalized();
+		mt::vec3 dir = (mt::cross(up, left)).Normalized();
 
 		// we have calculated the row vectors, now we keep
 		// local scaling into account:

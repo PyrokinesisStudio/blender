@@ -742,8 +742,8 @@ float KX_KetsjiEngine::GetCameraZoom(KX_Camera *camera) const
 	return overrideCamera ? m_overrideCamZoom : m_cameraZoom;
 }
 
-void KX_KetsjiEngine::EnableCameraOverride(const std::string& forscene, const MT_Matrix4x4& projmat,
-		const MT_Matrix4x4& viewmat, const RAS_CameraData& camdata)
+void KX_KetsjiEngine::EnableCameraOverride(const std::string& forscene, const mt::mat4& projmat,
+		const mt::mat4& viewmat, const RAS_CameraData& camdata)
 {
 	SetFlag(CAMERA_OVERRIDE, true);
 	m_overrideSceneName = forscene;
@@ -1099,9 +1099,8 @@ void KX_KetsjiEngine::PostProcessScene(KX_Scene *scene)
 
 		// set transformation
 		if (override_camera) {
-			mt::mat4x3 trans = m_overrideCamViewMat.toTransform();
-			mt::mat4x3 camtrans;
-			camtrans.invert(trans);
+			const mt::mat4x3 trans = mt::mat4x3::ToAffineTransform(m_overrideCamViewMat);
+			const mt::mat4x3 camtrans = trans.Inverse();
 
 			activecam->NodeSetLocalPosition(camtrans.TranslationVector3D());
 			activecam->NodeSetLocalOrientation(camtrans.RotationMatrix());
