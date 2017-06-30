@@ -33,7 +33,7 @@
 #include "SG_Familly.h"
 #include "SG_Controller.h"
 
-#include <algorithm>
+#include "BLI_utildefines.h"
 
 static CM_ThreadMutex scheduleMutex;
 static CM_ThreadMutex transformMutex;
@@ -482,7 +482,7 @@ void SG_Node::RelativeRotate(const mt::mat3& rot, bool local)
 		local ?
 		rot
 		:
-		(GetWorldOrientation().inverse() * rot * GetWorldOrientation()));
+		(GetWorldOrientation().Inverse() * rot * GetWorldOrientation()));
 	SetModified();
 }
 
@@ -553,16 +553,12 @@ void SG_Node::SetWorldFromLocalTransform()
 
 mt::mat4x3 SG_Node::GetWorldTransform() const
 {
-	return mt::mat4x3(m_worldPosition,
-	                    m_worldRotation.scaled(
-							m_worldScaling[0], m_worldScaling[1], m_worldScaling[2]));
+	return mt::mat4x3(m_worldRotation, m_worldPosition, m_worldScaling);
 }
 
 mt::mat4x3 SG_Node::GetLocalTransform() const
 {
-	return mt::mat4x3(m_localPosition,
-	                    m_localRotation.scaled(
-							m_localScaling[0], m_localScaling[1], m_localScaling[2]));
+	return mt::mat4x3(m_localRotation, m_localPosition, m_localScaling);
 }
 
 bool SG_Node::ComputeWorldTransforms(const SG_Node *parent, bool& parentUpdated)

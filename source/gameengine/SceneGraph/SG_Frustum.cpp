@@ -1,7 +1,5 @@
 #include "SG_Frustum.h"
 
-#include "MT_Frustum.h" // TODO replace in mathfu
-
 SG_Frustum::SG_Frustum(const mt::mat4& matrix)
 	:m_matrix(matrix)
 {
@@ -141,7 +139,7 @@ SG_Frustum::TestType SG_Frustum::AabbInsideFrustum(const mt::vec3& min, const mt
 	if (result == INTERSECT) {
 		mt::vec3 fmin;
 		mt::vec3 fmax;
-		MT_FrustumAabb((m_matrix * mat).inverse(), fmin, fmax);
+		mt::FrustumAabb((m_matrix * mat).Inverse(), fmin, fmax);
 
 		if (!aabbIntersect(min, max, fmin, fmax)) {
 			return OUTSIDE;

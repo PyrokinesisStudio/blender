@@ -149,7 +149,7 @@ static void Kx_VecUpMat3(mt::vec3 vec, mt::mat3& mat, short axis)
 	if (mat.GetColumn(coz).Normalize() == 0.f) {
 		/* this is a very abnormal situation: the camera has reach the object center exactly
 		 * We will choose a completely arbitrary direction */
-		mat.GetColumn(coz) = mt::kAxisX3f;
+		mat.GetColumn(coz) = mt::axisX3;
 	}
 	
 	inp = mat(coz, 2);
@@ -159,7 +159,7 @@ static void Kx_VecUpMat3(mt::vec3 vec, mt::mat3& mat, short axis)
 
 	if (mat.GetColumn(coy).Normalize() == 0.f) {
 		/* the camera is vertical, chose the y axis arbitrary */
-		mat.GetColumn(coy) = mt::kAxisY3f;
+		mat.GetColumn(coy) = mt::axisY3;
 	}
 
 	mat.GetColumn(cox) = mt::vec3::CrossProduct(mat.GetColumn(coy), mat.GetColumn(coz));

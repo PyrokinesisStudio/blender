@@ -45,7 +45,7 @@ SG_BBox::SG_BBox(const mt::vec3 &min, const mt::vec3 &max)
 void SG_BBox::UpdateSphere()
 {
 	m_center = (m_max + m_min) * 0.5f;
-	m_radius = m_center.distance(m_min);
+	m_radius = (m_center - m_min).Length();
 }
 
 const mt::vec3& SG_BBox::GetCenter() const

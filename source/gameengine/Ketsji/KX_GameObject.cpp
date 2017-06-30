@@ -1036,7 +1036,6 @@ const mt::vec4& KX_GameObject::GetObjectColor()
 
 void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 {
-	const float eps = 3.0f * FLT_EPSILON;
 	mt::mat3 orimat;
 	mt::vec3 vect,ori,z,x,y;
 	float len;

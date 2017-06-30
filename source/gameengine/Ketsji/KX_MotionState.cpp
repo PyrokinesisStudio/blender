@@ -68,7 +68,7 @@ void KX_MotionState::SetWorldPosition(const mt::vec3& pos)
 
 void KX_MotionState::SetWorldOrientation(const mt::quat& quat)
 {
-	m_node->SetLocalOrientation(mt::mat3(quat));
+	m_node->SetLocalOrientation(quat.ToMatrix());
 }
 
 void KX_MotionState::CalculateWorldTransformations()

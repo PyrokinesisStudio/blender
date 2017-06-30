@@ -130,7 +130,7 @@ void KX_FontObject::AddMeshUser()
 {
 	m_meshUser = new RAS_TextUser(m_pClient_info, m_boundingBox);
 
-	NodeGetWorldTransform().getValue(m_meshUser->GetMatrix());
+	NodeGetWorldTransform().Pack(m_meshUser->GetMatrix());
 
 	RAS_BucketManager *bucketManager = GetScene()->GetBucketManager();
 	RAS_DisplayArrayBucket *arrayBucket = bucketManager->GetTextDisplayArrayBucket();
@@ -143,7 +143,7 @@ void KX_FontObject::UpdateBuckets()
 {
 	// Update datas and add mesh slot to be rendered only if the object is not culled.
 	if (m_pSGNode->IsDirty(SG_Node::DIRTY_RENDER)) {
-		NodeGetWorldTransform().getValue(m_meshUser->GetMatrix());
+		NodeGetWorldTransform().Pack(m_meshUser->GetMatrix());
 		m_pSGNode->ClearDirty(SG_Node::DIRTY_RENDER);
 	}
 

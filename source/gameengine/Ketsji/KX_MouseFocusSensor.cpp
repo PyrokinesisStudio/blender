@@ -92,10 +92,10 @@ void KX_MouseFocusSensor::Init()
 	m_hitObject_Last = nullptr;
 	m_reset = true;
 	
-	m_hitPosition = mt::zero2;
-	m_prevTargetPoint = mt::zero2;
-	m_prevSourcePoint = mt::zero2;
-	m_hitNormal = mt::zero2;
+	m_hitPosition = mt::zero3;
+	m_prevTargetPoint = mt::zero3;
+	m_prevSourcePoint = mt::zero3;
+	m_hitNormal = mt::zero3;
 }
 
 bool KX_MouseFocusSensor::Evaluate()
@@ -480,7 +480,7 @@ PyObject *KX_MouseFocusSensor::pyattr_get_ray_direction(PyObjectPlus *self_v, co
 {
 	KX_MouseFocusSensor* self = static_cast<KX_MouseFocusSensor*>(self_v);
 	mt::vec3 dir = self->RayTarget() - self->RaySource();
-	if (mt::FuzzyZero(dir))	dir = mt::kZeros3f;
+	if (mt::FuzzyZero(dir))	dir = mt::zero3;
 	else					dir.Normalize();
 	return PyObjectFrom(dir);
 }

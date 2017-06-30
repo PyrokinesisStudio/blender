@@ -36,8 +36,6 @@
 #include "KX_Globals.h"
 #include "KX_PyMath.h"
 
-#include "MT_Frustum.h"  // TODO
-
 #include "RAS_ICanvas.h"
 
 #include "GPU_glew.h"
@@ -579,7 +577,7 @@ PyObject *KX_Camera::pyattr_get_fov(PyObjectPlus *self_v, const KX_PYATTRIBUTE_D
 	float width = self->m_camdata.m_sensor_x;
 	float fov = 2.0f * atanf(0.5f * width / lens);
 
-	return PyFloat_FromDouble(fov * MT_DEGS_PER_RAD);
+	return PyFloat_FromDouble(RAD2DEGF(fov));
 }
 
 int KX_Camera::pyattr_set_fov(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *attrdef, PyObject *value)

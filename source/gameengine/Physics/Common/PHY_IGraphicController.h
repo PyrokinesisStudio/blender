@@ -34,6 +34,8 @@
 
 #include "PHY_IController.h"
 
+class PHY_IMotionState;
+
 /**
  * PHY_IPhysicsController is the abstract simplified Interface to a physical object.
  * It contains the IMotionState and IDeformableMesh Interfaces.

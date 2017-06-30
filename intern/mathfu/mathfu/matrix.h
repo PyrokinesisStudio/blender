@@ -584,7 +584,8 @@ class Matrix {
   }
 
   inline Vector<T, rows> GetEuler() const {
-     return EulerHelper(*this);
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 3);
+    return EulerHelper(*this);
   }
 
   /// @brief Calculate the inverse of this Matrix.
@@ -1337,19 +1338,19 @@ class Constants<double> {
   static double GetDeterminantThreshold() { return 1e-15; }
 };
 
-template <class T, int rows, int columns>
-inline Vector<T, rows> EulerHelper(const Matrix<T, rows, columns>& m) {
+template <class T>
+inline Vector<T, 3> EulerHelper(const Matrix<T, 3>& m) {
 	const T cy = sqrtf(m(0, 0) * m(0, 0) + m(1, 0) * m(1, 0));
-	Vector<T, rows> eul;
+	Vector<T, 3> eul;
 
 	if (cy > (float)(16.0f * Constants<T>::GetDeterminantThreshold())) {
-		return Vector<T, rows>(atan2f(m(2, 1), m(2, 2)), atan2f(-m(2, 0), cy), atan2f(m(1, 0), m(0, 0)));
+		return Vector<T, 3>(atan2f(m(2, 1), m(2, 2)), atan2f(-m(2, 0), cy), atan2f(m(1, 0), m(0, 0)));
 	}
 	else {
-		return Vector<T, rows>(atan2f(-m(1, 2), m(1, 1)), atan2f(-m(2, 0), cy), 0.0);
+		return Vector<T, 3>(atan2f(-m(1, 2), m(1, 1)), atan2f(-m(2, 0), cy), 0);
 	}
 
-	return Vector<T, rows>(0.0);
+	return Vector<T, 3>(static_cast<T>(0));
 }
 
 /// @cond MATHFU_INTERNAL
@@ -1406,6 +1407,28 @@ inline bool InverseHelper(const Matrix<T, 3, 3>& m,
       sub11, sub12, sub13, m[6] * m[5] - m[3] * m[8], m[0] * m[8] - m[6] * m[2],
       m[3] * m[2] - m[0] * m[5], m[3] * m[7] - m[6] * m[4],
       m[6] * m[1] - m[0] * m[7], m[0] * m[4] - m[3] * m[1]);
+  *(inverse) *= 1 / determinant;
+  return true;
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+template <bool check_invertible, class T>
+inline bool InverseHelper(const Matrix<T, 4, 3>& m,
+                          Matrix<T, 4, 3>* const inverse) {
+  // Find determinant of matrix.
+  T sub11 = m[5] * m[10] - m[6] * m[7], sub12 = -m[1] * m[10] + m[2] * m[9],
+    sub13 = m[1] * m[6] - m[2] * m[5];
+  T determinant = m[0] * sub11 + m[4] * sub12 + m[8] * sub13;
+  if (check_invertible &&
+      fabs(determinant) < Constants<T>::GetDeterminantThreshold()) {
+    return false;
+  }
+  // Find determinants of 2x2 submatrices for the elements of the inverse.
+  *inverse = Matrix<T, 4, 3>(
+      sub11, sub12, sub13, m[8] * m[6] - m[4] * m[10], m[0] * m[10] - m[8] * m[2],
+      m[3] * m[2] - m[0] * m[6], m[4] * m[9] - m[8] * m[5],
+      m[7] * m[1] - m[0] * m[9], m[0] * m[5] - m[4] * m[1]);
   *(inverse) *= 1 / determinant;
   return true;
 }

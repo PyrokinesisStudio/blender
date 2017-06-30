@@ -17,7 +17,7 @@ void KX_CullingHandler::Process(KX_CullingNode *node)
 	const SG_BBox& aabb = node->GetAabb();
 
 	bool culled = true;
-	const SG_Frustum::TestType sphereTest = m_frustum.SphereInsideFrustum(trans(aabb.GetCenter()), fabs(scale[scale.closestAxis()]) * aabb.GetRadius());
+	const SG_Frustum::TestType sphereTest = m_frustum.SphereInsideFrustum(trans * aabb.GetCenter(), fabs(scale[scale.closestAxis()]) * aabb.GetRadius());
 
 	// First test if the sphere is in the frustum as it is faster to test than box.
 	if (sphereTest == SG_Frustum::INSIDE) {
@@ -25,7 +25,7 @@ void KX_CullingHandler::Process(KX_CullingNode *node)
 	}
 	// If the sphere intersects we made a box test because the box could be not homogeneous.
 	else if (sphereTest == SG_Frustum::INTERSECT) {
-		const mt::mat4 mat = mt::mat4(trans);
+		const mt::mat4 mat = mt::mat4::FromAffineTransform(trans);
 		culled = (m_frustum.AabbInsideFrustum(aabb.GetMin(), aabb.GetMax(), mat) == SG_Frustum::OUTSIDE);
 	}
 

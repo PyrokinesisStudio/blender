@@ -123,7 +123,7 @@ bool KX_IpoSGController::Update(double currentTime)
 			m_ipo_start_initialized = true;
 			if (!m_ipo_euler_initialized) {
 				// do it only once to avoid angle discontinuities
-				m_ipo_start_orient.getEuler(m_ipo_start_euler[0], m_ipo_start_euler[1], m_ipo_start_euler[2]);
+				m_ipo_start_euler = m_ipo_start_orient.GetEuler();
 				m_ipo_euler_initialized = true;
 			}
 		}

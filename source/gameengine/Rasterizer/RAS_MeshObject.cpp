@@ -71,7 +71,7 @@ struct RAS_MeshObject::polygonSlot
 		/* note we don't divide center by the number of vertices, since all
 		* polygons have the same number of vertices, and that we leave out
 		* the 4-th component of the plane equation since it is constant. */
-		m_z = MT_dot(pnorm, center);
+		m_z = mt::dot(pnorm, center);
 	}
 
 	void set(unsigned int *indexmap, int offset, int nvert)

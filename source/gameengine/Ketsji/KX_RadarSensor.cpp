@@ -37,6 +37,8 @@
 #include "PHY_IMotionState.h"
 #include "DNA_sensor_types.h"
 
+#include "BLI_math_rotation.h"
+
 /**
  * 	RadarSensor constructor. Creates a near-sensor derived class, with a cone collision shape.
  */
@@ -88,10 +90,8 @@ CValue* KX_RadarSensor::GetReplica()
  *	for usage.  */
 void KX_RadarSensor::SynchronizeTransform()
 {
-	// Getting the parent location was commented out. Why?
-	mt::mat4x3 trans;
-	trans.setOrigin(((KX_GameObject*)GetParent())->NodeGetWorldPosition());
-	trans.setBasis(((KX_GameObject*)GetParent())->NodeGetWorldOrientation());
+	KX_GameObject *obj = static_cast<KX_GameObject *>(GetParent());
+	mt::mat4x3 trans(obj->NodeGetWorldOrientation(), obj->NodeGetWorldPosition());
 	// What is the default orientation? pointing in the -y direction?
 	// is the geometry correctly converted?
 
@@ -102,28 +102,28 @@ void KX_RadarSensor::SynchronizeTransform()
 	{
 	case SENS_RADAR_X_AXIS: // +X Axis
 		{
-			mt::quat rotquatje(mt::vec3(0,0,1),MT_radians(90));
+			mt::quat rotquatje(M_PI / 2.0f, mt::axisZ3);
 			trans.rotate(rotquatje);
 			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_Y_AXIS: // +Y Axis
 		{
-			mt::quat rotquatje(mt::vec3(1,0,0),MT_radians(-180));
+			mt::quat rotquatje(-M_PI, mt::axisX3);
 			trans.rotate(rotquatje);
 			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_Z_AXIS: // +Z Axis
 		{
-			mt::quat rotquatje(mt::vec3(1,0,0),MT_radians(-90));
+			mt::quat rotquatje(-M_PI / 2.0f, mt::axisX3);
 			trans.rotate(rotquatje);
 			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
 		};
 	case SENS_RADAR_NEG_X_AXIS: // -X Axis
 		{
-			mt::quat rotquatje(mt::vec3(0,0,1),MT_radians(-90));
+			mt::quat rotquatje(-M_PI / 2.0f, mt::axisZ3);
 			trans.rotate(rotquatje);
 			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
@@ -137,7 +137,7 @@ void KX_RadarSensor::SynchronizeTransform()
 		};
 	case SENS_RADAR_NEG_Z_AXIS: // -Z Axis
 		{
-			mt::quat rotquatje(mt::vec3(1,0,0),MT_radians(90));
+			mt::quat rotquatje(M_PI / 2.0f, mt::axisX3);
 			trans.rotate(rotquatje);
 			trans.translate(mt::vec3 (0, -m_coneheight/2.0f, 0));
 			break;
@@ -154,7 +154,7 @@ void KX_RadarSensor::SynchronizeTransform()
 	m_cone_origin[1] = temp[1];
 	m_cone_origin[2] = temp[2];
 
-	temp = trans(mt::vec3(0, -m_coneheight/2.0f, 0));
+	temp = trans * mt::vec3(0, -m_coneheight/2.0f, 0);
 	m_cone_target[0] = temp[0];
 	m_cone_target[1] = temp[1];
 	m_cone_target[2] = temp[2];
@@ -219,7 +219,7 @@ PyObject *KX_RadarSensor::pyattr_get_angle(PyObjectPlus *self_v, const KX_PYATTR
 
 	// The original angle from the gui was converted, so we recalculate the value here to maintain
 	// consistency between Python and the gui
-	return PyFloat_FromDouble(MT_degrees(atan(self->m_coneradius / self->m_coneheight)) * 2);
+	return PyFloat_FromDouble(RAD2DEGF(atan(self->m_coneradius / self->m_coneheight)) * 2);
 	
 }
 

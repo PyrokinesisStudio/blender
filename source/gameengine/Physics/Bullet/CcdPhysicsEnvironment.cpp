@@ -159,7 +159,7 @@ public:
 			if (body && body->hasContactResponse()) {
 				result.m_hitPointInWorld = rayCallback.m_hitPointWorld;
 				result.m_hitNormalInWorld = rayCallback.m_hitNormalWorld;
-				result.m_hitNormalInWorld.Normalize();
+				result.m_hitNormalInWorld.normalize();
 				result.m_distFraction = rayCallback.m_closestHitFraction;
 				return (void *)body;
 			}
@@ -840,14 +840,14 @@ void CcdPhysicsEnvironment::ProcessFhSprings(double curTime, float interval)
 
 					CcdConstructionInfo& hitObjShapeProps = controller->GetConstructionInfo();
 
-					float distance = resultCallback.m_closestHitFraction * rayDirLocal.Length() - ctrl->GetConstructionInfo().m_radius;
+					float distance = resultCallback.m_closestHitFraction * rayDirLocal.length() - ctrl->GetConstructionInfo().m_radius;
 					if (distance >= hitObjShapeProps.m_fh_distance)
 						continue;
 
 					//btVector3 ray_dir = cl_object->getCenterOfMassTransform().getBasis()* rayDirLocal.Normalized();
-					btVector3 ray_dir = rayDirLocal.Normalized();
+					btVector3 ray_dir = rayDirLocal.normalized();
 					btVector3 normal = resultCallback.m_hitNormalWorld;
-					normal.Normalize();
+					normal.normalize();
 
 					if (ctrl->GetConstructionInfo().m_do_fh) {
 						btVector3 lspot = cl_object->getCenterOfMassPosition() +
@@ -877,7 +877,7 @@ void CcdPhysicsEnvironment::ProcessFhSprings(double curTime, float interval)
 							lateral = lcs * loc_lateral;
 						}
 
-						btScalar rel_vel_lateral = lateral.Length();
+						btScalar rel_vel_lateral = lateral.length();
 
 						if (rel_vel_lateral > SIMD_EPSILON) {
 							btScalar friction_factor = hit_object->getFriction();//cl_object->getFriction();
@@ -896,7 +896,7 @@ void CcdPhysicsEnvironment::ProcessFhSprings(double curTime, float interval)
 
 
 					if (ctrl->GetConstructionInfo().m_do_rot_fh) {
-						btVector3 up2 = cl_object->getWorldTransform().getBasis().GetColumn(2);
+						btVector3 up2 = cl_object->getWorldTransform().getBasis().getColumn(2);
 
 						btVector3 t_spring = up2.cross(normal) * hitObjShapeProps.m_fh_spring;
 						btVector3 ang_vel = cl_object->getAngularVelocity();
@@ -1237,17 +1237,17 @@ PHY_IPhysicsController *CcdPhysicsEnvironment::RayTest(PHY_IRayCastFilterCallbac
 						btVector3 v = v2 - v1;
 						btVector3 w = v3 - v1;
 						btVector3 u = v.cross(w);
-						btScalar A = u.Length();
+						btScalar A = u.length();
 
 						v = v2 - rayCallback.m_hitPointWorld;
 						w = v3 - rayCallback.m_hitPointWorld;
 						u = v.cross(w);
-						btScalar A1 = u.Length();
+						btScalar A1 = u.length();
 
 						v = rayCallback.m_hitPointWorld - v1;
 						w = v3 - v1;
 						u = v.cross(w);
-						btScalar A2 = u.Length();
+						btScalar A2 = u.length();
 
 						btVector3 baryCo;
 						baryCo.setX(A1 / A);
@@ -1282,8 +1282,8 @@ SKIP_UV_NORMAL:
 				}
 			}
 		}
-		if (rayCallback.m_hitNormalWorld.LengthSquared() > (SIMD_EPSILON * SIMD_EPSILON)) {
-			rayCallback.m_hitNormalWorld.Normalize();
+		if (rayCallback.m_hitNormalWorld.length2() > (SIMD_EPSILON * SIMD_EPSILON)) {
+			rayCallback.m_hitNormalWorld.normalize();
 		}
 		else {
 			rayCallback.m_hitNormalWorld.setValue(1.0f, 0.0f, 0.0f);
@@ -2388,7 +2388,7 @@ int findClosestNode(btSoftBody *sb, const btVector3& worldPoint)
 	float maxDistSqr = 1e30f;
 
 	for (int n = 0; n < nodes.size(); n++) {
-		btScalar distSqr = (nodes[n].m_x - worldPoint).LengthSquared();
+		btScalar distSqr = (nodes[n].m_x - worldPoint).length2();
 		if (distSqr < maxDistSqr)
 		{
 			maxDistSqr = distSqr;
@@ -2516,7 +2516,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 				
 				btVector3 axis1(axis1X,axis1Y,axis1Z), axis2(axis2X,axis2Y,axis2Z);
-				if (axis1.Length() == 0.0)
+				if (axis1.length() == 0.0)
 				{
 					btPlaneSpace1( axisInA, axis1, axis2 );
 				}
@@ -2578,7 +2578,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 				
 				btVector3 axis1(axis1X,axis1Y,axis1Z), axis2(axis2X,axis2Y,axis2Z);
-				if (axis1.Length() == 0.0)
+				if (axis1.length() == 0.0)
 				{
 					btPlaneSpace1( axisInA, axis1, axis2 );
 				}
@@ -2642,7 +2642,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 
 				btVector3 axis1(axis1X, axis1Y, axis1Z), axis2(axis2X, axis2Y, axis2Z);
-				if (axis1.Length() == 0.0f) {
+				if (axis1.length() == 0.0f) {
 					btPlaneSpace1(axisInA, axis1, axis2);
 				}
 
@@ -2668,7 +2668,7 @@ int CcdPhysicsEnvironment::CreateConstraint(class PHY_IPhysicsController *ctrl0,
 				btTransform frameInB;
 
 				btVector3 axis1(axis1X, axis1Y, axis1Z), axis2(axis2X, axis2Y, axis2Z);
-				if (axis1.Length() == 0.0f) {
+				if (axis1.length() == 0.0f) {
 					btPlaneSpace1(axisInA, axis1, axis2);
 				}
 
@@ -3057,7 +3057,7 @@ void CcdPhysicsEnvironment::ConvertObject(KX_BlenderSceneConverter& converter, K
 		}
 		case OB_BOUND_CYLINDER:
 		{
-			float radius = MT_max(bounds_extends[0], bounds_extends[1]);
+			float radius = std::max(bounds_extends[0], bounds_extends[1]);
 			shapeInfo->m_halfExtend.setValue(
 			    radius,
 			    radius,
@@ -3070,7 +3070,7 @@ void CcdPhysicsEnvironment::ConvertObject(KX_BlenderSceneConverter& converter, K
 
 		case OB_BOUND_CONE:
 		{
-			shapeInfo->m_radius = MT_max(bounds_extends[0], bounds_extends[1]);
+			shapeInfo->m_radius = std::max(bounds_extends[0], bounds_extends[1]);
 			shapeInfo->m_height = 2.0f * bounds_extends[2];
 			shapeInfo->m_shapeType = PHY_SHAPE_CONE;
 			bm = shapeInfo->CreateBulletShape(ci.m_margin);
@@ -3084,7 +3084,7 @@ void CcdPhysicsEnvironment::ConvertObject(KX_BlenderSceneConverter& converter, K
 		}
 		case OB_BOUND_CAPSULE:
 		{
-			shapeInfo->m_radius = MT_max(bounds_extends[0], bounds_extends[1]);
+			shapeInfo->m_radius = std::max(bounds_extends[0], bounds_extends[1]);
 			shapeInfo->m_height = 2.0f * (bounds_extends[2] - shapeInfo->m_radius);
 			if (shapeInfo->m_height < 0.0f)
 				shapeInfo->m_height = 0.0f;
@@ -3149,7 +3149,7 @@ void CcdPhysicsEnvironment::ConvertObject(KX_BlenderSceneConverter& converter, K
 			parentScale[1] = 1.0f / parentScale[1];
 			parentScale[2] = 1.0f / parentScale[2];
 			mt::vec3 relativeScale = gameNode->GetWorldScaling() * parentScale;
-			mt::mat3 parentInvRot = parentNode->GetWorldOrientation().transposed();
+			mt::mat3 parentInvRot = parentNode->GetWorldOrientation().Transpose();
 			mt::vec3 relativePos = parentInvRot * ((gameNode->GetWorldPosition() - parentNode->GetWorldPosition()) * parentScale);
 			mt::mat3 relativeRot = parentInvRot * gameNode->GetWorldOrientation();
 

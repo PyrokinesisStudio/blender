@@ -3,6 +3,7 @@
 
 #include "mathfu/glsl_mappings.h"
 #include "mathfu/constants.h"
+#include "mathfu/frustum.h"
 
 namespace mt = mathfu;
 

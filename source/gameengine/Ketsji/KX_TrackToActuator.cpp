@@ -148,13 +148,13 @@ static void compatible_eulFast(float *eul, float *oldrot)
 	dz = eul[2] - oldrot[2];
 
 	if (fabsf(dx) > (float)M_PI) {
-		if (dx > 0.0f) eul[0] -= (float)MT_2_PI; else eul[0] += (float)MT_2_PI;
+		if (dx > 0.0f) eul[0] -= (float)(M_PI * 2.0f); else eul[0] += (float)(M_PI * 2.0f);
 	}
 	if (fabsf(dy) > (float)M_PI) {
-		if (dy > 0.0f) eul[1] -= (float)MT_2_PI; else eul[1] += (float)MT_2_PI;
+		if (dy > 0.0f) eul[1] -= (float)(M_PI * 2.0f); else eul[1] += (float)(M_PI * 2.0f);
 	}
 	if (fabsf(dz) > (float)M_PI) {
-		if (dz > 0.0f) eul[2] -= (float)MT_2_PI; else eul[2] += (float)MT_2_PI;
+		if (dz > 0.0f) eul[2] -= (float)(M_PI * 2.0f); else eul[2] += (float)(M_PI * 2.0f);
 	}
 }
 
@@ -203,12 +203,12 @@ static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimu
 	int right_index;
 
 	/* Normalized Vec vector*/
-	vec = vec.safe_normalized_vec(z);
+	vec = vec.SafeNormalized(z);
 
 	/* if 2D doesn't move the up vector */
 	if (!threedimup) {
 		vec.z = 0.0f;
-		vec = (vec - mt::dot(z, vec)*z).safe_normalized_vec(z);
+		vec = (vec - mt::dot(z, vec)*z).SafeNormalized(z);
 	}
 
 	if (axis > 2)
@@ -223,7 +223,7 @@ static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimu
 	/* then onto the plane */
 	proj = z - proj;
 	/* proj specifies the transformation of the up axis */
-	proj = proj.safe_normalized_vec(y);
+	proj = proj.SafeNormalized(y);
 
 	/* Normalized cross product of vec and proj specifies transformation of the right axis */
 	right = mt::cross(proj, vec);

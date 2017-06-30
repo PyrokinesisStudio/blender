@@ -27,8 +27,6 @@
 #include "RAS_DebugDraw.h"
 #include "RAS_OpenGLDebugDraw.h"
 
-#include "MT_Frustum.h" // TODO
-
 RAS_DebugDraw::Shape::Shape(const mt::vec4& color)
 	:m_color(color)
 {
@@ -120,7 +118,7 @@ void RAS_DebugDraw::DrawSolidBox(const std::array<mt::vec3, 8>& vertices, const 
 void RAS_DebugDraw::DrawCameraFrustum(const mt::mat4& projmat, const mt::mat4& viewmat)
 {
 	std::array<mt::vec3, 8> box;
-	MT_FrustumBox((projmat * viewmat).Inverse(), box);
+	mt::FrustumBox((projmat * viewmat).Inverse(), box);
 
 	DrawSolidBox(box, mt::vec4(0.4f, 0.4f, 0.4f, 0.4f), mt::vec4(0.0f, 0.0f, 0.0f, 0.4f),
 		mt::vec4(0.8f, 0.5f, 0.0f, 1.0f));
