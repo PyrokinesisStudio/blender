@@ -84,7 +84,7 @@ KX_ConstraintActuator::KX_ConstraintActuator(SCA_IObject *gameobj,
 	case KX_ACT_CONSTRAINT_ORIZ:
 		{
 			float len = m_refDirVector.Length();
-			if (MT_fuzzyZero(len)) {
+			if (mt::FuzzyZero(len)) {
 				// missing a valid direction
 				CM_LogicBrickWarning(this, "there is no valid reference direction!");
 				m_locrot = KX_ACT_CONSTRAINT_NODEF;
@@ -221,7 +221,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 				//    compute local axis with reference direction as X and
 				//    Y in direction X refDirection plane
 				mt::vec3 zaxis = mt::cross(m_refDirVector, direction);
-				if (MT_fuzzyZero2(zaxis.LengthSquared())) {
+				if (mt::FuzzyZero(zaxis.LengthSquared())) {
 					// direction and refDirection are identical,
 					// choose any other direction to define plane
 					if (direction[0] < 0.9999f)
@@ -365,7 +365,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 							mt::vec3 linV = spc->GetLinearVelocity();
 							// cancel the projection along the ray direction
 							float fallspeed = mt::dot(linV, direction);
-							if (!MT_fuzzyZero(fallspeed))
+							if (!mt::FuzzyZero(fallspeed))
 								spc->SetLinearVelocity(linV-fallspeed*direction,false);
 						}
 					} else {
@@ -460,7 +460,7 @@ bool KX_ConstraintActuator::Update(double curtime)
 						mt::vec3 angVelocity = spc->GetAngularVelocity();
 						// remove component that is parallel to normal
 						angVelocity -= mt::dot(angVelocity, newnormal)*newnormal;
-						mt::vec3 angDamp = angVelocity * ((m_refDirVector[1]>MT_EPSILON)?m_refDirVector[1]:m_refDirVector[0]);
+						mt::vec3 angDamp = angVelocity * (mt::FuzzyZero(m_refDirVector[1])?m_refDirVector[0]:m_refDirVector[1]);
 						spc->SetAngularVelocity(spc->GetAngularVelocity()+(angSpring-angDamp), false);
 					}
 				} else if (m_option & KX_ACT_CONSTRAINT_PERMANENT) {
@@ -572,7 +572,7 @@ int KX_ConstraintActuator::pyattr_check_direction(PyObjectPlus *self_v, const st
 	KX_ConstraintActuator* act = static_cast<KX_ConstraintActuator*>(self_v);
 	mt::vec3 dir(act->m_refDirection);
 	float len = dir.Length();
-	if (MT_fuzzyZero(len)) {
+	if (mt::FuzzyZero(len)) {
 		PyErr_SetString(PyExc_ValueError, "actuator.direction = vec: KX_ConstraintActuator, invalid direction");
 		return 1;
 	}

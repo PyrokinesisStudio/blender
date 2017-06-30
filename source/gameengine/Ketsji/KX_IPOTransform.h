@@ -47,9 +47,7 @@ public:
 		{}
 
 	mt::mat4x3         GetTransform() const {
-		return mt::mat4x3(m_position + m_deltaPosition,
-		                    mt::mat3(m_eulerAngles + m_deltaEulerAngles,
-		                                 m_scaling + m_deltaScaling));
+		return mt::mat4x3(mt::mat3(m_eulerAngles + m_deltaEulerAngles, m_scaling + m_deltaScaling), m_position + m_deltaPosition);
 	}
 
 	mt::vec3&	         GetPosition()          { return m_position; 	}

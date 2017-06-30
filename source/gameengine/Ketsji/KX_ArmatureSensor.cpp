@@ -43,8 +43,6 @@
 #include "SCA_EventManager.h"
 #include "SCA_LogicManager.h"
 
-#include <float.h>
-
 KX_ArmatureSensor::KX_ArmatureSensor(class SCA_EventManager* eventmgr,
 					SCA_IObject* gameobj,
 					const std::string& posechannel,

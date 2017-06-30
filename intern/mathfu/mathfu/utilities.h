@@ -18,6 +18,7 @@
 
 #include <assert.h>
 #include <math.h>
+#include <float.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -288,12 +289,12 @@ bool FuzzyZero(const T &x) {
 
 template <>
 bool FuzzyZero(const float &x) {
-  return (x < 1.0e-7f);
+  return (std::abs(x) < FLT_EPSILON);
 }
 
 template <>
 bool FuzzyZero(const double &x) {
-  return (x < 1.0e-15);
+  return (std::abs(x) < DBL_EPSILON);
 }
 
 /// @brief Clamp x within [lower, upper].

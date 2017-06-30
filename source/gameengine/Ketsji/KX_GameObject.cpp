@@ -1036,14 +1036,14 @@ const mt::vec4& KX_GameObject::GetObjectColor()
 
 void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 {
-	const float eps = 3.0f * MT_EPSILON;
+	const float eps = 3.0f * FLT_EPSILON;
 	mt::mat3 orimat;
 	mt::vec3 vect,ori,z,x,y;
 	float len;
 
 	vect = dir;
 	len = vect.Length();
-	if (MT_fuzzyZero(len))
+	if (mt::FuzzyZero(len))
 	{
 		CM_FunctionError("null vector!");
 		return;
@@ -1060,7 +1060,7 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 	{
 		case 0: // align x axis of new coord system to vect
 			ori = orimat.GetColumn(2); // pivot axis
-			if (1.0f - MT_abs(mt::dot(vect, ori)) < eps)  { // vect parallel to pivot?
+			if (mt::FuzzyZero(1.0f - std::abs(mt::dot(vect, ori))))  { // vect parallel to pivot?
 				ori = orimat.GetColumn(1); // change the pivot!
 			}
 
@@ -1069,7 +1069,7 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 			} else {
 				x = (vect * fac) + ((orimat * mt::vec3(1.0f, 0.0f, 0.0f)) * (1.0f - fac));
 				len = x.Length();
-				if (MT_fuzzyZero(len)) x = vect;
+				if (mt::FuzzyZero(len)) x = vect;
 				else x /= len;
 			}
 			y = mt::cross(ori, x);
@@ -1077,7 +1077,7 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 			break;
 		case 1: // y axis
 			ori = orimat.GetColumn(0);
-			if (1.0f - MT_abs(mt::dot(vect, ori)) < eps) {
+			if (mt::FuzzyZero(1.0f - std::abs(mt::dot(vect, ori)))) {
 				ori = orimat.GetColumn(2);
 			}
 
@@ -1086,7 +1086,7 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 			} else {
 				y = (vect * fac) + ((orimat * mt::vec3(0.0f, 1.0f, 0.0f)) * (1.0f - fac));
 				len = y.Length();
-				if (MT_fuzzyZero(len)) y = vect;
+				if (mt::FuzzyZero(len)) y = vect;
 				else y /= len;
 			}
 			z = mt::cross(ori, y);
@@ -1094,7 +1094,7 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 			break;
 		case 2: // z axis
 			ori = orimat.GetColumn(1);
-			if (1.0f - MT_abs(mt::dot(vect, ori)) < eps) {
+			if (mt::FuzzyZero(1.0f - std::abs(mt::dot(vect, ori)))) {
 				ori = orimat.GetColumn(0);
 			}
 
@@ -1103,7 +1103,7 @@ void KX_GameObject::AlignAxisToVect(const mt::vec3& dir, int axis, float fac)
 			} else {
 				z = (vect * fac) + ((orimat * mt::vec3(0.0f, 0.0f, 1.0f)) * (1.0f - fac));
 				len = z.Length();
-				if (MT_fuzzyZero(len)) z = vect;
+				if (mt::FuzzyZero(len)) z = vect;
 				else z /= len;
 			}
 			x = mt::cross(ori, z);
@@ -3614,7 +3614,7 @@ KX_PYMETHODDEF_DOC_O(KX_GameObject, getVectTo,
 	toDir = toPoint-fromPoint;
 	distance = toDir.Length();
 
-	if (MT_fuzzyZero(distance))
+	if (mt::FuzzyZero(distance))
 	{
 		locToDir = toDir = mt::vec3(0.0f,0.0f,0.0f);
 		distance = 0.0f;
@@ -3862,13 +3862,13 @@ KX_PYMETHODDEF_DOC(KX_GameObject, rayCast,
 
 	if (dist != 0.0f) {
 		mt::vec3 toDir = toPoint-fromPoint;
-		if (MT_fuzzyZero(toDir.LengthSquared())) {
+		if (mt::FuzzyZero(toDir.LengthSquared())) {
 			//return Py_BuildValue("OOO", Py_None, Py_None, Py_None);
 			return none_tuple_3();
 		}
 		toDir.Normalize();
 		toPoint = fromPoint + (dist) * toDir;
-	} else if (MT_fuzzyZero((toPoint-fromPoint).LengthSquared())) {
+	} else if (mt::FuzzyZero((toPoint-fromPoint).LengthSquared())) {
 		//return Py_BuildValue("OOO", Py_None, Py_None, Py_None);
 		return none_tuple_3();
 	}

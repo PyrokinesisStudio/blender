@@ -21,7 +21,7 @@ SG_Frustum::SG_Frustum(const mt::mat4& matrix)
 	// Normalize clip planes.
 	for (mt::vec4& plane : m_planes) {
 		const float factor = sqrtf(plane[0] * plane[0] + plane[1] * plane[1] + plane[2] * plane[2]);
-		if (!MT_fuzzyZero(factor)) {
+		if (!mt::FuzzyZero(factor)) {
 			plane /= factor;
 		}
 	}

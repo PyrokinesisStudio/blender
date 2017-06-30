@@ -33,14 +33,8 @@
  *  \ingroup ketsji
  */
 
-#include "BLI_math_vector.h"
-
 #include "KX_CameraActuator.h"
-#include <math.h>
-#include <float.h>
 #include "KX_GameObject.h"
-
-#include "EXP_PyObjectPlus.h" 
 
 /* ------------------------------------------------------------------------- */
 /* Native functions                                                          */
@@ -142,7 +136,7 @@ static void Kx_VecUpMat3(mt::vec3 vec, mt::mat3& mat, short axis)
 	}
 	if (axis==3) {
 		cox= 0; coy= 1; coz= 2;		/* Y op -Z tr */
-		vec = -vec
+		vec = -vec;
 	}
 	if (axis==4) {
 		cox= 1; coy= 0; coz= 2;		/*  */
@@ -163,7 +157,7 @@ static void Kx_VecUpMat3(mt::vec3 vec, mt::mat3& mat, short axis)
 	mat(coy, 1) =      - inp * mat(coz, 1);
 	mat(coy, 2) = 1.0f - inp * mat(coz, 2);
 
-	if (normalize_v3((float *)mat[coy]) == 0.f) {
+	if (mat.GetColumn(coy).Normalize() == 0.f) {
 		/* the camera is vertical, chose the y axis arbitrary */
 		mat.GetColumn(coy) = MT_AxisY3;
 	}

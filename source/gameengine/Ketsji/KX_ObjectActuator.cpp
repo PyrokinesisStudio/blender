@@ -160,7 +160,7 @@ bool KX_ObjectActuator::Update()
 			// KP, KD, KI : coefficient
 			// F = KP*e+KI*I+KD*dv
 			float mass = parent->GetMass();
-			if (mass < MT_EPSILON)
+			if (mt::FuzzyZero(mass))
 				return false;
 			mt::vec3 v = parent->GetLinearVelocity(m_bitLocalFlag.LinearVelocity);
 			if (m_reference)

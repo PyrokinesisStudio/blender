@@ -480,7 +480,7 @@ PyObject *KX_MouseFocusSensor::pyattr_get_ray_direction(PyObjectPlus *self_v, co
 {
 	KX_MouseFocusSensor* self = static_cast<KX_MouseFocusSensor*>(self_v);
 	mt::vec3 dir = self->RayTarget() - self->RaySource();
-	if (MT_fuzzyZero(dir))	dir = MT_Zeros3;
+	if (mt::FuzzyZero(dir))	dir = MT_Zeros3;
 	else					dir.Normalize();
 	return PyObjectFrom(dir);
 }

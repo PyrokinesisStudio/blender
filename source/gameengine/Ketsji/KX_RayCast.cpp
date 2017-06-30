@@ -86,7 +86,7 @@ bool KX_RayCast::RayTest(PHY_IPhysicsEnvironment* physics_environment, const mt:
 		// The biggest danger to endless loop, prevent this by checking that the
 		// hit point always progresses along the ray direction..
 		prevpoint -= callback.m_hitPoint;
-		if (prevpoint.LengthSquared() < MT_EPSILON)
+		if (mt::FuzzyZero(prevpoint.LengthSquared()))
 			break;
 
 		if (callback.RayHit(info))
@@ -101,7 +101,7 @@ bool KX_RayCast::RayTest(PHY_IPhysicsEnvironment* physics_environment, const mt:
 		float marg = 0.001f + hit_controller->GetMargin();
 		marg *= 2.f;
 		/* Calculate the other side of this object */
-		float h = MT_abs(mt::dot(todir, callback.m_hitNormal));
+		float h = std::abs(mt::dot(todir, callback.m_hitNormal));
 		if (h <= 0.01f)
 			// the normal is almost orthogonal to the ray direction, cannot compute the other side
 			break;

@@ -1130,7 +1130,7 @@ float CcdPhysicsController::GetMass()
 void CcdPhysicsController::SetMass(float newmass)
 {
 	btRigidBody *body = GetRigidBody();
-	if (body && !m_suspended && !IsPhysicsSuspended() && (newmass > MT_EPSILON && GetMass() > MT_EPSILON)) {
+	if (body && !m_suspended && !IsPhysicsSuspended() && (!mt::FuzzyZero(newmass) && !mt::FuzzyZero(GetMass()))) {
 		btBroadphaseProxy *handle = body->getBroadphaseHandle();
 		GetPhysicsEnvironment()->UpdateCcdPhysicsController(this,
 		                                                    newmass,
