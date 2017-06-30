@@ -195,7 +195,7 @@ PyDoc_STRVAR(gPyGetRandomFloat_doc,
 );
 static PyObject *gPyGetRandomFloat(PyObject *)
 {
-	return PyFloat_FromDouble(MT_random());
+	return PyFloat_FromDouble(mt::Random());
 }
 
 static PyObject *gPySetGravity(PyObject *, PyObject *value)

@@ -127,12 +127,12 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		static const mt::vec3 worldUp(0.0f, 0.0f, 1.0f);
 		const mt::vec3& norm = circle.m_normal;
 		mt::mat3 tr;
-		if (norm.fuzzyZero() || norm == worldUp) {
+		if (mt::vec3::FuzzyZero(norm) || norm == worldUp) {
 			tr = mt::mat3::Identity();
 		}
 		else {
-			const mt::vec3 xaxis = MT_cross(norm, worldUp);
-			const mt::vec3 yaxis = MT_cross(xaxis, norm);
+			const mt::vec3 xaxis = mt::cross(norm, worldUp);
+			const mt::vec3 yaxis = mt::cross(xaxis, norm);
 			tr = mt::mat3(xaxis.x, xaxis.y, xaxis.z,
 						yaxis.x, yaxis.y, yaxis.z,
 						norm.x, norm.y, norm.z);
@@ -140,7 +140,7 @@ void RAS_OpenGLDebugDraw::Flush(RAS_Rasterizer *rasty, RAS_ICanvas *canvas, RAS_
 		const float rad = circle.m_radius;
 		const int n = circle.m_sector;
 		for (int j = 0; j < n; ++j) {
-			const float theta = j * MT_2_PI / n;
+			const float theta = j * (M_PI * 2) / n;
 			mt::vec3 pos(cosf(theta) * rad, sinf(theta) * rad, 0.0f);
 			pos = pos * tr;
 			pos += circle.m_center;

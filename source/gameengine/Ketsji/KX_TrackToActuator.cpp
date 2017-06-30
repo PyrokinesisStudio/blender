@@ -147,13 +147,13 @@ static void compatible_eulFast(float *eul, float *oldrot)
 	dy = eul[1] - oldrot[1];
 	dz = eul[2] - oldrot[2];
 
-	if (fabsf(dx) > (float)MT_PI) {
+	if (fabsf(dx) > (float)M_PI) {
 		if (dx > 0.0f) eul[0] -= (float)MT_2_PI; else eul[0] += (float)MT_2_PI;
 	}
-	if (fabsf(dy) > (float)MT_PI) {
+	if (fabsf(dy) > (float)M_PI) {
 		if (dy > 0.0f) eul[1] -= (float)MT_2_PI; else eul[1] += (float)MT_2_PI;
 	}
-	if (fabsf(dz) > (float)MT_PI) {
+	if (fabsf(dz) > (float)M_PI) {
 		if (dz > 0.0f) eul[2] -= (float)MT_2_PI; else eul[2] += (float)MT_2_PI;
 	}
 }

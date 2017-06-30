@@ -1380,8 +1380,8 @@ bool RAS_Rasterizer::RayHit(struct KX_ClientObjectInfo *client, KX_RayCast *resu
 		const mt::vec3& point = result->m_hitPoint;
 		mt::vec3 resultnormal(result->m_hitNormal);
 		mt::vec3 left(&origmat[0]);
-		mt::vec3 dir = -(mt::cross(left, resultnormal)).safe_normalized();
-		left = (mt::cross(dir, resultnormal)).safe_normalized();
+		mt::vec3 dir = -(mt::cross(left, resultnormal)).SafeNormalized(mt::axisX3);
+		left = (mt::cross(dir, resultnormal)).SafeNormalized(mt::axisX3);
 		// for the up vector, we take the 'resultnormal' returned by the physics
 
 		// we found the "ground", but the cast matrix doesn't take
@@ -1425,24 +1425,24 @@ void RAS_Rasterizer::GetTransform(float *origmat, int objectdrawmode, float mat[
 
 		mt::vec3 left;
 		if (m_camortho) {
-			left = m_viewmatrix.GetColumn(2).xyz().safe_normalized();
+			left = m_viewmatrix.GetColumn(2).xyz().SafeNormalized(mt::axisX3);
 		}
 		else {
 			const mt::vec3 objpos(&origmat[12]);
 			const mt::vec3& campos = GetCameraPosition();
-			left = (campos - objpos).safe_normalized();
+			left = (campos - objpos).SafeNormalized(mt::axisX3);
 		}
 
-		mt::vec3 up = mt::vec3(&origmat[8]).safe_normalized();
+		mt::vec3 up = mt::vec3(&origmat[8]).SafeNormalized(mt::axisX3);
 
 		// get scaling of halo object
 		const mt::vec3& scale = mt::vec3(len_v3(&origmat[0]), len_v3(&origmat[4]), len_v3(&origmat[8]));
 
 		if (objectdrawmode & RAS_IPolyMaterial::BILLBOARD_SCREENALIGNED) {
-			up = (up - mt::dot(up, left) * left).safe_normalized();
+			up = (up - mt::dot(up, left) * left).SafeNormalized(mt::axisX3);
 		}
 		else {
-			left = (left - mt::dot(up, left) * up).safe_normalized();
+			left = (left - mt::dot(up, left) * up).SafeNormalized(mt::axisX3);
 		}
 
 		mt::vec3 dir = (mt::cross(up, left)).Normalized();

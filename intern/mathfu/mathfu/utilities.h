@@ -281,20 +281,25 @@ namespace mathfu {
 /// @{
 
 template <class T>
-bool FuzzyZero(const T &x) {
+inline bool FuzzyZeroHelper(const T &x) {
   // No constant defined for the general case.
   assert(false);
   return 0;
 }
 
 template <>
-bool FuzzyZero(const float &x) {
+inline bool FuzzyZeroHelper(const float &x) {
   return (std::abs(x) < FLT_EPSILON);
 }
 
 template <>
-bool FuzzyZero(const double &x) {
+inline bool FuzzyZeroHelper(const double &x) {
   return (std::abs(x) < DBL_EPSILON);
+}
+
+template <class T>
+inline bool FuzzyZero(const T &x) {
+  return FuzzyZeroHelper(x);
 }
 
 /// @brief Clamp x within [lower, upper].

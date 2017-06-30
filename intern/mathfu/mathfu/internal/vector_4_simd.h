@@ -214,6 +214,13 @@ class Vector<float, 4> {
     return Vector<float, 4>(simd4f_normalize4(simd));
   }
 
+  inline Vector<float, 4> SafeNormalized(const Vector<float, 4>& v) const {
+    if (FuzzyZeroHelper(Length())) {
+      return v;
+    }
+    return Normalized();
+  }
+
   static inline bool FuzzyZero(const Vector<float, 4>& v) {
     return FuzzyZeroHelper(v);
   }

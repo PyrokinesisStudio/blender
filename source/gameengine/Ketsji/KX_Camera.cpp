@@ -42,6 +42,8 @@
 
 #include "GPU_glew.h"
 
+#include <BLI_math_rotation.h>
+
 KX_Camera::KX_Camera(void* sgReplicationInfo,
                      SG_Callbacks callbacks,
                      const RAS_CameraData& camdata,
@@ -589,9 +591,8 @@ int KX_Camera::pyattr_set_fov(PyObjectPlus *self_v, const KX_PYATTRIBUTE_DEF *at
 		return PY_SET_ATTR_FAIL;
 	}
 
-	fov *= MT_RADS_PER_DEG;
 	float width = self->m_camdata.m_sensor_x;
-	float lens = width / (2.0f * tanf(0.5f * fov));
+	float lens = width / (2.0f * tanf(0.5f * DEG2RADF(fov)));
 	
 	self->m_camdata.m_lens= lens;
 	self->m_set_projection_matrix = false;

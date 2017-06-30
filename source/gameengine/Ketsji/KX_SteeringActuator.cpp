@@ -266,7 +266,7 @@ bool KX_SteeringActuator::Update(double curtime)
 		bool isdyna = obj->IsDynamic();
 		if (isdyna)
 			m_steerVec.z = 0;
-		if (!m_steerVec.fuzzyZero())
+		if (!mt::vec3::FuzzyZero(m_steerVec))
 			m_steerVec.Normalize();
 		mt::vec3 newvel = m_velocity * m_steerVec;
 
@@ -408,7 +408,7 @@ static bool getNavmeshNormal(dtStatNavMesh* navmesh, const mt::vec3& pos, mt::ve
 		mt::vec3 a,b;
 		a = tri[1]-tri[0];
 		b = tri[2]-tri[0];
-		normal = mt::cross(b, a).safe_normalized();
+		normal = mt::cross(b, a).SafeNormalized(mt::axisX3);
 		return true;
 	}
 
@@ -421,7 +421,7 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 		return;
 	KX_GameObject* curobj = (KX_GameObject*) GetParent();
 	mt::vec3 dir = m_facingMode==0 ?  curobj->NodeGetLocalOrientation().GetColumn(1) : velocity;
-	if (dir.fuzzyZero())
+	if (mt::vec3::FuzzyZero(dir))
 		return;
 	dir.Normalize();
 	mt::vec3 up(0,0,1);
@@ -436,8 +436,8 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 		if (getNavmeshNormal(navmesh, trpos, normal))
 		{
 
-			left = (mt::cross(dir, up)).safe_normalized();
-			dir = (-mt::cross(left, normal)).safe_normalized();
+			left = (mt::cross(dir, up)).SafeNormalized(mt::axisX3);
+			dir = (-mt::cross(left, normal)).SafeNormalized(mt::axisX3);
 			up = normal;
 		}
 	}
@@ -446,43 +446,43 @@ void KX_SteeringActuator::HandleActorFace(mt::vec3& velocity)
 	{
 	case 1: // TRACK X
 		{
-			left  = dir.safe_normalized();
-			dir = -(mt::cross(left, up)).safe_normalized();
+			left  = dir.SafeNormalized(mt::axisX3);
+			dir = -(mt::cross(left, up)).SafeNormalized(mt::axisX3);
 			break;
 		};
 	case 2:	// TRACK Y
 		{
-			left  = (mt::cross(dir, up)).safe_normalized();
+			left  = (mt::cross(dir, up)).SafeNormalized(mt::axisX3);
 			break;
 		}
 
 	case 3: // track Z
 		{
-			left = up.safe_normalized();
-			up = dir.safe_normalized();
+			left = up.SafeNormalized(mt::axisX3);
+			up = dir.SafeNormalized(mt::axisX3);
 			dir = left;
-			left  = (mt::cross(dir, up)).safe_normalized();
+			left  = (mt::cross(dir, up)).SafeNormalized(mt::axisX3);
 			break;
 		}
 
 	case 4: // TRACK -X
 		{
-			left  = -dir.safe_normalized();
-			dir = -(mt::cross(left, up)).safe_normalized();
+			left  = -dir.SafeNormalized(mt::axisX3);
+			dir = -(mt::cross(left, up)).SafeNormalized(mt::axisX3);
 			break;
 		};
 	case 5: // TRACK -Y
 		{
-			left  = (-mt::cross(dir, up)).safe_normalized();
+			left  = (-mt::cross(dir, up)).SafeNormalized(mt::axisX3);
 			dir = -dir;
 			break;
 		}
 	case 6: // track -Z
 		{
-			left = up.safe_normalized();
-			up = -dir.safe_normalized();
+			left = up.SafeNormalized(mt::axisX3);
+			up = -dir.SafeNormalized(mt::axisX3);
 			dir = left;
-			left  = (mt::cross(dir, up)).safe_normalized();
+			left  = (mt::cross(dir, up)).SafeNormalized(mt::axisX3);
 			break;
 		}
 	}

@@ -84,6 +84,10 @@ class Vector<T, 2> {
 
   inline Vector<T, 2> Normalized() const { return NormalizedHelper(*this); }
 
+  inline Vector<T, 2> SafeNormalized(const Vector<T, 2>& v) const {
+    return SafeNormalizedHelper(*this, v);
+  }
+
   static inline bool FuzzyZero(const Vector<T, 2>& v) {
     return FuzzyZeroHelper(v);
   }

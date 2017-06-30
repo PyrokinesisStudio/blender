@@ -408,6 +408,10 @@ class Vector {
   /// @return The normalized vector.
   inline Vector<T, d> Normalized() const { return NormalizedHelper(*this); }
 
+  inline Vector<T, d> SafeNormalized(const Vector<T, d>& v) const {
+    return SafeNormalizedHelper(*this, v);
+  }
+
   static inline bool FuzzyZero(const Vector<T, d>& v) {
     return FuzzyZeroHelper(v);
   }
@@ -824,6 +828,15 @@ inline T NormalizeHelper(Vector<T, d>& v) {
 template <class T, int d>
 inline Vector<T, d> NormalizedHelper(const Vector<T, d>& v) {
   return v * (T(1) / LengthHelper(v));
+}
+
+template <class T, int d>
+inline Vector<T, d> SafeNormalizedHelper(const Vector<T, d>& v1, const Vector<T, d>& v2) {
+  const T length = LengthHelper(v1);
+  if (FuzzyZero(length)) {
+    return v2;
+  }
+  return v1 * (T(1) / length);
 }
 
 /// @brief Linearly interpolate two vectors.

@@ -3724,7 +3724,7 @@ KX_PYMETHODDEF_DOC(KX_GameObject, rayCastTo,
 	mt::vec3 fromPoint = NodeGetWorldPosition();
 	
 	if (dist != 0.0f)
-		toPoint = fromPoint + dist * (toPoint-fromPoint).safe_normalized();
+		toPoint = fromPoint + dist * (toPoint-fromPoint).SafeNormalized(mt::axisX3);
 	
 	PHY_IPhysicsEnvironment* pe = GetScene()->GetPhysicsEnvironment();
 	PHY_IPhysicsController *spc = GetPhysicsController();

@@ -616,18 +616,18 @@ void BL_ConvertActuators(const char* maggiename,
 						break;
 					case ACT_CONST_ROTX:
 						locrot = KX_ConstraintActuator::KX_ACT_CONSTRAINT_ROTX;
-						min = conact->minrot[0] * (float)MT_RADS_PER_DEG;
-						max = conact->maxrot[0] * (float)MT_RADS_PER_DEG;
+						min = DEG2RADF(conact->minrot[0]);
+						max = DEG2RADF(conact->maxrot[0]);
 						break;
 					case ACT_CONST_ROTY:
 						locrot = KX_ConstraintActuator::KX_ACT_CONSTRAINT_ROTY;
-						min = conact->minrot[1] * (float)MT_RADS_PER_DEG;
-						max = conact->maxrot[1] * (float)MT_RADS_PER_DEG;
+						min = DEG2RADF(conact->minrot[1]);
+						max = DEG2RADF(conact->maxrot[1]);
 						break;
 					case ACT_CONST_ROTZ:
 						locrot = KX_ConstraintActuator::KX_ACT_CONSTRAINT_ROTZ;
-						min = conact->minrot[2] * (float)MT_RADS_PER_DEG;
-						max = conact->maxrot[2] * (float)MT_RADS_PER_DEG;
+						min = DEG2RADF(conact->minrot[2]);
+						max = DEG2RADF(conact->maxrot[2]);
 						break;
 					default:
 						; /* error */ 

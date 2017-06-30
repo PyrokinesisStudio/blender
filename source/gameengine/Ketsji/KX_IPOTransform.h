@@ -38,17 +38,13 @@
 class KX_IPOTransform {
 public:
 	KX_IPOTransform() :
-		m_position(MT_Zero3),
-		m_eulerAngles(MT_Zero3),
-		m_scaling(MT_Ones3),
-		m_deltaPosition(MT_Zero3),
-		m_deltaEulerAngles(MT_Zero3),
-		m_deltaScaling(MT_Zero3)
+		m_position(mt::zero3),
+		m_eulerAngles(mt::zero3),
+		m_scaling(mt::one3),
+		m_deltaPosition(mt::zero3),
+		m_deltaEulerAngles(mt::zero3),
+		m_deltaScaling(mt::zero3)
 		{}
-
-	mt::mat4x3         GetTransform() const {
-		return mt::mat4x3(mt::mat3(m_eulerAngles + m_deltaEulerAngles, m_scaling + m_deltaScaling), m_position + m_deltaPosition);
-	}
 
 	mt::vec3&	         GetPosition()          { return m_position; 	}
 	mt::vec3&          GetEulerAngles()       { return m_eulerAngles;	}
@@ -67,9 +63,9 @@ public:
 	void SetScaling(const mt::vec3& scaling)  { m_scaling = scaling;	}
 	
 	void ClearDeltaStuff() { 
-		m_deltaPosition = MT_Zero3;
-		m_deltaEulerAngles = MT_Zero3;
-		m_deltaScaling = MT_Zero3;
+		m_deltaPosition = mt::zero3;
+		m_deltaEulerAngles = mt::zero3;
+		m_deltaScaling = mt::zero3;
 	}
 
 protected:

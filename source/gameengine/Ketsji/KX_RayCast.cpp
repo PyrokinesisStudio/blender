@@ -66,7 +66,7 @@ bool KX_RayCast::RayTest(PHY_IPhysicsEnvironment* physics_environment, const mt:
 	// returns true if an object was found, false if not.
 	
 	mt::vec3 frompoint(_frompoint);
-	const mt::vec3 todir( (topoint - frompoint).safe_normalized() );
+	const mt::vec3 todir( (topoint - frompoint).SafeNormalized(mt::axisX3) );
 	mt::vec3 prevpoint(_frompoint+todir*(-1.f));
 	
 	PHY_IPhysicsController* hit_controller;

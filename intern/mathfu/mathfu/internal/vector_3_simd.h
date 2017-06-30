@@ -263,6 +263,13 @@ class Vector<float, 3> {
     return Vector<float, 3>(simd4f_normalize3(MATHFU_VECTOR3_LOAD3(*this)));
   }
 
+  inline Vector<float, 3> SafeNormalized(const Vector<float, 3>& v) const {
+    if (FuzzyZeroHelper(Length())) {
+      return v;
+    }
+    return Normalized();
+  }
+
   static inline bool FuzzyZero(const Vector<float, 3>& v) {
     return FuzzyZeroHelper(v);
   }

@@ -330,7 +330,7 @@ static mt::vec3 nearestPointToObstacle(mt::vec3& pos ,KX_Obstacle* obstacle)
 	case KX_OBSTACLE_SEGMENT :
 	{
 		mt::vec3 ab = obstacle->m_pos2 - obstacle->m_pos;
-		if (!ab.fuzzyZero())
+		if (!mt::vec3::FuzzyZero(ab))
 		{
 			const float dist = ab.Length();
 			mt::vec3 abdir = ab.Normalized();

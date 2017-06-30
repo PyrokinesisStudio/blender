@@ -185,8 +185,11 @@ class Vector<float, 2> {
     return Vector<float, 2>(simd2f_normalize2(simd));
   }
 
-  static inline bool FuzzyZero(const Vector<float, 2>& v) {
-    return FuzzyZeroHelper(v);
+  inline Vector<float, 2> SafeNormalized(const Vector<float, 2>& v) const {
+    if (FuzzyZeroHelper(Length())) {
+      return v;
+    }
+    return Normalized();
   }
 
   template <typename CompatibleT>

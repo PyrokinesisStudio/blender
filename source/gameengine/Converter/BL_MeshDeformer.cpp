@@ -190,7 +190,7 @@ void BL_MeshDeformer::RecalcNormals()
 			const RAS_TexVertInfo& vinfo = array->GetVertexInfo(i);
 
 			if (!(vinfo.getFlag() & RAS_TexVertInfo::FLAT))
-				v->SetNormal(mt::vec3(m_transnors[vinfo.getOrigIndex()])); //.safe_normalized()
+				v->SetNormal(mt::vec3(m_transnors[vinfo.getOrigIndex()])); //.SafeNormalized(mt::axisX3)
 		}
 	}
 }
