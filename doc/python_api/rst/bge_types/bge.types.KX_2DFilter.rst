@@ -54,6 +54,18 @@ base class --- :class:`BL_Shader`
       :arg samplerName: The shader sampler name set to :data:`index` if :data:`samplerName` is passed in the function. (optional)
       :type samplerName: string
 
+   .. method:: setCubeMap(index, bindCode, samplerName="")
+
+      Set specified cube map texture bind code :data:`bindCode` in specified slot :data:`index`. Any call to :data:`setCubeMap`
+      should be followed by a call to :data:`BL_Shader.setSampler` with the same :data:`index`.
+
+      :arg index: The texture slot.
+      :type index: integer
+      :arg bindCode: The cube map texture bind code/Id.
+      :type bindCode: integer
+      :arg samplerName: The shader sampler name set to :data:`index` if :data:`samplerName` is passed in the function. (optional)
+      :type samplerName: string
+
    .. method:: addOffScreen(slots, depth=False, width=-1, height=-1, hdr=bge.render.HDR_NONE, mipmap=False)
 
       Register a custom off screen to render the filter to.
