@@ -128,8 +128,8 @@ public:
 	);
 	virtual void ProcessReplica();
 
-	mt::mat4x3		GetWorldToCamera() const;
-	mt::mat4x3		GetCameraToWorld() const;
+	mt::mat3x4		GetWorldToCamera() const;
+	mt::mat3x4		GetCameraToWorld() const;
 
 	/** Sets the projection matrix that is used by the rasterizer. */
 	void				SetProjectionMatrix(const mt::mat4 & mat);

@@ -541,12 +541,13 @@ double BL_ArmatureObject::GetLastFrame()
 	return m_lastframe;
 }
 
-bool BL_ArmatureObject::GetBoneMatrix(Bone *bone, mt::mat4x3& trans)
+bool BL_ArmatureObject::GetBoneMatrix(Bone *bone, mt::mat3x4& trans)
 {
 	ApplyPose();
 	bPoseChannel *pchan = BKE_pose_channel_find_name(m_objArma->pose, bone->name);
 	if (pchan) {
-		trans = mt::mat4x3(mt::vec4(pchan->pose_mat[0]), mt::vec4(pchan->pose_mat[1]), mt::vec4(pchan->pose_mat[2]));
+		trans = mt::mat3x4(mt::vec3(pchan->pose_mat[0]), mt::vec3(pchan->pose_mat[1]),
+						   mt::vec3(pchan->pose_mat[2]), mt::vec3(pchan->pose_mat[3]));
 	}
 	RestorePose();
 

@@ -86,21 +86,21 @@ UpdateChildCoordinates(
 		BL_ArmatureObject *armature = (BL_ArmatureObject*)(parent->GetSGClientObject());
 		if (armature)
 		{
-			mt::mat4x3 bone_transform;
+			mt::mat3x4 bone_transform;
 			if (armature->GetBoneMatrix(m_bone, bone_transform))
 			{
 				// Get the child's transform, and the bone matrix.
-				mt::mat4x3 child_transform(child_rotation, child_pos + mt::vec3(0.0f, armature->GetBoneLength(m_bone), 0.0f), child_scale);
+				mt::mat3x4 child_transform(child_rotation, child_pos + mt::vec3(0.0f, armature->GetBoneLength(m_bone), 0.0f), child_scale);
 				
 				// The child's world transform is parent * child
-				mt::mat4x3 parent_transform = parent->GetWorldTransform() * bone_transform;
+				mt::mat3x4 parent_transform = parent->GetWorldTransform() * bone_transform;
 				child_transform *= parent_transform;
 				
 				// Recompute the child transform components from the transform.
 				child_w_rotation = child_transform.RotationMatrix();
 				child_w_scale = mt::mat3::ToScaleVector(child_w_rotation);
 				child_w_rotation.Scale(mt::vec3(1.0f / child_w_scale.x, 1.0f / child_w_scale.y, 1.0f / child_w_scale.z));
-				child_w_pos = child_transform.GetColumn(3).xyz();
+				child_w_pos = child_transform.TranslationVector3D();
 					
 				valid_parent_transform = true;
 			}

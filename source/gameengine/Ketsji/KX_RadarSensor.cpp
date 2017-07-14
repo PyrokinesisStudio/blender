@@ -91,7 +91,7 @@ CValue* KX_RadarSensor::GetReplica()
 void KX_RadarSensor::SynchronizeTransform()
 {
 	KX_GameObject *obj = static_cast<KX_GameObject *>(GetParent());
-	mt::mat4x3 trans(obj->NodeGetWorldOrientation(), obj->NodeGetWorldPosition());
+	mt::mat3x4 trans(obj->NodeGetWorldOrientation(), obj->NodeGetWorldPosition());
 	// What is the default orientation? pointing in the -y direction?
 	// is the geometry correctly converted?
 

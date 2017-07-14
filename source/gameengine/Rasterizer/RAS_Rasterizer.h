@@ -568,7 +568,7 @@ public:
 	void SetProjectionMatrix(const mt::mat4 &mat);
 
 	/// Get the modelview matrix according to the stereo settings.
-	mt::mat4 GetViewMatrix(StereoEye eye, const mt::mat4x3 &camtrans, bool perspective);
+	mt::mat4 GetViewMatrix(StereoEye eye, const mt::mat3x4 &camtrans, bool perspective);
 	/**
 	 * Sets the modelview matrix.
 	 */
@@ -754,7 +754,7 @@ public:
 	        int fontid, const std::string& text, int size, int dpi,
 	        const float color[4], const float mat[16], float aspect);
 
-	void ProcessLighting(bool uselights, const mt::mat4x3 &trans);
+	void ProcessLighting(bool uselights, const mt::mat3x4 &trans);
 
 	void PushMatrix();
 	void PopMatrix();

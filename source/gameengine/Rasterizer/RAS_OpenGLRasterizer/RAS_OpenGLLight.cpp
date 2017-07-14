@@ -221,7 +221,7 @@ int RAS_OpenGLLight::GetShadowLayer()
 		return 0;
 }
 
-void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::mat4x3& camtrans)
+void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::mat3x4& camtrans)
 {
 	GPULamp *lamp;
 	float viewmat[4][4], winmat[4][4];
@@ -245,7 +245,7 @@ void RAS_OpenGLLight::BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::
 	mt::mat4 modelviewmat((float *)viewmat);
 	mt::mat4 projectionmat((float *)winmat);
 
-	const mt::mat4x3 trans = mt::mat4x3((float *)viewmat);
+	const mt::mat3x4 trans = mt::mat3x4((float *)viewmat);
 	camtrans = trans.Inverse();
 
 	cam->SetModelviewMatrix(modelviewmat);
@@ -297,8 +297,8 @@ void RAS_OpenGLLight::Update()
 
 	if ((lamp = GetGPULamp()) != nullptr && kxlight->GetSGNode()) {
 		float obmat[4][4];
-		const mt::mat4x3 trans = kxlight->NodeGetWorldTransform();
-		trans.Pack(obmat);
+		const mt::mat3x4 trans = kxlight->NodeGetWorldTransform();
+		trans.PackFromAffineTransform(obmat);
 
 		int hide = kxlight->GetVisible() ? 0 : 1;
 		GPU_lamp_update(lamp, m_layer, hide, obmat);

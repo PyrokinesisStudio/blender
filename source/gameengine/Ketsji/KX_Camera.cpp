@@ -93,16 +93,16 @@ void KX_Camera::ProcessReplica()
 	m_delete_node = false;
 }
 
-mt::mat4x3 KX_Camera::GetWorldToCamera() const
+mt::mat3x4 KX_Camera::GetWorldToCamera() const
 { 
 	return GetCameraToWorld().Inverse();
 }
 
 
 	 
-mt::mat4x3 KX_Camera::GetCameraToWorld() const
+mt::mat3x4 KX_Camera::GetCameraToWorld() const
 {
-	return mt::mat4x3(NodeGetWorldOrientation(), NodeGetWorldPosition());
+	return mt::mat3x4(NodeGetWorldOrientation(), NodeGetWorldPosition());
 }
 
 /**

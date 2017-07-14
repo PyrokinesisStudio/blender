@@ -201,7 +201,7 @@ class Matrix {
 
   /// @brief Creates a Matrix from twelve floats.
   ///
-  /// @note This method only works with Matrix<float, 4, 3>.
+  /// @note This method only works with Matrix<float, 3, 4>.
   ///
   ///
   /// @param s00 Value of the first row and column.
@@ -216,23 +216,31 @@ class Matrix {
   /// @param s12 Value of the second row, third column.
   /// @param s22 Value of the third row and column.
   /// @param s32 Value of the fourth row, third column.
-  inline Matrix(const T& s00, const T& s10, const T& s20, const T& s30,
-                const T& s01, const T& s11, const T& s21, const T& s31,
-                const T& s02, const T& s12, const T& s22, const T& s32) {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
-    data_[0] = Vector<T, rows>(s00, s10, s20, s30);
-    data_[1] = Vector<T, rows>(s01, s11, s21, s31);
-    data_[2] = Vector<T, rows>(s02, s12, s22, s32);
+  inline Matrix(const T& s00, const T& s10, const T& s20,
+                const T& s01, const T& s11, const T& s21,
+                const T& s02, const T& s12, const T& s22,
+				const T& s03, const T& s13, const T& s23) {
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 4);
+    data_[0] = Vector<T, rows>(s00, s10, s20);
+    data_[1] = Vector<T, rows>(s01, s11, s21);
+    data_[2] = Vector<T, rows>(s02, s12, s22);
+    data_[3] = Vector<T, rows>(s03, s13, s23);
   }
 
   inline Matrix(const Matrix<T, 3>& m, const Vector<T, 3>& v) {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
-	MATHFU_MAT_OPERATION((data_[i] = Vector<T, rows>(m.GetColumn(i), v[i])));
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 4);
+    for (int i = 0; i < 3; ++i) {
+      data_[i] = m.GetColumn(i);
+    }
+    data_[3] = v;
   }
   
   inline Matrix(const Matrix<T, 3>& m, const Vector<T, 3>& v, const Vector<T, 3>& s) {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
-	MATHFU_MAT_OPERATION((data_[i] = Vector<T, rows>(m.GetColumn(i) * s[i], v[i])));
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 4);
+    for (int i = 0; i < 3; ++i) {
+      data_[i] = m.GetColumn(i) * s;
+    }
+    data_[3] = v;
   }
 
   /// @brief Create a Matrix from sixteen floats.
@@ -300,17 +308,18 @@ class Matrix {
 
   /// @brief Create 4x3 Matrix from 3, 4 element vectors.
   ///
-  /// @note This method only works with a 3x3 Matrix.
+  /// @note This method only works with a 3x4 Matrix.
   ///
   /// @param column0 Vector used for the first column.
   /// @param column1 Vector used for the second column.
   /// @param column2 Vector used for the third column.
-  inline Matrix(const Vector<T, 4>& column0, const Vector<T, 4>& column1,
-                const Vector<T, 4>& column2) {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
+  inline Matrix(const Vector<T, 3>& column0, const Vector<T, 3>& column1,
+                const Vector<T, 3>& column2, const Vector<T, 3>& column3) {
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 4);
     data_[0] = column0;
     data_[1] = column1;
     data_[2] = column2;
+    data_[3] = column3;
   }
 
   inline Matrix(const T& yaw, const T& pitch, const T& roll) {
@@ -454,14 +463,8 @@ class Matrix {
   }
 
   inline void PackFromAffineTransform(T a[4][4]) const {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
-    for (int i = 0; i < 3; ++i) {
-      const Vector<T, 4>& v = GetColumn(i);
-      for (int j = 0; j < 3; ++j) {
-        a[i][j] = v[j];
-      }
-      a[3][i] = v[3];
-    }
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 4);
+    MATHFU_MAT_OPERATION(GetColumn(i).Pack(a[i]));
 
     a[0][3] = 0;
     a[1][3] = 0;
@@ -470,14 +473,8 @@ class Matrix {
   }
 
   inline void PackFromAffineTransform(T a[16]) const {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
-    for (int i = 0; i < 3; ++i) {
-      const Vector<T, 4>& v = GetColumn(i);
-      for (int j = 0; j < 3; ++j) {
-        a[i * 4 + j] = v[j];
-      }
-      a[12 + i] = v[3];
-    }
+    MATHFU_STATIC_ASSERT(rows == 3 && columns == 4);
+    MATHFU_MAT_OPERATION(GetColumn(i).Pack(&a[i * 4]));
 
     a[3] = 0;
     a[7] = 0;
@@ -697,12 +694,12 @@ class Matrix {
   /// @note 3-dimensional affine transforms are represented by 4x4 matrices.
   /// @return Vector with the first three components of column 3.
   inline Vector<T, 3> TranslationVector3D() const {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns >= 3);
+    MATHFU_STATIC_ASSERT(rows >= 3 && columns == 4);
     return Vector<T, 3>(data_[3][0], data_[3][1], data_[3][2]);
   }
 
   inline Matrix<T, 3> RotationMatrix() const {
-    MATHFU_STATIC_ASSERT(rows == 4 && columns >= 3);
+    MATHFU_STATIC_ASSERT(rows >= 3 && columns == 4);
     return ToRotationMatrix(*this);
   }
 
@@ -841,9 +838,8 @@ class Matrix {
   ///
   /// @param m 4x3 Matrix.
   /// @return rotation Matrix containing the result.
-  static inline Matrix<T, 3> ToRotationMatrix(const Matrix<T, 4, 3>& m) {
-    return Matrix<T, 3>(m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9],
-                        m[10]);
+  static inline Matrix<T, 3> ToRotationMatrix(const Matrix<T, 3, 4>& m) {
+    return Matrix<T, 3>(m.GetColumn(0), m.GetColumn(1), m.GetColumn(2));
   } 
 
   /// @brief Constructs a Matrix<float, 4> from an AffineTransform.
@@ -851,11 +847,11 @@ class Matrix {
   /// @param affine An AffineTransform reference to be used to construct
   /// a Matrix<float, 4> by adding in the 'w' row of [0, 0, 0, 1].
   static inline Matrix<T, 4> FromAffineTransform(
-      const Matrix<T, 4, 3>& affine) {
-    return Matrix<T, 4>(affine[0], affine[4], affine[8], static_cast<T>(0),
-                        affine[1], affine[5], affine[9], static_cast<T>(0),
-                        affine[2], affine[6], affine[10], static_cast<T>(0),
-                        affine[3], affine[7], affine[11], static_cast<T>(1));
+      const Matrix<T, 3, 4>& affine) {
+    return Matrix<T, 4>(affine[0], affine[1], affine[2], static_cast<T>(0),
+                        affine[3], affine[4], affine[5], static_cast<T>(0),
+                        affine[6], affine[7], affine[8], static_cast<T>(0),
+                        affine[9], affine[10], affine[11], static_cast<T>(1));
   }
 
   /// @brief Converts a Matrix<float, 4> into an AffineTransform.
@@ -865,9 +861,9 @@ class Matrix {
   ///
   /// @return Returns an AffineTransform that contains the essential
   /// transformation data from the Matrix<float, 4>.
-  static inline Matrix<T, 4, 3> ToAffineTransform(const Matrix<T, 4>& m) {
-    return Matrix<T, 4, 3>(m[0], m[4], m[8], m[12], m[1], m[5], m[9], m[13],
-                           m[2], m[6], m[10], m[14]);
+  static inline Matrix<T, 3, 4> ToAffineTransform(const Matrix<T, 4>& m) {
+    return Matrix<T, 3, 4>(m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9],
+                           m[10], m[12], m[13], m[14]);
   }
 
   /// @brief Create a 3x3 rotation Matrix from a 2D normalized directional
@@ -1098,21 +1094,21 @@ inline Vector<T, 4> operator*(const Matrix<T, 4, 4>& m, const Vector<T, 4>& v) {
 
 /// @cond MATHFU_INTERNAL
 template <class T>
-inline Vector<T, 3> operator*(const Matrix<T, 4, 3>& m, const Vector<T, 3>& v) {
+inline Vector<T, 3> operator*(const Matrix<T, 3, 4>& m, const Vector<T, 3>& v) {
   return Vector<T, 3>(
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, 3) + m(0, 3),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, 3) + m(1, 3),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, 3) + m(2, 3));
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, 3) + m(3, 0),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, 3) + m(3, 1),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, 3) + m(3, 2));
 }
 /// @endcond
 
 /// @cond MATHFU_INTERNAL
 template <>
-inline Vector<float, 3> operator*(const Matrix<float, 4, 3>& m, const Vector<float, 3>& v) {
+inline Vector<float, 3> operator*(const Matrix<float, 3, 4>& m, const Vector<float, 3>& v) {
   return Vector<float, 3>(
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(0, 3),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(1, 3),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(2, 3));
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(3, 0),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(3, 1),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(3, 2));
 }
 /// @endcond
 
@@ -1204,32 +1200,35 @@ inline void TimesHelper(const Matrix<T, 3, 3>& m1, const Matrix<T, 3, 3>& m2,
 
 /// @cond MATHFU_INTERNAL
 template <typename T>
-inline void TimesHelper(const Matrix<T, 4, 3>& m1, const Matrix<T, 4, 3>& m2,
-                        Matrix<T, 4, 3>* out_m) {
-  Matrix<T, 4, 3>& out = *out_m;
+inline void TimesHelper(const Matrix<T, 3, 4>& m1, const Matrix<T, 3, 4>& m2,
+                        Matrix<T, 3, 4>* out_m) {
+  Matrix<T, 3, 4>& out = *out_m;
+
+  Vector<T, 4> c1(m2.GetColumn(0), 0);
+  Vector<T, 4> c2(m2.GetColumn(1), 0);
+  Vector<T, 4> c3(m2.GetColumn(2), 0);
+  Vector<T, 4> c4(m2.GetColumn(3), 1);
+
   {
-    Vector<T, 4> row(m1[0], m1[4], m1[8], 0);
-    out[0] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
-    out[4] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
-    out[8] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
+    Vector<T, 4> row(m1[0], m1[3], m1[6], m1[9]);
+    out[0] = Vector<T, 4>::DotProduct(c1, row);
+    out[3] = Vector<T, 4>::DotProduct(c2, row);
+    out[6] = Vector<T, 4>::DotProduct(c3, row);
+    out[9] = Vector<T, 4>::DotProduct(c4, row);
   }
   {
-    Vector<T, 4> row(m1[1], m1[5], m1[9], 0);
-    out[1] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
-    out[5] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
-    out[9] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
+    Vector<T, 4> row(m1[1], m1[4], m1[7], m1[10]);
+    out[1] = Vector<T, 4>::DotProduct(c1, row);
+    out[4] = Vector<T, 4>::DotProduct(c2, row);
+    out[7] = Vector<T, 4>::DotProduct(c3, row);
+    out[10] = Vector<T, 4>::DotProduct(c4, row);
   }
   {
-    Vector<T, 4> row(m1[2], m1[6], m1[10], 0);
-    out[2] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
-    out[6] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
-    out[10] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
-  }
-  {
-    Vector<T, 4> row(m1[3], m1[7], m1[11], 1);
-    out[3] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
-    out[7] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
-    out[11] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
+    Vector<T, 4> row(m1[2], m1[5], m1[8], m1[11]);
+    out[2] = Vector<T, 4>::DotProduct(c1, row);
+    out[5] = Vector<T, 4>::DotProduct(c2, row);
+    out[8] = Vector<T, 4>::DotProduct(c3, row);
+    out[11] = Vector<T, 4>::DotProduct(c4, row);
   }
 }
 /// @endcond
@@ -1312,8 +1311,8 @@ inline Matrix<T, 4, 4> IdentityHelper() {
 
 /// @cond MATHFU_INTERNAL
 template <class T>
-inline Matrix<T, 4, 3> IdentityHelper() {
-  return Matrix<T, 4, 3>(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
+inline Matrix<T, 3, 4> IdentityHelper() {
+  return Matrix<T, 3, 4>(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0);
 }
 /// @endcond
 
@@ -1497,12 +1496,12 @@ inline bool InverseHelper(const Matrix<T, 3, 3>& m,
 
 /// @cond MATHFU_INTERNAL
 template <bool check_invertible, class T>
-inline bool InverseHelper(const Matrix<T, 4, 3>& m,
-                          Matrix<T, 4, 3>* const inverse) {
+inline bool InverseHelper(const Matrix<T, 3, 4>& m,
+                          Matrix<T, 3, 4>* const inverse) {
   // Find determinant of matrix.
-  T sub11 = m[5] * m[10] - m[6] * m[9], sub12 = -m[1] * m[10] + m[2] * m[9],
-    sub13 = m[1] * m[6] - m[2] * m[5];
-  T determinant = m[0] * sub11 + m[4] * sub12 + m[8] * sub13;
+  T sub11 = m[4] * m[8] - m[5] * m[7], sub12 = -m[1] * m[8] + m[2] * m[7],
+    sub13 = m[1] * m[5] - m[2] * m[4];
+  T determinant = m[0] * sub11 + m[3] * sub12 + m[6] * sub13;
   if (check_invertible &&
       fabs(determinant) < Constants<T>::GetDeterminantThreshold()) {
     return false;
@@ -1512,23 +1511,24 @@ inline bool InverseHelper(const Matrix<T, 4, 3>& m,
   sub12 /= determinant;
   sub13 /= determinant;
 
-  T sub21 = (m[8] * m[6] - m[4] * m[10]) / determinant;
-  T sub22 = (m[0] * m[10] - m[8] * m[2]) / determinant;
-  T sub23 = (m[4] * m[2] - m[0] * m[6]) / determinant;
+  T sub21 = (m[6] * m[5] - m[3] * m[8]) / determinant;
+  T sub22 = (m[0] * m[8] - m[6] * m[2]) / determinant;
+  T sub23 = (m[3] * m[2] - m[0] * m[5]) / determinant;
 
-  T sub31 = (m[4] * m[9] - m[8] * m[5]) / determinant;
-  T sub32 = (m[8] * m[1] - m[0] * m[9]) / determinant;
-  T sub33 = (m[0] * m[5] - m[4] * m[1]) / determinant;
+  T sub31 = (m[3] * m[7] - m[6] * m[4]) / determinant;
+  T sub32 = (m[6] * m[1] - m[0] * m[7]) / determinant;
+  T sub33 = (m[0] * m[4] - m[3] * m[1]) / determinant;
 
-  T sub14 = -(m[3] * sub11 + m[7] * sub21 + m[11] * sub31); 
-  T sub24 = -(m[3] * sub12 + m[7] * sub22 + m[11] * sub32); 
-  T sub34 = -(m[3] * sub13 + m[7] * sub23 + m[11] * sub33); 
+  T sub41 = -(m[9] * sub11 + m[10] * sub21 + m[11] * sub31); 
+  T sub42 = -(m[9] * sub12 + m[10] * sub22 + m[11] * sub32); 
+  T sub43 = -(m[9] * sub13 + m[10] * sub23 + m[11] * sub33); 
   
   // Find determinants of 4x3 submatrices for the elements of the inverse.
-  *inverse = Matrix<T, 4, 3>(
-      sub11, sub12, sub13, sub14,
-	  sub21, sub22, sub23, sub24,
-	  sub31, sub32, sub33, sub34);
+  *inverse = Matrix<T, 3, 4>(
+      sub11, sub12, sub13,
+	  sub21, sub22, sub23,
+	  sub31, sub32, sub33,
+	  sub41, sub42, sub43);
   return true;
 }
 /// @endcond
@@ -1653,8 +1653,8 @@ inline Matrix<T, rows, columns> ScaleHelper(const Matrix<T, rows, columns>& m, c
 
 /// @cond MATHFU_INTERNAL
 template <class T>
-inline Matrix<T, 4, 3> ScaleHelper(const Matrix<T, 4, 3>& m, const Vector<T, 3>& v) {
-  Matrix<T, 4, 3> ret = m;
+inline Matrix<T, 3, 4> ScaleHelper(const Matrix<T, 3, 4>& m, const Vector<T, 3>& v) {
+  Matrix<T, 3, 4> ret = m;
   for (int i = 0; i < 3; ++i) {
     ret.GetColumn(i).x *= v[i].x;
     ret.GetColumn(i).y *= v[i].y;
@@ -1675,7 +1675,7 @@ inline Vector<T, columns> ToScaleVectorHelper(const Matrix<T, rows, columns>& m)
 }
 
 template <class T>
-inline Vector<T, 3> ToScaleVectorHelper(const Matrix<T, 4, 3>& m) {
+inline Vector<T, 3> ToScaleVectorHelper(const Matrix<T, 3, 4>& m) {
   Vector<T, 3> ret;
   for (int i = 0; i < 3; ++i) {
     ret[i] = m.GetColumn(i).xyz().Length();
@@ -1852,7 +1852,7 @@ static inline CompatibleT ToTypeHelper(const Matrix<T, rows, columns>& m) {
 /// @brief A typedef representing a 4x3 float affine transformation.
 /// Since the last row ('w' row) of an affine transformation is fixed,
 /// this data type only includes the variable information for the transform.
-typedef Matrix<float, 4, 3> AffineTransform;
+typedef Matrix<float, 3, 4> AffineTransform;
 /// @}
 
 }  // namespace mathfu

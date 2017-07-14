@@ -889,7 +889,7 @@ mt::mat4 RAS_Rasterizer::GetOrthoMatrix(
 }
 
 // next arguments probably contain redundant info, for later...
-mt::mat4 RAS_Rasterizer::GetViewMatrix(StereoEye eye, const mt::mat4x3 &camtrans, bool perspective)
+mt::mat4 RAS_Rasterizer::GetViewMatrix(StereoEye eye, const mt::mat3x4 &camtrans, bool perspective)
 {
 	// correction for stereo
 	if (Stereo() && perspective) {
@@ -905,19 +905,19 @@ mt::mat4 RAS_Rasterizer::GetViewMatrix(StereoEye eye, const mt::mat4x3 &camtrans
 		// vector between eyes
 		const mt::vec3 eyeline = mt::cross(viewDir, viewupVec);
 
-		mt::mat4x3 trans = camtrans;
+		mt::mat3x4 trans = camtrans;
 		switch (eye) {
 			case RAS_STEREO_LEFTEYE:
 			{
 				// translate to left by half the eye distance
-				const mt::mat4x3 transform(mt::mat3::Identity(), -eyeline * m_eyeseparation / 2.0f);
+				const mt::mat3x4 transform(mt::mat3::Identity(), -eyeline * m_eyeseparation / 2.0f);
 				trans *= transform;
 				break;
 			}
 			case RAS_STEREO_RIGHTEYE:
 			{
 				// translate to right by half the eye distance
-				const mt::mat4x3 transform(mt::mat3::Identity(), eyeline * m_eyeseparation / 2.0f);
+				const mt::mat3x4 transform(mt::mat3::Identity(), eyeline * m_eyeseparation / 2.0f);
 				trans *= transform;
 				break;
 			}
@@ -1260,7 +1260,7 @@ void RAS_Rasterizer::DesactivateOverrideShaderInstancing()
  * has a maximum of 8 lights (simultaneous), so 20 * 8 lights are possible in
  * a scene. */
 
-void RAS_Rasterizer::ProcessLighting(bool uselights, const mt::mat4x3& viewmat)
+void RAS_Rasterizer::ProcessLighting(bool uselights, const mt::mat3x4& viewmat)
 {
 	bool enable = false;
 	int layer = -1;

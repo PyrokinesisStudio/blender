@@ -384,7 +384,7 @@ bool ImageRender::Render()
 
 	m_rasterizer->SetProjectionMatrix(m_camera->GetProjectionMatrix());
 
-	mt::mat4x3 camtrans(m_camera->GetWorldToCamera());
+	mt::mat3x4 camtrans(m_camera->GetWorldToCamera());
 	mt::mat4 viewmat = mt::mat4::FromAffineTransform(camtrans);
 	
 	m_rasterizer->SetViewMatrix(viewmat, m_camera->NodeGetWorldPosition(), m_camera->NodeGetLocalScaling());

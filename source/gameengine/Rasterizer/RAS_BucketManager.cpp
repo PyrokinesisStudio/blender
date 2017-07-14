@@ -146,7 +146,7 @@ void RAS_BucketManager::RenderBasicBuckets(RAS_Rasterizer *rasty, RAS_BucketMana
 	}
 }
 
-void RAS_BucketManager::Renderbuckets(const mt::mat4x3& cameratrans, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen)
+void RAS_BucketManager::Renderbuckets(const mt::mat3x4& cameratrans, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen)
 {
 	RAS_Rasterizer::DrawType drawingMode = rasty->GetDrawingMode();
 

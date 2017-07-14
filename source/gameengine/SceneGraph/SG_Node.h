@@ -334,8 +334,8 @@ public:
 	const mt::vec3& GetWorldScaling() const;
 
 	void SetWorldFromLocalTransform();
-	mt::mat4x3 GetWorldTransform() const;
-	mt::mat4x3 GetLocalTransform() const;
+	mt::mat3x4 GetWorldTransform() const;
+	mt::mat3x4 GetLocalTransform() const;
 
 	bool ComputeWorldTransforms(const SG_Node *parent, bool& parentUpdated);
 

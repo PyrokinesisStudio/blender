@@ -57,7 +57,7 @@ public:
 	mt::mat4 GetWinMat();
 	mt::mat4 GetShadowMatrix();
 	int GetShadowLayer();
-	void BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::mat4x3& camtrans);
+	void BindShadowBuffer(RAS_ICanvas *canvas, KX_Camera *cam, mt::mat3x4& camtrans);
 	void UnbindShadowBuffer();
 	Image *GetTextureImage(short texslot);
 	void Update();

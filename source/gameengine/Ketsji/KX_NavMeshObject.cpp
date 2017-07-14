@@ -561,8 +561,8 @@ mt::vec3 KX_NavMeshObject::TransformToLocalCoords(const mt::vec3& wpos)
 {
 	mt::mat3 orientation = NodeGetWorldOrientation();
 	orientation.Scale(NodeGetWorldScaling());
-	mt::mat4x3 worldtr(orientation, NodeGetWorldPosition()); 
-	mt::mat4x3 invworldtr = worldtr.Inverse();
+	mt::mat3x4 worldtr(orientation, NodeGetWorldPosition()); 
+	mt::mat3x4 invworldtr = worldtr.Inverse();
 	mt::vec3 lpos = invworldtr * wpos;
 	return lpos;
 }
@@ -571,7 +571,7 @@ mt::vec3 KX_NavMeshObject::TransformToWorldCoords(const mt::vec3& lpos)
 {
 	mt::mat3 orientation = NodeGetWorldOrientation();
 	orientation.Scale(NodeGetWorldScaling());
-	mt::mat4x3 worldtr(orientation, NodeGetWorldPosition()); 
+	mt::mat3x4 worldtr(orientation, NodeGetWorldPosition()); 
 	mt::vec3 wpos = worldtr * lpos;
 	return wpos;
 }

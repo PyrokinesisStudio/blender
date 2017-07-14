@@ -103,7 +103,7 @@ public:
 	RAS_BucketManager(RAS_IPolyMaterial *textMaterial);
 	virtual ~RAS_BucketManager();
 
-	void Renderbuckets(const mt::mat4x3 & cameratrans, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen);
+	void Renderbuckets(const mt::mat3x4 & cameratrans, RAS_Rasterizer *rasty, RAS_OffScreen *offScreen);
 
 	RAS_MaterialBucket *FindBucket(RAS_IPolyMaterial *material, bool &bucketCreated);
 	RAS_DisplayArrayBucket *GetTextDisplayArrayBucket() const;

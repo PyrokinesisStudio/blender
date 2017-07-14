@@ -153,7 +153,7 @@ bool KX_TextureRendererManager::RenderRenderer(RAS_Rasterizer *rasty, KX_Texture
 
 		renderer->BindFace(i);
 
-		const mt::mat4x3 camtrans(m_camera->GetWorldToCamera());
+		const mt::mat3x4 camtrans(m_camera->GetWorldToCamera());
 		const mt::mat4 viewmat = mt::mat4::FromAffineTransform(camtrans);
 
 		rasty->SetViewMatrix(viewmat, m_camera->NodeGetWorldPosition(), mt::vec3(1.0f, 1.0f, 1.0f));

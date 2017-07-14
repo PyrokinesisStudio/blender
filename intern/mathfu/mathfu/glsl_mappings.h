@@ -58,7 +58,7 @@ typedef Matrix<float, 3, 3> mat3;
 /// 3x3 <code>float</code> Matrix.
 typedef Matrix<float, 4, 4> mat4;
 /// 4x3 <code>float</code> Matrix.
-typedef Matrix<float, 4, 3> mat4x3;
+typedef Matrix<float, 3, 4> mat3x4;
 
 /// 2-dimensional <code>float</code> packed Vector (VectorPacked).
 typedef VectorPacked<float, 2> vec2_packed;

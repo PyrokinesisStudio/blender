@@ -505,12 +505,12 @@ public:
 	const mt::mat3& NodeGetWorldOrientation(  ) const;
 	const mt::vec3& NodeGetWorldScaling(  ) const;
 	const mt::vec3& NodeGetWorldPosition(  ) const;
-	mt::mat4x3 NodeGetWorldTransform() const;
+	mt::mat3x4 NodeGetWorldTransform() const;
 
 	const mt::mat3& NodeGetLocalOrientation(  ) const;
 	const mt::vec3& NodeGetLocalScaling(  ) const;
 	const mt::vec3& NodeGetLocalPosition(  ) const;
-	mt::mat4x3 NodeGetLocalTransform() const;
+	mt::mat3x4 NodeGetLocalTransform() const;
 
 	/**
 	 * \section scene graph node accessor functions.

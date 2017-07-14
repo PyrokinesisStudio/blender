@@ -551,14 +551,14 @@ void SG_Node::SetWorldFromLocalTransform()
 	m_worldRotation = m_localRotation;
 }
 
-mt::mat4x3 SG_Node::GetWorldTransform() const
+mt::mat3x4 SG_Node::GetWorldTransform() const
 {
-	return mt::mat4x3(m_worldRotation, m_worldPosition, m_worldScaling);
+	return mt::mat3x4(m_worldRotation, m_worldPosition, m_worldScaling);
 }
 
-mt::mat4x3 SG_Node::GetLocalTransform() const
+mt::mat3x4 SG_Node::GetLocalTransform() const
 {
-	return mt::mat4x3(m_localRotation, m_localPosition, m_localScaling);
+	return mt::mat3x4(m_localRotation, m_localPosition, m_localScaling);
 }
 
 bool SG_Node::ComputeWorldTransforms(const SG_Node *parent, bool& parentUpdated)
