@@ -17,7 +17,8 @@ void KX_CullingHandler::Process(KX_CullingNode *node)
 	const SG_BBox& aabb = node->GetAabb();
 
 	bool culled = true;
-	const SG_Frustum::TestType sphereTest = m_frustum.SphereInsideFrustum(trans * aabb.GetCenter(), fabs(scale[scale.closestAxis()]) * aabb.GetRadius());
+	const float maxscale = std::max(std::max(fabs(scale.x), fabs(scale.y)), fabs(scale.z));
+	const SG_Frustum::TestType sphereTest = m_frustum.SphereInsideFrustum(trans * aabb.GetCenter(), maxscale * aabb.GetRadius());
 
 	// First test if the sphere is in the frustum as it is faster to test than box.
 	if (sphereTest == SG_Frustum::INSIDE) {

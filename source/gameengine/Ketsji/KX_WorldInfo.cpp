@@ -146,9 +146,9 @@ void KX_WorldInfo::setMistColor(const mt::vec3& mistcolor)
 	m_mistcolor = mistcolor;
 
 	if (m_do_color_management) {
-		float col[4];
+		float col[3];
 		linearrgb_to_srgb_v3_v3(col, m_mistcolor.Data());
-		m_con_mistcolor = mt::vec4(col);
+		m_con_mistcolor = mt::vec3(col);
 	}
 	else {
 		m_con_mistcolor = m_mistcolor;
@@ -160,9 +160,9 @@ void KX_WorldInfo::setAmbientColor(const mt::vec3& ambientcolor)
 	m_ambientcolor = ambientcolor;
 
 	if (m_do_color_management) {
-		float col[4];
+		float col[3];
 		linearrgb_to_srgb_v3_v3(col, m_ambientcolor.Data());
-		m_con_ambientcolor = mt::vec4(col);
+		m_con_ambientcolor = mt::vec3(col);
 	}
 	else {
 		m_con_ambientcolor = m_ambientcolor;

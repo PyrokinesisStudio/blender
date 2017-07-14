@@ -77,6 +77,15 @@ class Quaternion {
     v_ = v1;
   }
 
+  /// @brief Construct a quaternion from an array.
+  ///
+  /// @param s1 Scalar component.
+  /// @param v1 Vector component.
+  inline Quaternion(const T* const a) {
+    s_ = a[3];
+    v_ = Vector<T, 3>(a[0], a[1], a[2]);
+  }
+
   /// @brief Return the scalar component of the quaternion.
   ///
   /// @return The scalar component
@@ -553,7 +562,7 @@ class Quaternion {
       float z;
       float w;
     };
-	T data_;
+	T data_[4];
   };
 };
 

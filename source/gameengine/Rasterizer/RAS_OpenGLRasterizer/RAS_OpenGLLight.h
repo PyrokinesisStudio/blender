@@ -28,6 +28,7 @@
 #include "RAS_ILightObject.h"
 
 class RAS_Rasterizer;
+class KX_Scene;
 struct GPULamp;
 struct Image;
 

@@ -98,7 +98,7 @@ void KX_RadarSensor::SynchronizeTransform()
 	// a collision cone is oriented
 	// center the cone correctly 
 	// depends on the radar 'axis'
-	switch (m_axis)
+	/*switch (m_axis)
 	{
 	case SENS_RADAR_X_AXIS: // +X Axis
 		{
@@ -145,7 +145,7 @@ void KX_RadarSensor::SynchronizeTransform()
 	default:
 		{
 		}
-	}
+	} TODO */
 	
 	//Using a temp variable to translate mt::vec3 to float[3].
 	//float[3] works better for the Python interface.

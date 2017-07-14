@@ -234,9 +234,13 @@ static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimu
 
 		/* account for up direction, track direction */
 		right = right * basis_cross(axis, upflag);
-		mat.setRow(right_index, right);
+		/*mat.setRow(right_index, right);
 		mat.setRow(upflag, proj);
-		mat.setRow(axis, vec);
+		mat.setRow(axis, vec); TODO check*/
+
+		mat.GetColumn(right_index) = right;
+		mat.GetColumn(upflag) = proj;
+		mat.GetColumn(axis) = vec;
 		mat = mat.Inverse();
 	}
 	/* identity matrix - don't do anything if the two axes are the same */

@@ -165,7 +165,7 @@ PyObject *KX_VehicleWrapper::PyGetWheelOrientationQuaternion(PyObject *args)
 		WHEEL_INDEX_CHECK_OR_RETURN(wheelIndex, "getWheelOrientationQuaternion");
 
 		const mt::quat quat = m_vehicle->GetWheelOrientationQuaternion(wheelIndex);
-		const mt::mat3 ornmat(quat);
+		const mt::mat3 ornmat = quat.ToMatrix();
 		return PyObjectFrom(ornmat);
 	}
 	return nullptr;

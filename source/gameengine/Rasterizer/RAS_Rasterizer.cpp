@@ -938,7 +938,8 @@ void RAS_Rasterizer::SetViewMatrix(const mt::mat4& viewmat, const mt::vec3& pos,
 		const bool negX = (scale[0] < 0.0f);
 		const bool negY = (scale[1] < 0.0f);
 		const bool negZ = (scale[2] < 0.0f);
-		m_viewmatrix.tscale((negX) ? -1.0f : 1.0f, (negY) ? -1.0f : 1.0f, (negZ) ? -1.0f : 1.0f, 1.0f);
+// 		m_viewmatrix.tscale((negX) ? -1.0f : 1.0f, (negY) ? -1.0f : 1.0f, (negZ) ? -1.0f : 1.0f, 1.0f);
+		// TODO
 		m_camnegscale = negX ^ negY ^ negZ;
 	}
 	else {

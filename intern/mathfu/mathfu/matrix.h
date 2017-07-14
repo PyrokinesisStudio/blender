@@ -298,6 +298,21 @@ class Matrix {
     data_[2] = column2;
   }
 
+  /// @brief Create 4x3 Matrix from 3, 4 element vectors.
+  ///
+  /// @note This method only works with a 3x3 Matrix.
+  ///
+  /// @param column0 Vector used for the first column.
+  /// @param column1 Vector used for the second column.
+  /// @param column2 Vector used for the third column.
+  inline Matrix(const Vector<T, 4>& column0, const Vector<T, 4>& column1,
+                const Vector<T, 4>& column2) {
+    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
+    data_[0] = column0;
+    data_[1] = column1;
+    data_[2] = column2;
+  }
+
   inline Matrix(const T& yaw, const T& pitch, const T& roll) {
     MATHFU_STATIC_ASSERT(rows == 3 && columns == 3);
     const T ci = cosf(yaw);
@@ -436,6 +451,38 @@ class Matrix {
 
   inline void Pack(T a[columns * rows]) const {
     MATHFU_MAT_OPERATION(GetColumn(i).Pack(&a[i * columns]));
+  }
+
+  inline void PackFromAffineTransform(T a[4][4]) const {
+    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
+    for (int i = 0; i < 3; ++i) {
+      const Vector<T, 4>& v = GetColumn(i);
+      for (int j = 0; j < 3; ++j) {
+        a[i][j] = v[j];
+      }
+      a[3][i] = v[3];
+    }
+
+    a[0][3] = 0;
+    a[1][3] = 0;
+    a[2][3] = 0;
+    a[3][3] = 1;
+  }
+
+  inline void PackFromAffineTransform(T a[16]) const {
+    MATHFU_STATIC_ASSERT(rows == 4 && columns == 3);
+    for (int i = 0; i < 3; ++i) {
+      const Vector<T, 4>& v = GetColumn(i);
+      for (int j = 0; j < 3; ++j) {
+        a[i * 4 + j] = v[j];
+      }
+      a[12 + i] = v[3];
+    }
+
+    a[3] = 0;
+    a[7] = 0;
+    a[11] = 0;
+    a[15] = 1;
   }
 
   /// @cond MATHFU_INTERNAL
@@ -758,6 +805,10 @@ class Matrix {
     Matrix<T, rows> return_matrix(Identity());
     for (int i = 0; i < rows - 1; ++i) return_matrix(i, i) = v[i];
     return return_matrix;
+  }
+
+  static inline Vector<T, columns> ToScaleVector(const Matrix<T, rows, columns>& m) {
+    return ToScaleVectorHelper(m);
   }
 
   /// @brief Create a 4x4 Matrix from a 3x3 rotation Matrix.
@@ -1152,6 +1203,38 @@ inline void TimesHelper(const Matrix<T, 3, 3>& m1, const Matrix<T, 3, 3>& m2,
 /// @endcond
 
 /// @cond MATHFU_INTERNAL
+template <typename T>
+inline void TimesHelper(const Matrix<T, 4, 3>& m1, const Matrix<T, 4, 3>& m2,
+                        Matrix<T, 4, 3>* out_m) {
+  Matrix<T, 4, 3>& out = *out_m;
+  {
+    Vector<T, 4> row(m1[0], m1[4], m1[8], 0);
+    out[0] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
+    out[4] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
+    out[8] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
+  }
+  {
+    Vector<T, 4> row(m1[1], m1[5], m1[9], 0);
+    out[1] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
+    out[5] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
+    out[9] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
+  }
+  {
+    Vector<T, 4> row(m1[2], m1[6], m1[10], 0);
+    out[2] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
+    out[6] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
+    out[10] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
+  }
+  {
+    Vector<T, 4> row(m1[3], m1[7], m1[11], 1);
+    out[3] = Vector<T, 4>::DotProduct(m2.GetColumn(0), row);
+    out[7] = Vector<T, 4>::DotProduct(m2.GetColumn(1), row);
+    out[11] = Vector<T, 4>::DotProduct(m2.GetColumn(2), row);
+  }
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
 template <class T>
 inline void TimesHelper(const Matrix<T, 4, 4>& m1, const Matrix<T, 4, 4>& m2,
                         Matrix<T, 4, 4>* out_m) {
@@ -1417,19 +1500,35 @@ template <bool check_invertible, class T>
 inline bool InverseHelper(const Matrix<T, 4, 3>& m,
                           Matrix<T, 4, 3>* const inverse) {
   // Find determinant of matrix.
-  T sub11 = m[5] * m[10] - m[6] * m[7], sub12 = -m[1] * m[10] + m[2] * m[9],
+  T sub11 = m[5] * m[10] - m[6] * m[9], sub12 = -m[1] * m[10] + m[2] * m[9],
     sub13 = m[1] * m[6] - m[2] * m[5];
   T determinant = m[0] * sub11 + m[4] * sub12 + m[8] * sub13;
   if (check_invertible &&
       fabs(determinant) < Constants<T>::GetDeterminantThreshold()) {
     return false;
   }
-  // Find determinants of 2x2 submatrices for the elements of the inverse.
+
+  sub11 /= determinant;
+  sub12 /= determinant;
+  sub13 /= determinant;
+
+  T sub21 = (m[8] * m[6] - m[4] * m[10]) / determinant;
+  T sub22 = (m[0] * m[10] - m[8] * m[2]) / determinant;
+  T sub23 = (m[4] * m[2] - m[0] * m[6]) / determinant;
+
+  T sub31 = (m[4] * m[9] - m[8] * m[5]) / determinant;
+  T sub32 = (m[8] * m[1] - m[0] * m[9]) / determinant;
+  T sub33 = (m[0] * m[5] - m[4] * m[1]) / determinant;
+
+  T sub14 = -(m[3] * sub11 + m[7] * sub21 + m[11] * sub31); 
+  T sub24 = -(m[3] * sub12 + m[7] * sub22 + m[11] * sub32); 
+  T sub34 = -(m[3] * sub13 + m[7] * sub23 + m[11] * sub33); 
+  
+  // Find determinants of 4x3 submatrices for the elements of the inverse.
   *inverse = Matrix<T, 4, 3>(
-      sub11, sub12, sub13, m[8] * m[6] - m[4] * m[10], m[0] * m[10] - m[8] * m[2],
-      m[3] * m[2] - m[0] * m[6], m[4] * m[9] - m[8] * m[5],
-      m[7] * m[1] - m[0] * m[9], m[0] * m[5] - m[4] * m[1]);
-  *(inverse) *= 1 / determinant;
+      sub11, sub12, sub13, sub14,
+	  sub21, sub22, sub23, sub24,
+	  sub31, sub32, sub33, sub34);
   return true;
 }
 /// @endcond
@@ -1545,8 +1644,41 @@ bool InverseHelper(const Matrix<T, 4, 4>& m, Matrix<T, 4, 4>* const inverse) {
 template <class T, int rows, int columns>
 inline Matrix<T, rows, columns> ScaleHelper(const Matrix<T, rows, columns>& m, const Vector<T, columns>& v) {
   Matrix<T, rows, columns> ret = m;
-  for (int i = 0; i < rows; ++i) {
+  for (int i = 0; i < columns; ++i) {
     ret.GetColumn(i) *= v[i];
+  }
+  return ret;
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+template <class T>
+inline Matrix<T, 4, 3> ScaleHelper(const Matrix<T, 4, 3>& m, const Vector<T, 3>& v) {
+  Matrix<T, 4, 3> ret = m;
+  for (int i = 0; i < 3; ++i) {
+    ret.GetColumn(i).x *= v[i].x;
+    ret.GetColumn(i).y *= v[i].y;
+    ret.GetColumn(i).z *= v[i].z;
+  }
+  return ret;
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+template <class T, int rows, int columns>
+inline Vector<T, columns> ToScaleVectorHelper(const Matrix<T, rows, columns>& m) {
+  Vector<T, columns> ret;
+  for (int i = 0; i < columns; ++i) {
+    ret[i] = m.GetColumn(i).Length();
+  }
+  return ret;
+}
+
+template <class T>
+inline Vector<T, 3> ToScaleVectorHelper(const Matrix<T, 4, 3>& m) {
+  Vector<T, 3> ret;
+  for (int i = 0; i < 3; ++i) {
+    ret[i] = m.GetColumn(i).xyz().Length();
   }
   return ret;
 }

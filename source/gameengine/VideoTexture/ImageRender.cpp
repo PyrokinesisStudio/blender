@@ -248,9 +248,9 @@ bool ImageRender::Render()
 		// get observer world position
 		const mt::vec3 & observerWorldPos = m_observer->GetSGNode()->GetWorldPosition();
 		// get plane D term = mirrorPos . normal
-		float mirrorPlaneDTerm = mirrorWorldPos.dot(mirrorWorldZ);
+		float mirrorPlaneDTerm = mt::dot(mirrorWorldPos, mirrorWorldZ);
 		// compute distance of observer to mirror = D - observerPos . normal
-		float observerDistance = mirrorPlaneDTerm - observerWorldPos.dot(mirrorWorldZ);
+		float observerDistance = mirrorPlaneDTerm - mt::dot(observerWorldPos, mirrorWorldZ);
 		// if distance < 0.01 => observer is on wrong side of mirror, don't render
 		if (observerDistance < 0.01)
 			return false;
@@ -385,7 +385,7 @@ bool ImageRender::Render()
 	m_rasterizer->SetProjectionMatrix(m_camera->GetProjectionMatrix());
 
 	mt::mat4x3 camtrans(m_camera->GetWorldToCamera());
-	mt::mat4 viewmat(camtrans);
+	mt::mat4 viewmat = mt::mat4::FromAffineTransform(camtrans);
 	
 	m_rasterizer->SetViewMatrix(viewmat, m_camera->NodeGetWorldPosition(), m_camera->NodeGetLocalScaling());
 	m_camera->SetModelviewMatrix(viewmat);
@@ -1053,7 +1053,7 @@ ImageRender::ImageRender (KX_Scene *scene, KX_GameObject *observer, KX_GameObjec
 	// mirror normal vector (pointed towards the back of the mirror) in local space
 	m_mirrorZ = mt::vec3(-mirrorNormal[0], -mirrorNormal[1], -mirrorNormal[2]);
 	m_mirrorY = mt::vec3(mirrorUp);
-	m_mirrorX = m_mirrorY.cross(m_mirrorZ);
+	m_mirrorX = mt::cross(m_mirrorY, m_mirrorZ);
 	m_render = true;
 
 	// set mirror background color to scene background color as default

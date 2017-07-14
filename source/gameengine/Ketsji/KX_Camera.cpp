@@ -843,12 +843,19 @@ KX_PYMETHODDEF_DOC_O(KX_Camera, getScreenPosition,
 	GLdouble win[3];
 	GLdouble modelmatrix[16];
 	GLdouble projmatrix[16];
+	float fmodelmatrix[16];
+	float fprojmatrix[16];
 
 	mt::mat4 m_modelmatrix = mt::mat4::FromAffineTransform(GetWorldToCamera());
 	mt::mat4 m_projmatrix = this->GetProjectionMatrix();
 
-	m_modelmatrix.Pack(modelmatrix);
-	m_projmatrix.Pack(projmatrix);
+	m_modelmatrix.Pack(fmodelmatrix);
+	m_projmatrix.Pack(fprojmatrix);
+
+	for (unsigned short i = 0; i < 16; ++i) {
+		modelmatrix[i] = fmodelmatrix[i];
+		projmatrix[i] = fprojmatrix[i];
+	}
 
 	viewport = KX_GetActiveEngine()->GetCanvas()->GetViewPort();
 
@@ -886,12 +893,19 @@ KX_PYMETHODDEF_DOC_VARARGS(KX_Camera, getScreenVect,
 	GLdouble win[3];
 	GLdouble modelmatrix[16];
 	GLdouble projmatrix[16];
+	float fmodelmatrix[16];
+	float fprojmatrix[16];
 
 	mt::mat4 m_modelmatrix = mt::mat4::FromAffineTransform(GetWorldToCamera());
 	mt::mat4 m_projmatrix = this->GetProjectionMatrix();
 
-	m_modelmatrix.Pack(modelmatrix);
-	m_projmatrix.Pack(projmatrix);
+	m_modelmatrix.Pack(fmodelmatrix);
+	m_projmatrix.Pack(fprojmatrix);
+
+	for (unsigned short i = 0; i < 16; ++i) {
+		modelmatrix[i] = fmodelmatrix[i];
+		projmatrix[i] = fprojmatrix[i];
+	}
 
 	viewport = KX_GetActiveEngine()->GetCanvas()->GetViewPort();
 

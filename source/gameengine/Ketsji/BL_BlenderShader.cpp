@@ -178,7 +178,7 @@ void BL_BlenderShader::Update(RAS_MeshSlot *ms, RAS_Rasterizer *rasty)
 	}
 
 	float viewmat[4][4];
-	float *obcol = (float *)ms->m_meshUser->GetColor().Data();
+	const float *obcol = ms->m_meshUser->GetColor().Data();
 
 	rasty->GetViewMatrix().Pack(viewmat);
 	float auto_bump_scale = ms->m_pDerivedMesh != 0 ? ms->m_pDerivedMesh->auto_bump_scale : 1.0f;

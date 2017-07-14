@@ -1861,9 +1861,9 @@ struct  DbvtCullingCallback : btDbvt::ICollide {
 			// means we are doing occlusion culling. Check if this object is an occluders
 			KX_GameObject *gameobj = KX_GameObject::GetClientObject(info);
 			if (gameobj && gameobj->GetOccluder()) {
-				const mt::mat4x3 trans = gameobj->NodeGetWorldTransform();
 				float fl[16];
-				trans.getValue(fl);
+				gameobj->NodeGetWorldTransform().PackFromAffineTransform(fl);
+				
 				// this will create the occlusion buffer if not already done
 				// and compute the transformation from model local space to clip space
 				m_ocb->SetModelMatrix(fl);
