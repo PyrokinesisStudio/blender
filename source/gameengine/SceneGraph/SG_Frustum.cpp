@@ -4,17 +4,17 @@ SG_Frustum::SG_Frustum(const mt::mat4& matrix)
 	:m_matrix(matrix)
 {
 	// Left clip plane
-	m_planes[0] = m_matrix.GetColumn(3) + m_matrix.GetColumn(0);
+	m_planes[0] = m_matrix.GetRow(3) + m_matrix.GetRow(0);
 	// Right clip plane
-	m_planes[1] = m_matrix.GetColumn(3) - m_matrix.GetColumn(0);
+	m_planes[1] = m_matrix.GetRow(3) - m_matrix.GetRow(0);
 	// Top clip plane
-	m_planes[2] = m_matrix.GetColumn(3) - m_matrix.GetColumn(1);
+	m_planes[2] = m_matrix.GetRow(3) - m_matrix.GetRow(1);
 	// Bottom clip plane
-	m_planes[3] = m_matrix.GetColumn(3) + m_matrix.GetColumn(1);
+	m_planes[3] = m_matrix.GetRow(3) + m_matrix.GetRow(1);
 	// Near clip plane
-	m_planes[4] = m_matrix.GetColumn(3) + m_matrix.GetColumn(2);
+	m_planes[4] = m_matrix.GetRow(3) + m_matrix.GetRow(2);
 	// Far clip plane
-	m_planes[5] = m_matrix.GetColumn(3) - m_matrix.GetColumn(2);
+	m_planes[5] = m_matrix.GetRow(3) - m_matrix.GetRow(2);
 
 	// Normalize clip planes.
 	for (mt::vec4& plane : m_planes) {

@@ -498,6 +498,14 @@ class Matrix {
   }
   /// @endcond
 
+  inline Vector<T, columns> GetRow(const int i) const {
+    Vector<T, columns> v;
+    for (int j = 0; j < columns; ++j) {
+      v[j] = data_[j][i];
+    }
+    return v;
+  }
+
   /// @brief Negate this Matrix.
   ///
   /// @return Matrix containing the result.
