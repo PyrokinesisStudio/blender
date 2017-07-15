@@ -105,6 +105,9 @@ bool KX_SoftBodyDeformer::Apply(RAS_MeshMaterial *meshmat, RAS_IDisplayArray *ar
 	mt::vec3 aabbMin;
 	mt::vec3 aabbMax;
 
+	const mt::vec3& pos = m_gameobj->NodeGetWorldPosition();
+	const mt::mat3 mat = m_gameobj->NodeGetWorldOrientation().Inverse();
+
 	for (unsigned int i = 0, size = array->GetVertexCount(); i < size; ++i) {
 		RAS_ITexVert *v = array->GetVertex(i);
 		const RAS_TexVertInfo& vinfo = origarray->GetVertexInfo(i);
@@ -131,24 +134,15 @@ bool KX_SoftBodyDeformer::Apply(RAS_MeshMaterial *meshmat, RAS_IDisplayArray *ar
 			continue;
 		}
 
-		const mt::vec3& scale = m_gameobj->NodeGetWorldScaling();
-		const mt::vec3& invertscale = mt::vec3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
-		const mt::vec3& pos = m_gameobj->NodeGetWorldPosition();
-		const mt::mat3& rot = m_gameobj->NodeGetWorldOrientation();
-
 		// Extract object transform from the vertex position.
-		pt = (pt - pos) * rot * invertscale;
+		pt = (pt - pos) * mat;
 		// if the AABB need an update.
 		if (i == 0) {
 			aabbMin = aabbMax = pt;
 		}
 		else {
-			aabbMin.x = std::min(aabbMin.x, pt.x);
-			aabbMin.y = std::min(aabbMin.y, pt.y);
-			aabbMin.z = std::min(aabbMin.z, pt.z);
-			aabbMax.x = std::max(aabbMax.x, pt.x);
-			aabbMax.y = std::max(aabbMax.y, pt.y);
-			aabbMax.z = std::max(aabbMax.z, pt.z);
+			aabbMax = mt::vec3::Max(aabbMax, pt);
+			aabbMin = mt::vec3::Min(aabbMin, pt);
 		}
 	}
 

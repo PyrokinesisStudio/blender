@@ -26,7 +26,7 @@ inline mt::mat3 ToMoto(const btMatrix3x3& mat)
 
 inline mt::quat ToMoto(const btQuaternion& quat)
 {
-	return mt::quat(quat.x(), quat.y(), quat.z(), quat.w());
+	return mt::quat(quat.w(), quat.x(), quat.y(), quat.z());
 }
 
 inline btVector3 ToBullet(const mt::vec3& vec)

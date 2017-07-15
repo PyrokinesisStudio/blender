@@ -139,8 +139,9 @@ PyObject *PyObjectFrom(const mt::mat3 &mat)
 #ifdef USE_MATHUTILS
 PyObject *PyObjectFrom(const mt::quat &qrot)
 {
-	/* NOTE, were re-ordering here for Mathutils compat */
-	return Quaternion_CreatePyObject(qrot.Data(), nullptr);
+	float data[4];
+	qrot.Pack(data);
+	return Quaternion_CreatePyObject(data, nullptr);
 }
 #endif
 

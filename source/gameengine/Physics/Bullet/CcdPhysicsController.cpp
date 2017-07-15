@@ -261,7 +261,7 @@ public:
 	void setWorldTransform(const btTransform& worldTrans)
 	{
 		m_blenderMotionState->SetWorldPosition(ToMoto(worldTrans.getOrigin()));
-		m_blenderMotionState->SetWorldOrientation(ToMoto(worldTrans.getRotation()));
+		m_blenderMotionState->SetWorldOrientation(ToMoto(worldTrans.getBasis()));
 		m_blenderMotionState->CalculateWorldTransformations();
 	}
 };
@@ -748,11 +748,9 @@ bool CcdPhysicsController::SynchronizeMotionStates(float time)
 	if (sb) {
 		if (sb->m_pose.m_bframe) {
 			btVector3 worldPos = sb->m_pose.m_com;
-			btQuaternion worldquat;
 			btMatrix3x3 trs = sb->m_pose.m_rot * sb->m_pose.m_scl;
-			trs.getRotation(worldquat);
 			m_MotionState->SetWorldPosition(ToMoto(worldPos));
-			m_MotionState->SetWorldOrientation(ToMoto(worldquat));
+			m_MotionState->SetWorldOrientation(ToMoto(trs));
 		}
 		else {
 			btVector3 aabbMin, aabbMax;

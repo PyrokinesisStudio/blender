@@ -380,17 +380,10 @@ class Quaternion {
   ///
   /// @param a array "d" element to write to.
   inline void Pack(T *a) const {
-    a[0] = x;
-	a[1] = y;
-	a[2] = z;
-	a[3] = w;
-  }
-
-  /// @brief Return the array of this vector.
-  ///
-  /// @return The array of this vector.
-  inline const T* const Data() const {
-    return data_;
+    a[0] = w;
+	a[1] = x;
+	a[2] = y;
+	a[3] = z;
   }
 
   /// @brief Returns a vector that is perpendicular to the supplied vector.
@@ -552,17 +545,16 @@ class Quaternion {
   MATHFU_DEFINE_CLASS_SIMD_AWARE_NEW_DELETE
 
   union {
+    T s_;
+    T w;
+  };
+  union {
+    Vector<T, 3> v_;
     struct {
-      T s_;
-      Vector<T, 3> v_;
+      T x;
+      T y;
+      T z;
     };
-    struct {
-      float x;
-      float y;
-      float z;
-      float w;
-    };
-	T data_[4];
   };
 };
 

@@ -20,6 +20,8 @@
 
 #include <math.h>
 
+#include <iostream>
+
 /// @file mathfu/vector.h Vector
 /// @brief Vector class and functions.
 /// @addtogroup mathfu_vector
@@ -1007,6 +1009,21 @@ static inline CompatibleT ToTypeHelper(const Vector<T, d>& v) {
   memcpy(&compatible, &v, sizeof(compatible));
   return compatible;
 #endif  // __cplusplus >= 201103L
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+template<typename T, int d>
+std::ostream& operator <<(std::ostream& stream, const Vector<T, d>& v) {
+  int s = d - 1;
+
+  stream << "(";
+  for (int i = 0; i < s; ++i) {
+    stream << v[i] << ", ";
+  }
+  stream << v[s] << ")";
+
+  return stream;
 }
 /// @endcond
 

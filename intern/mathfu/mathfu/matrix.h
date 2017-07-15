@@ -238,7 +238,7 @@ class Matrix {
   inline Matrix(const Matrix<T, 3>& m, const Vector<T, 3>& v, const Vector<T, 3>& s) {
     MATHFU_STATIC_ASSERT(rows == 3 && columns == 4);
     for (int i = 0; i < 3; ++i) {
-      data_[i] = m.GetColumn(i) * s;
+      data_[i] = m.GetColumn(i) * s[i];
     }
     data_[3] = v;
   }
@@ -335,9 +335,9 @@ class Matrix {
     const T sc = si * ch;
     const T ss = si * sh;
 
-    data_[0] = Vector<T, rows>(cj * ch, sj * sc - cs, sj * cc + ss);
-    data_[1] = Vector<T, rows>(cj * sh, sj * ss + cc, sj * cs - sc);
-    data_[2] = Vector<T, rows>(-sj, cj * si, cj * ci);
+    data_[0] = Vector<T, rows>(cj * ch, cj * sh, -sj);
+    data_[1] = Vector<T, rows>(sj * sc - cs, sj * ss + cc, cj * si);
+    data_[2] = Vector<T, rows>(sj * cc + ss, sj * cs - sc, cj * ci);
   }
 
   inline Matrix(const Vector<T, rows>& euler) {
@@ -353,9 +353,9 @@ class Matrix {
     const T sc = si * ch;
     const T ss = si * sh;
 
-    data_[0] = Vector<T, rows>(cj * ch, sj * sc - cs, sj * cc + ss);
-    data_[1] = Vector<T, rows>(cj * sh, sj * ss + cc, sj * cs - sc);
-    data_[2] = Vector<T, rows>(-sj, cj * si, cj * ci);
+    data_[0] = Vector<T, rows>(cj * ch, cj * sh, -sj);
+    data_[1] = Vector<T, rows>(sj * sc - cs, sj * ss + cc, cj * si);
+    data_[2] = Vector<T, rows>(sj * cc + ss, sj * cs - sc, cj * ci);
   }
 
   /// @brief Create a Matrix from the first row * column elements of an array.
@@ -1096,19 +1096,9 @@ inline Vector<T, 4> operator*(const Matrix<T, 4, 4>& m, const Vector<T, 4>& v) {
 template <class T>
 inline Vector<T, 3> operator*(const Matrix<T, 3, 4>& m, const Vector<T, 3>& v) {
   return Vector<T, 3>(
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, 3) + m(3, 0),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, 3) + m(3, 1),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, 3) + m(3, 2));
-}
-/// @endcond
-
-/// @cond MATHFU_INTERNAL
-template <>
-inline Vector<float, 3> operator*(const Matrix<float, 3, 4>& m, const Vector<float, 3>& v) {
-  return Vector<float, 3>(
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(3, 0),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(3, 1),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, MATHFU_VECTOR_STRIDE_FLOATS(v)) + m(3, 2));
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, 4) + m(3, 0),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, 4) + m(3, 1),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, 4) + m(3, 2));
 }
 /// @endcond
 
@@ -1844,6 +1834,23 @@ static inline CompatibleT ToTypeHelper(const Matrix<T, rows, columns>& m) {
   memcpy(&compatible, &m, sizeof(compatible));
   return compatible;
 #endif  // __cplusplus >= 201103L
+}
+/// @endcond
+
+/// @cond MATHFU_INTERNAL
+template<typename T, int rows, int columns>
+std::ostream& operator <<(std::ostream& stream, const Matrix<T, rows, columns>& m) {
+  int s = columns - 1;
+
+  stream << "\n";
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < s; ++j) {
+      stream << m.GetColumn(j)[i] << ", ";
+    }
+    stream << m.GetColumn(s)[i] << "\n";
+  }
+
+  return stream;
 }
 /// @endcond
 
