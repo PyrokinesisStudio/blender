@@ -78,7 +78,7 @@ float KX_BoundingBox::GetRadius() const
 	return box.GetRadius();
 }
 
-bool KX_BoundingBox::SetMax(mt::vec3 max)
+bool KX_BoundingBox::SetMax(const mt::vec3 &max)
 {
 	const mt::vec3& min = GetMin();
 
@@ -90,7 +90,7 @@ bool KX_BoundingBox::SetMax(mt::vec3 max)
 	return true;
 }
 
-bool KX_BoundingBox::SetMin(mt::vec3 min)
+bool KX_BoundingBox::SetMin(const mt::vec3 &min)
 {
 	const mt::vec3& max = GetMax();
 

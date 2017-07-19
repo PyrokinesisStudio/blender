@@ -164,7 +164,7 @@ public:
 	void DeleteShader();
 
 	// Update predefined uniforms each render call
-	void Update(RAS_Rasterizer *rasty, mt::mat4 model);
+	void Update(RAS_Rasterizer *rasty, const mt::mat4 &model);
 
 	void SetSampler(int loc, int unit);
 

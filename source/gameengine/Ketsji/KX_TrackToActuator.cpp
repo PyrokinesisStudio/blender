@@ -118,7 +118,7 @@ static mt::mat3 EulToMat3(float eul[3])
 
 
 /* old function from Blender */
-static void Mat3ToEulOld(mt::mat3 mat, float eul[3])
+static void Mat3ToEulOld(const mt::mat3 &mat, float eul[3])
 {
 	const float cy = sqrtf(mat(0, 0) * mat(0, 0) + mat(1, 0) * mat(1, 0));
 
@@ -160,7 +160,7 @@ static void compatible_eulFast(float *eul, float *oldrot)
 
 
 
-static mt::mat3 matrix3x3_interpol(mt::mat3 oldmat, mt::mat3 mat, int m_time)
+static mt::mat3 matrix3x3_interpol(const mt::mat3 &oldmat, const mt::mat3 &mat, int m_time)
 {
 	float eul[3], oldeul[3];
 
@@ -192,7 +192,7 @@ static float basis_cross(int n, int m)
 }
 
 /* vectomat function obtained from constrain.c and modified to work with MOTO library */
-static mt::mat3 vectomat(mt::vec3 vec, short axis, short upflag, short threedimup)
+static mt::mat3 vectomat(mt::vec3 &vec, short axis, short upflag, short threedimup)
 {
 	mt::mat3 mat;
 	mt::vec3 y(0.0f, 1.0f, 0.0f);

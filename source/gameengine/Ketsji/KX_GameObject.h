@@ -849,7 +849,7 @@ public:
 	 * and a valid graphic controller (if it exists).
 	 */
 	void UpdateBounds(bool force);
-	void SetBoundsAabb(mt::vec3 aabbMin, mt::vec3 aabbMax);
+	void SetBoundsAabb(const mt::vec3 &aabbMin, const mt::vec3 &aabbMax);
 	void GetBoundsAabb(mt::vec3 &aabbMin, mt::vec3 &aabbMax) const;
 
 	KX_CullingNode *GetCullingNode();

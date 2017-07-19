@@ -3,6 +3,7 @@
 
 #include "mathfu/matrix.h"
 #include "mathfu/vector.h"
+#include <array>
 
 namespace mathfu {
 

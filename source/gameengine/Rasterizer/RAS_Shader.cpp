@@ -389,7 +389,7 @@ bool RAS_Shader::GetEnabled() const
 	return m_use;
 }
 
-void RAS_Shader::Update(RAS_Rasterizer *rasty, const mt::mat4 model)
+void RAS_Shader::Update(RAS_Rasterizer *rasty, const mt::mat4 &model)
 {
 	if (!Ok() || !m_preDef.size()) {
 		return;

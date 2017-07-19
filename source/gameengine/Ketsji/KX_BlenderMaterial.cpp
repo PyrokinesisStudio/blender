@@ -375,8 +375,8 @@ void KX_BlenderMaterial::ActivateGLMaterials(RAS_Rasterizer *rasty) const
 }
 
 void KX_BlenderMaterial::UpdateIPO(
-    mt::vec4 rgba,
-    mt::vec3 specrgb,
+    const mt::vec4 &rgba,
+    const mt::vec3 &specrgb,
     float hard,
     float spec,
     float ref,

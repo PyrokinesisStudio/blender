@@ -65,9 +65,9 @@ public:
 	/// Return AABB radius.
 	float GetRadius() const;
 	/// Set AABB max, return false if the max is lesser than min.
-	bool SetMax(mt::vec3 max);
+	bool SetMax(const mt::vec3 &max);
 	/// Set AABB min, return true if the max is greater than max.
-	bool SetMin(mt::vec3 min);
+	bool SetMin(const mt::vec3 &min);
 
 	virtual PyObject *py_repr();
 

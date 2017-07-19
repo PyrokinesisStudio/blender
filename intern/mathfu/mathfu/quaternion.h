@@ -548,7 +548,7 @@ class Quaternion {
     T s_;
     T w;
   };
-  union {
+  struct {
     Vector<T, 3> v_;
     struct {
       T x;

@@ -216,9 +216,9 @@ public:
 
 	virtual void AddWheel(
 	    PHY_IMotionState *motionState,
-	    mt::vec3 connectionPoint,
-	    mt::vec3 downDirection,
-	    mt::vec3 axleDirection,
+	    const mt::vec3 &connectionPoint,
+	    const mt::vec3 &downDirection,
+	    const mt::vec3 &axleDirection,
 	    float suspensionRestLength,
 	    float wheelRadius,
 	    bool hasSteering)

@@ -1375,7 +1375,7 @@ void KX_GameObject::UpdateBounds(bool force)
 	SetBoundsAabb(aabbMin, aabbMax);
 }
 
-void KX_GameObject::SetBoundsAabb(mt::vec3 aabbMin, mt::vec3 aabbMax)
+void KX_GameObject::SetBoundsAabb(const mt::vec3 &aabbMin, const mt::vec3 &aabbMax)
 {
 	// Set the AABB in culling node box.
 	m_cullingNode.GetAabb().Set(aabbMin, aabbMax);
