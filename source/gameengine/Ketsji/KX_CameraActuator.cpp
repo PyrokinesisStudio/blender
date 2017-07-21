@@ -108,9 +108,10 @@ void KX_CameraActuator::Relink(std::map<SCA_IObject *, SCA_IObject *>& obj_map)
 
 /* copied from blender BLI_math ... don't know if there's an equivalent */
 
-static void Kx_VecUpMat3(mt::vec3 &vec, mt::mat3& mat, short axis)
+static void Kx_VecUpMat3(const mt::vec3 &vec_, const mt::mat3& mat_, short axis)
 {
-
+	mt::vec3 vec = vec_;
+	mt::mat3 mat = mat_;
 	// Construct a camera matrix s.t. the specified axis
 
 	// maps to the given vector (*vec). Also defines the rotation

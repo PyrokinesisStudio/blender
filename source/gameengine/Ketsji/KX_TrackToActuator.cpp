@@ -192,7 +192,7 @@ static float basis_cross(int n, int m)
 }
 
 /* vectomat function obtained from constrain.c and modified to work with MOTO library */
-static mt::mat3 vectomat(mt::vec3 &vec, short axis, short upflag, short threedimup)
+static mt::mat3 vectomat(const mt::vec3 &dir, short axis, short upflag, short threedimup)
 {
 	mt::mat3 mat;
 	mt::vec3 y(0.0f, 1.0f, 0.0f);
@@ -203,7 +203,7 @@ static mt::mat3 vectomat(mt::vec3 &vec, short axis, short upflag, short threedim
 	int right_index;
 
 	/* Normalized Vec vector*/
-	vec = vec.SafeNormalized(z);
+	mt::vec3 vec = dir.SafeNormalized(z);
 
 	/* if 2D doesn't move the up vector */
 	if (!threedimup) {

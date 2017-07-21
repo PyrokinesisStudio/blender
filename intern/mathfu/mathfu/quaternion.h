@@ -545,16 +545,18 @@ class Quaternion {
   MATHFU_DEFINE_CLASS_SIMD_AWARE_NEW_DELETE
 
   union {
-    T s_;
-    T w;
-  };
-  struct {
-    Vector<T, 3> v_;
+	struct {
+	  Vector<T, 3> v_;
+	};
     struct {
       T x;
       T y;
       T z;
     };
+  };
+  union {
+	  T s_;
+	  T w;
   };
 };
 
