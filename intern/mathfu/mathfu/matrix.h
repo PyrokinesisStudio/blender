@@ -340,22 +340,9 @@ class Matrix {
     data_[2] = Vector<T, rows>(sj * cc + ss, sj * cs - sc, cj * ci);
   }
 
-  inline Matrix(const Vector<T, rows>& euler) {
-    MATHFU_STATIC_ASSERT(rows == 3 && columns == 3);
-    const T ci = cosf(euler.x);
-    const T cj = cosf(euler.y);
-    const T ch = cosf(euler.z);
-    const T si = sinf(euler.x);
-    const T sj = sinf(euler.y);
-    const T sh = sinf(euler.z);
-    const T cc = ci * ch;
-    const T cs = ci * sh;
-    const T sc = si * ch;
-    const T ss = si * sh;
-
-    data_[0] = Vector<T, rows>(cj * ch, cj * sh, -sj);
-    data_[1] = Vector<T, rows>(sj * sc - cs, sj * ss + cc, cj * si);
-    data_[2] = Vector<T, rows>(sj * cc + ss, sj * cs - sc, cj * ci);
+  inline Matrix(const Vector<T, rows>& euler)
+    :Matrix(euler.x, euler.y, euler.z)
+  {
   }
 
   /// @brief Create a Matrix from the first row * column elements of an array.
