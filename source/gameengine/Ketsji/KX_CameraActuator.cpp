@@ -108,10 +108,8 @@ void KX_CameraActuator::Relink(std::map<SCA_IObject *, SCA_IObject *>& obj_map)
 
 /* copied from blender BLI_math ... don't know if there's an equivalent */
 
-static void Kx_VecUpMat3(const mt::vec3 &vec_, const mt::mat3& mat_, short axis)
+static void Kx_VecUpMat3(mt::vec3 &vec, mt::mat3& mat, short axis)
 {
-	mt::vec3 vec = vec_;
-	mt::mat3 mat = mat_;
 	// Construct a camera matrix s.t. the specified axis
 
 	// maps to the given vector (*vec). Also defines the rotation
@@ -154,9 +152,9 @@ static void Kx_VecUpMat3(const mt::vec3 &vec_, const mt::mat3& mat_, short axis)
 	}
 	
 	inp = mat(coz, 2);
-	mat(coy, 0) =      - inp * mat(coz, 0);
-	mat(coy, 1) =      - inp * mat(coz, 1);
-	mat(coy, 2) = 1.0f - inp * mat(coz, 2);
+	mat(0, coy) =      - inp * mat(0, coz);
+	mat(1, coy) =      - inp * mat(1, coz);
+	mat(2, coy) = 1.0f - inp * mat(2, coz);
 
 	if (mat.GetColumn(coy).Normalize() == 0.f) {
 		/* the camera is vertical, chose the y axis arbitrary */
