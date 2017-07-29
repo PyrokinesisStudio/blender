@@ -94,7 +94,7 @@ UpdateChildCoordinates(
 				
 				// The child's world transform is parent * child
 				mt::mat3x4 parent_transform = parent->GetWorldTransform() * bone_transform;
-				child_transform *= parent_transform;
+				child_transform = parent_transform * child_transform;
 				
 				// Recompute the child transform components from the transform.
 				child_w_rotation = child_transform.RotationMatrix();
