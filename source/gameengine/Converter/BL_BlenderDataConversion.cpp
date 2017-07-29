@@ -646,6 +646,10 @@ RAS_MeshObject* BL_ConvertMesh(Mesh* mesh, Object* blenderobj, KX_Scene* scene, 
 
 			if (mface->v4)
 				tan[3] = MT_Vector4(tangent[f*4 + 3]);
+
+			for (unsigned short i = 0; i < 4; ++i) {
+				CM_Debug(tan[i]);
+			}
 		}
 		if (blenderobj)
 			ma = give_current_material(blenderobj, mface->mat_nr+1);

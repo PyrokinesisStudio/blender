@@ -494,12 +494,11 @@ void normal_new_shading(vec3 dir, vec3 nor, out vec3 outnor, out float outdot)
 	outdot = dot(normalize(dir), nor);
 }
 
-void mat_math_rot(float rot, out mat3 mat)
+/*void mat_math_rot(float rot, out mat2 mat)
 {
-	mat = mat3(cos(rot), -sin(rot), 0.0,
-			   sin(rot), cos(rot), 0.0,
-			   0.0, 0.0, 1.0);
-}
+	mat = mat2(cos(rot), -sin(rot),
+			   sin(rot), cos(rot));
+}*/
 
 void curves_vec(float fac, vec3 vec, sampler2D curvemap, out vec3 outvec)
 {
@@ -1384,14 +1383,27 @@ void mtex_mapping_ofs(vec3 texco, vec3 ofs, out vec3 outtexco)
 	outtexco = texco + ofs;
 }
 
+void mtex_tangent_transform(vec4 tangent, vec3 vn, float rot, vec3 size, out vec4 outtangent)
+{
+	vec3 n = -vn;
+	float cosr = cos(rot);
+	float sinr = sin(rot);
+	outtangent.xyz = tangent.xyz * cosr + cross(n, tangent.xyz) * sinr + n * dot(tangent.xyz, n) * (1.0 - cosr);
+	outtangent.xyz *= size;
+	outtangent.w = tangent.w;
+}
+
 void mtex_mapping_size(vec3 texco, vec3 size, out vec3 outtexco)
 {
 	outtexco = size * texco;
 }
 
-void mtex_mapping_transform(vec3 texco, mat3 mat, vec3 ofs, vec3 size, out vec3 outtexco)
+void mtex_mapping_transform(vec3 texco, float rot, vec3 ofs, vec3 size, out vec3 outtexco)
 {
-	outtexco = (texco - vec3(0.5)) * mat * size + vec3(0.5) + ofs;
+	mat2 mat = mat2(cos(rot), -sin(rot),
+					sin(rot), cos(rot));
+
+	outtexco = vec3((texco.xy - vec2(0.5)) * mat, texco.z - 0.5) * size + vec3(0.5) + ofs;
 }
 
 void mtex_2d_mapping(vec3 vec, out vec3 outvec)
@@ -4042,7 +4054,7 @@ void node_output_world(vec4 surface, vec4 volume, out vec4 result)
 	result = surface;
 }
 
-void parallax_out(vec3 texco, vec3 vp, vec4 tangent, vec3 vn, vec3 size, mat3 mat, sampler2D ima, float numsteps,
+void parallax_out(vec3 texco, vec3 vp, vec4 tangent, vec3 vn, sampler2D ima, float numsteps,
 				  float bumpscale, float discarduv, out vec3 ptexcoord)
 {
 	vec3 binormal = cross(-vn, tangent.xyz) * tangent.w;
@@ -4050,7 +4062,7 @@ void parallax_out(vec3 texco, vec3 vp, vec4 tangent, vec3 vn, vec3 size, mat3 ma
 	vec3 vv = normalize(vvec);
 
 	// The uv shift per depth step, multitply by rotation and after size.
-	vec2 delta = (vec3(-vv.x, gl_FrontFacing ? vv.y : -vv.y, 0.0) * mat * size * bumpscale / vv.z).xy;
+	vec2 delta = (vec3(-vv.x, gl_FrontFacing ? vv.y : -vv.y, 0.0) /* mat * size*/ * bumpscale / vv.z).xy;
 
 	float height = 0.0;
 
@@ -4103,8 +4115,8 @@ void parallax_out(vec3 texco, vec3 vp, vec4 tangent, vec3 vn, vec3 size, mat3 ma
 	const vec2 clampmax = vec2(0.5);
 
 	if ((discarduv == 1.0) &&
-		(finaltexuv.x - 0.5 < clampmin.x * size.x || finaltexuv.x - 0.5 > clampmax.x * size.x ||
-		finaltexuv.y - 0.5 < clampmin.y * size.y || finaltexuv.y - 0.5 > clampmax.y * size.y))
+		(finaltexuv.x - 0.5 < clampmin.x/* * size.x*/ || finaltexuv.x - 0.5 > clampmax.x/* * size.x*/ ||
+		finaltexuv.y - 0.5 < clampmin.y/* * size.y*/ || finaltexuv.y - 0.5 > clampmax.y/* * size.y*/))
 	{
 		discard;
 	}
