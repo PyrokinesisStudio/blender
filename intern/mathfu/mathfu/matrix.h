@@ -1095,9 +1095,9 @@ inline Vector<T, 4> operator*(const Matrix<T, 4, 4>& m, const Vector<T, 4>& v) {
 template <class T>
 inline Vector<T, 3> operator*(const Matrix<T, 3, 4>& m, const Vector<T, 3>& v) {
   return Vector<T, 3>(
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, 4) + m(3, 0),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, 4) + m(3, 1),
-      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, 4) + m(3, 2));
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 0, 4) + m(0, 3),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 1, 4) + m(1, 3),
+      MATHFU_MATRIX_3X3_DOT(&m[0], v, 2, 4) + m(2, 3));
 }
 /// @endcond
 
