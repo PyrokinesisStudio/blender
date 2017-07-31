@@ -39,6 +39,8 @@ bool CcdConstraint::GetEnabled() const
 void CcdConstraint::SetEnabled(bool enabled)
 {
 	m_constraint->setEnabled(enabled);
+
+	// Unsleep objects to enable constraint influence.
 	if (enabled) {
 		m_constraint->getRigidBodyA().activate(true);
 		m_constraint->getRigidBodyB().activate(true);
