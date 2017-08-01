@@ -49,14 +49,13 @@ private:
 public:
 	// for rendering
 	RAS_DisplayArrayBucket *m_displayArrayBucket;
-	RAS_MeshObject *m_mesh;
 	DerivedMesh *m_pDerivedMesh;
 	RAS_MeshUser *m_meshUser;
 
 	/// Batch index used for batching render.
 	short m_batchPartIndex;
 
-	RAS_MeshSlot(RAS_MeshObject *mesh, RAS_MeshUser *meshUser, RAS_DisplayArrayBucket *arrayBucket);
+	RAS_MeshSlot(RAS_MeshUser *meshUser, RAS_DisplayArrayBucket *arrayBucket);
 	virtual ~RAS_MeshSlot();
 
 	void SetDisplayArrayBucket(RAS_DisplayArrayBucket *arrayBucket);

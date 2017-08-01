@@ -29,6 +29,30 @@
 
 #include "GPU_glew.h"
 
+#include <algorithm>
+
+struct PolygonSort
+{
+	float m_z;
+	unsigned int m_first;
+
+	PolygonSort() = default;
+
+	void Init(unsigned int first, const MT_Vector3& center, const MT_Vector3& pnorm)
+	{
+		m_first = first;
+		m_z = pnorm.dot(center);
+	}
+
+	struct BackToFront
+	{
+		bool operator()(const PolygonSort &a, const PolygonSort &b) const
+		{
+			return a.m_z < b.m_z;
+		}
+	};
+};
+
 RAS_IDisplayArray::RAS_IDisplayArray(PrimitiveType type, const RAS_TexVertFormat& format)
 	:m_type(type),
 	m_modifiedFlag(NONE_MODIFIED),
@@ -70,6 +94,50 @@ RAS_IDisplayArray *RAS_IDisplayArray::ConstructArray(RAS_IDisplayArray::Primitiv
 }
 #undef NEW_DISPLAY_ARRAY_UV
 #undef NEW_DISPLAY_ARRAY_COLOR
+
+void RAS_IDisplayArray::SortPolygons(const MT_Transform& transform, unsigned int *indexmap)
+{
+	const unsigned int totpoly = GetIndexCount() / 3;
+
+	if (totpoly <= 1 || m_type == LINES) {
+		return;
+	}
+
+	// Extract camera Z plane.
+	const MT_Vector3 pnorm(transform.getBasis()[2]);
+
+	if (m_polygonCenters.size() != totpoly) {
+		m_polygonCenters.resize(totpoly);
+		for (unsigned int i = 0; i < totpoly; ++i) {
+			MT_Vector3& center = m_polygonCenters[i];
+			for (unsigned short j = 0; j < 3; ++j) {
+				center += GetVertex(m_indices[i * 3 + j])->xyz();
+			}
+		}
+	}
+
+	std::vector<PolygonSort> sortedPoly(totpoly);
+
+	// Get indices and z into temporary array.
+	for (unsigned int i = 0; i < totpoly; ++i) {
+		sortedPoly[i].Init(i * 3, pnorm, m_polygonCenters[i]);
+	}
+
+	std::sort(sortedPoly.begin(), sortedPoly.end(), PolygonSort::BackToFront());
+
+	// Get indices from temporary array.
+	for (unsigned int i = 0; i < totpoly; ++i) {
+		const unsigned int first = sortedPoly[i].m_first;
+		for (unsigned short j = 0; j < 3; ++j) {
+			indexmap[i * 3 + j] = m_indices[first + j];
+		}
+	}
+}
+
+void RAS_IDisplayArray::InvalidatePolygonsCenters()
+{
+	m_polygonCenters.clear();
+}
 
 RAS_IDisplayArray::PrimitiveType RAS_IDisplayArray::GetPrimitiveType() const
 {
