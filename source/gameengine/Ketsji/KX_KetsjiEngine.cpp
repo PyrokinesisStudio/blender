@@ -243,7 +243,7 @@ void KX_KetsjiEngine::EndFrame()
 	m_logger.StartLog(KX_TimeLogger::RASTERIZER, m_kxsystem->GetTimeInSeconds());
 	m_rasterizer->EndFrame();
 
-	m_logger.StartLog(tc_logic, m_kxsystem->GetTimeInSeconds());
+	m_logger.StartLog(KX_TimeLogger::LOGIC, m_kxsystem->GetTimeInSeconds());
 	m_canvas->FlushScreenshots();
 
 	// swap backbuffer (drawing into this buffer) <-> front/visible buffer
