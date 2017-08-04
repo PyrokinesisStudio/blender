@@ -3178,6 +3178,10 @@ void CcdPhysicsEnvironment::SetupObjectConstraints(KX_GameObject *obj_src, KX_Ga
 		}
 		dofbit <<= 1;
 	}
+
+	if (dat->flag & CONSTRAINT_USE_BREAKING) {
+		constraint->SetBreakingThreshold(dat->breaking);
+	}
 }
 
 CcdCollData::CcdCollData(const btPersistentManifold *manifoldPoint)
