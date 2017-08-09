@@ -31,6 +31,8 @@
  * - `matrix[1]` currently not used.
  * - `matrix[2]` is the widget direction (for all manipulators).
  *
+ * TODO: use matrix_space
+ *
  */
 
 #include "BIF_gl.h"
@@ -141,6 +143,7 @@ static void grab3d_draw_intern(
 	float col[4];
 
 	BLI_assert(CTX_wm_area(C)->spacetype == SPACE_VIEW3D);
+	UNUSED_VARS_NDEBUG(C);
 
 	manipulator_color_get(mpr, highlight, col);
 
@@ -170,9 +173,9 @@ static void grab3d_draw_intern(
 	}
 }
 
-static void manipulator_grab_draw_select(const bContext *C, wmManipulator *mpr, int selectionbase)
+static void manipulator_grab_draw_select(const bContext *C, wmManipulator *mpr, int select_id)
 {
-	GPU_select_load_id(selectionbase);
+	GPU_select_load_id(select_id);
 	grab3d_draw_intern(C, mpr, true, false);
 }
 
