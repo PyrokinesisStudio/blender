@@ -58,7 +58,9 @@
 /** \name Lamp Manipulators
  * \{ */
 
-static bool WIDGETGROUP_lamp_poll(const bContext *C, wmManipulatorGroupType *UNUSED(wgt))
+/* Spot Lamp */
+
+static bool WIDGETGROUP_lamp_spot_poll(const bContext *C, wmManipulatorGroupType *UNUSED(wgt))
 {
 	Object *ob = CTX_data_active_object(C);
 
@@ -69,16 +71,14 @@ static bool WIDGETGROUP_lamp_poll(const bContext *C, wmManipulatorGroupType *UNU
 	return false;
 }
 
-static void WIDGETGROUP_lamp_setup(const bContext *UNUSED(C), wmManipulatorGroup *mgroup)
+static void WIDGETGROUP_lamp_spot_setup(const bContext *UNUSED(C), wmManipulatorGroup *mgroup)
 {
-	const char *propname = "spot_size";
-
 	const float color[4] = {0.5f, 0.5f, 1.0f, 1.0f};
 	const float color_hi[4] = {0.8f, 0.8f, 0.45f, 1.0f};
 
 	wmManipulatorWrapper *wwrapper = MEM_mallocN(sizeof(wmManipulatorWrapper), __func__);
 
-	wwrapper->manipulator = WM_manipulator_new("MANIPULATOR_WT_arrow_3d", mgroup, propname, NULL);
+	wwrapper->manipulator = WM_manipulator_new("MANIPULATOR_WT_arrow_3d", mgroup, NULL);
 	RNA_enum_set(wwrapper->manipulator->ptr, "draw_options",  ED_MANIPULATOR_ARROW_STYLE_INVERTED);
 
 	mgroup->customdata = wwrapper;
@@ -88,7 +88,7 @@ static void WIDGETGROUP_lamp_setup(const bContext *UNUSED(C), wmManipulatorGroup
 	WM_manipulator_set_color_highlight(wwrapper->manipulator, color_hi);
 }
 
-static void WIDGETGROUP_lamp_refresh(const bContext *C, wmManipulatorGroup *mgroup)
+static void WIDGETGROUP_lamp_spot_refresh(const bContext *C, wmManipulatorGroup *mgroup)
 {
 	wmManipulatorWrapper *wwrapper = mgroup->customdata;
 	Object *ob = CTX_data_active_object(C);
@@ -107,18 +107,129 @@ static void WIDGETGROUP_lamp_refresh(const bContext *C, wmManipulatorGroup *mgro
 	WM_manipulator_target_property_def_rna(wwrapper->manipulator, "offset", &lamp_ptr, propname, -1);
 }
 
-void VIEW3D_WGT_lamp(wmManipulatorGroupType *wgt)
+void VIEW3D_WGT_lamp_spot(wmManipulatorGroupType *wgt)
 {
-	wgt->name = "Lamp Widgets";
-	wgt->idname = "VIEW3D_WGT_lamp";
+	wgt->name = "Spot Lamp Widgets";
+	wgt->idname = "VIEW3D_WGT_lamp_spot";
 
 	wgt->flag |= (WM_MANIPULATORGROUPTYPE_PERSISTENT |
 	              WM_MANIPULATORGROUPTYPE_3D |
 	              WM_MANIPULATORGROUPTYPE_DEPTH_3D);
 
-	wgt->poll = WIDGETGROUP_lamp_poll;
-	wgt->setup = WIDGETGROUP_lamp_setup;
-	wgt->refresh = WIDGETGROUP_lamp_refresh;
+	wgt->poll = WIDGETGROUP_lamp_spot_poll;
+	wgt->setup = WIDGETGROUP_lamp_spot_setup;
+	wgt->refresh = WIDGETGROUP_lamp_spot_refresh;
+}
+
+/* Area Lamp */
+
+/* translate callbacks */
+static void manipulator_area_lamp_prop_size_get(
+        const wmManipulator *UNUSED(mpr), wmManipulatorProperty *mpr_prop,
+        void *value_p)
+{
+	float *value = value_p;
+	BLI_assert(mpr_prop->type->array_length == 2);
+	UNUSED_VARS_NDEBUG(mpr_prop);
+	Lamp *la = mpr_prop->custom_func.user_data;
+
+	value[0] = la->area_size;
+	value[1] = (la->area_shape == LA_AREA_RECT) ? la->area_sizey : la->area_size;
+}
+
+static void manipulator_area_lamp_prop_size_set(
+        const wmManipulator *UNUSED(mpr), wmManipulatorProperty *mpr_prop,
+        const void *value_p)
+{
+	const float *value = value_p;
+
+	BLI_assert(mpr_prop->type->array_length == 2);
+	UNUSED_VARS_NDEBUG(mpr_prop);
+	Lamp *la = mpr_prop->custom_func.user_data;
+	if (la->area_shape == LA_AREA_RECT) {
+		la->area_size = value[0];
+		la->area_sizey = value[1];
+	}
+	else {
+		la->area_size = value[0];
+	}
+}
+
+static void manipulator_area_lamp_prop_size_range(
+        const wmManipulator *UNUSED(mpr), wmManipulatorProperty *UNUSED(mpr_prop),
+        void *value_p)
+{
+	float *value = value_p;
+	value[0] = 0.0f;
+	value[1] =  FLT_MAX;
+}
+
+static bool WIDGETGROUP_lamp_area_poll(const bContext *C, wmManipulatorGroupType *UNUSED(wgt))
+{
+	Object *ob = CTX_data_active_object(C);
+
+	if (ob && ob->type == OB_LAMP) {
+		Lamp *la = ob->data;
+		return (la->type == LA_AREA);
+	}
+	return false;
+}
+
+static void WIDGETGROUP_lamp_area_setup(const bContext *UNUSED(C), wmManipulatorGroup *mgroup)
+{
+	const float color[4] = {1.0f, 1.0f, 0.5f, 1.0f};
+	const float color_hi[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+	wmManipulatorWrapper *wwrapper = MEM_mallocN(sizeof(wmManipulatorWrapper), __func__);
+	wwrapper->manipulator = WM_manipulator_new("MANIPULATOR_WT_cage_2d", mgroup, NULL);
+
+	RNA_enum_set(wwrapper->manipulator->ptr, "transform",
+	             ED_MANIPULATOR_RECT_TRANSFORM_FLAG_SCALE);
+
+	const float dims[4] = {1.0f, 1.0f};
+	RNA_float_set_array(wwrapper->manipulator->ptr, "dimensions", dims);
+
+	mgroup->customdata = wwrapper;
+
+	WM_manipulator_set_color(wwrapper->manipulator, color);
+	WM_manipulator_set_color_highlight(wwrapper->manipulator, color_hi);
+}
+
+static void WIDGETGROUP_lamp_area_refresh(const bContext *C, wmManipulatorGroup *mgroup)
+{
+	wmManipulatorWrapper *wwrapper = mgroup->customdata;
+	Object *ob = CTX_data_active_object(C);
+	Lamp *la = ob->data;
+
+	copy_m4_m4(wwrapper->manipulator->matrix_basis, ob->obmat);
+
+	RNA_enum_set(wwrapper->manipulator->ptr, "transform",
+	             ED_MANIPULATOR_RECT_TRANSFORM_FLAG_SCALE |
+	             ((la->area_shape == LA_AREA_SQUARE) ? ED_MANIPULATOR_RECT_TRANSFORM_FLAG_SCALE_UNIFORM : 0));
+
+	/* need to set property here for undo. TODO would prefer to do this in _init */
+	WM_manipulator_target_property_def_func(
+	        wwrapper->manipulator, "scale",
+	        &(const struct wmManipulatorPropertyFnParams) {
+	            .value_get_fn = manipulator_area_lamp_prop_size_get,
+	            .value_set_fn = manipulator_area_lamp_prop_size_set,
+	            .range_get_fn = manipulator_area_lamp_prop_size_range,
+	            .user_data = la,
+	        });
+}
+
+void VIEW3D_WGT_lamp_area(wmManipulatorGroupType *wgt)
+{
+	wgt->name = "Area Lamp Widgets";
+	wgt->idname = "VIEW3D_WGT_lamp_area";
+
+	wgt->flag |= (WM_MANIPULATORGROUPTYPE_PERSISTENT |
+	              WM_MANIPULATORGROUPTYPE_3D |
+	              WM_MANIPULATORGROUPTYPE_DEPTH_3D);
+
+	wgt->poll = WIDGETGROUP_lamp_area_poll;
+	wgt->setup = WIDGETGROUP_lamp_area_setup;
+	wgt->refresh = WIDGETGROUP_lamp_area_refresh;
 }
 
 /** \} */
@@ -184,7 +295,7 @@ static void WIDGETGROUP_camera_setup(const bContext *C, wmManipulatorGroup *mgro
 		const float color[4] = {1.0f, 0.3f, 0.0f, 1.0f};
 		const float color_hi[4] = {1.0f, 0.3f, 0.0f, 1.0f};
 
-		camgroup->dop_dist = WM_manipulator_new_ptr(wt_arrow, mgroup, "dof_distance", NULL);
+		camgroup->dop_dist = WM_manipulator_new_ptr(wt_arrow, mgroup, NULL);
 		RNA_enum_set(camgroup->dop_dist->ptr, "draw_style",  ED_MANIPULATOR_ARROW_STYLE_CROSS);
 		WM_manipulator_set_flag(camgroup->dop_dist, WM_MANIPULATOR_DRAW_HOVER, true);
 		WM_manipulator_set_color(camgroup->dop_dist, color);
@@ -197,7 +308,7 @@ static void WIDGETGROUP_camera_setup(const bContext *C, wmManipulatorGroup *mgro
 		const float color[4] = {1.0f, 1.0, 0.27f, 0.5f};
 		const float color_hi[4] = {1.0f, 1.0, 0.27f, 1.0f};
 
-		camgroup->focal_len = WM_manipulator_new_ptr(wt_arrow, mgroup, "focal_len", NULL);
+		camgroup->focal_len = WM_manipulator_new_ptr(wt_arrow, mgroup, NULL);
 		RNA_enum_set(camgroup->focal_len->ptr, "draw_style",  ED_MANIPULATOR_ARROW_STYLE_CONE);
 		RNA_enum_set(camgroup->focal_len->ptr, "draw_options",  ED_MANIPULATOR_ARROW_STYLE_CONSTRAINED);
 
@@ -205,7 +316,7 @@ static void WIDGETGROUP_camera_setup(const bContext *C, wmManipulatorGroup *mgro
 		WM_manipulator_set_color_highlight(camgroup->focal_len, color_hi);
 		cameragroup_property_setup(camgroup->focal_len, ob, ca, false);
 
-		camgroup->ortho_scale = WM_manipulator_new_ptr(wt_arrow, mgroup, "ortho_scale", NULL);
+		camgroup->ortho_scale = WM_manipulator_new_ptr(wt_arrow, mgroup, NULL);
 		RNA_enum_set(camgroup->ortho_scale->ptr, "draw_style",  ED_MANIPULATOR_ARROW_STYLE_CONE);
 		RNA_enum_set(camgroup->ortho_scale->ptr, "draw_options",  ED_MANIPULATOR_ARROW_STYLE_CONSTRAINED);
 
@@ -325,7 +436,7 @@ static void WIDGETGROUP_forcefield_setup(const bContext *UNUSED(C), wmManipulato
 	wmManipulatorWrapper *wwrapper = MEM_mallocN(sizeof(wmManipulatorWrapper), __func__);
 	mgroup->customdata = wwrapper;
 
-	wwrapper->manipulator = WM_manipulator_new("MANIPULATOR_WT_arrow_3d", mgroup, "field_strength", NULL);
+	wwrapper->manipulator = WM_manipulator_new("MANIPULATOR_WT_arrow_3d", mgroup, NULL);
 	RNA_enum_set(wwrapper->manipulator->ptr, "draw_options",  ED_MANIPULATOR_ARROW_STYLE_CONSTRAINED);
 	ED_manipulator_arrow3d_set_ui_range(wwrapper->manipulator, -200.0f, 200.0f);
 	ED_manipulator_arrow3d_set_range_fac(wwrapper->manipulator, 6.0f);

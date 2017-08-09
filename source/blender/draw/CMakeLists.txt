@@ -63,6 +63,7 @@ set(SRC
 	intern/draw_common.c
 	intern/draw_manager.c
 	intern/draw_manager_text.c
+	intern/draw_manager_profiling.c
 	intern/draw_view.c
 	modes/edit_armature_mode.c
 	modes/edit_curve_mode.c
@@ -95,6 +96,7 @@ set(SRC
 	intern/draw_cache_impl.h
 	intern/draw_common.h
 	intern/draw_manager_text.h
+	intern/draw_manager_profiling.h
 	intern/draw_view.h
 	modes/draw_mode_engines.h
 	engines/basic/basic_engine.h
@@ -140,7 +142,9 @@ data_to_c_simple(engines/eevee/shaders/effect_bloom_frag.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/effect_dof_vert.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/effect_dof_geom.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/effect_dof_frag.glsl SRC)
+data_to_c_simple(engines/eevee/shaders/effect_downsample_frag.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/effect_motion_blur_frag.glsl SRC)
+data_to_c_simple(engines/eevee/shaders/effect_ssr_frag.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/lightprobe_planar_downsample_frag.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/lightprobe_planar_downsample_geom.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/lightprobe_planar_downsample_vert.glsl SRC)
@@ -158,6 +162,7 @@ data_to_c_simple(engines/eevee/shaders/bsdf_common_lib.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/irradiance_lib.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/octahedron_lib.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/bsdf_sampling_lib.glsl SRC)
+data_to_c_simple(engines/eevee/shaders/raytrace_lib.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/ltc_lib.glsl SRC)
 data_to_c_simple(engines/eevee/shaders/volumetric_frag.glsl SRC)
 

@@ -270,7 +270,7 @@ void RAS_EeveeEffectsManager::UpdateAO(RAS_OffScreen *inputofs)
 		 * This texture is used as uniform if AO is enabled.
 		 * See: DRW_shgroup_uniform_buffer(shgrp, "minMaxDepthTex", &vedata->stl->g_data->minmaxz);
 		 */
-		EEVEE_create_minmax_buffer(m_scene->GetEeveeData(), inputofs->GetDepthTexture());
+		EEVEE_create_minmax_buffer(m_scene->GetEeveeData(), inputofs->GetDepthTexture(), -1);
 
 		/* Update viewvecs */
 		const bool is_persp = DRW_viewport_is_persp_get();
